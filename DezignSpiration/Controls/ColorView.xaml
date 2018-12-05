@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Grid xmlns="http://xamarin.com/schemas/2014/forms"
+      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+      x:Class="DezignSpiration.Controls.ColorView"
+      xmlns:ffimageloadingsvg="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
+      HeightRequest="100" WidthRequest="100">
+
+    <Frame VerticalOptions="FillAndExpand"
+           HorizontalOptions="FillAndExpand"
+           CornerRadius="5"
+           BackgroundColor="{Binding Color.PrimaryColor}"
+           Margin="20"
+           HasShadow="false">
+        <Frame BackgroundColor="{Binding Color.SecondaryColor}" HasShadow="false" />
+    </Frame>
+    <ffimageloadingsvg:SvgCachedImage Source="check.svg"
+                                      HeightRequest="50"
+                                      WidthRequest="50"
+                                      VerticalOptions="Center"
+                                      HorizontalOptions="Center"
+                                      IsVisible="{Binding IsSelected}"/>
+
+    <Grid.GestureRecognizers>
+        <TapGestureRecognizer Command="{Binding SelectedCommand}" CommandParameter="{Binding Color}" />
+    </Grid.GestureRecognizers>
+</Grid>

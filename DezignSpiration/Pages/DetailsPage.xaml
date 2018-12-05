@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DezignSpiration.Pages.DetailsPage"
+             xmlns:ffimageloadingsvg="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
+             BackgroundColor="White">
+    <ContentPage.Resources>
+        <Style TargetType="Label">
+            <Setter Property="TextColor" Value="Black" />
+            <Setter Property="Margin" Value="30" />
+            <Setter Property="HorizontalTextAlignment" Value="Center" />
+        </Style>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <ScrollView VerticalOptions="CenterAndExpand">
+            <StackLayout VerticalOptions="CenterAndExpand">
+                <Label Text="{Binding DescriptionTitle}" Font="Large" FontAttributes="Bold" />
+                <Label Text="{Binding Description}" Font="Large" />
+                <Label Text="{Binding Author}" Font="Large" FontAttributes="Bold" />
+                <ffimageloadingsvg:SvgCachedImage
+                    HeightRequest="50" WidthRequest="50"
+                    Aspect="AspectFit" Source="cancel.svg">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Close_Button_Tapped" />
+                    </Image.GestureRecognizers>
+                </ffimageloadingsvg:SvgCachedImage>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

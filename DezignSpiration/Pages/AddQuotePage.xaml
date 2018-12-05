@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:DezignSpiration.Controls;assembly=DezignSpiration"
+             xmlns:ffimageloadingsvg="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
+             x:Class="DezignSpiration.Pages.AddQuotePage">
+    
+    <ContentPage.Resources>
+        <Style TargetType="Label">
+            <Setter Property="Margin" Value="20,0"/>
+            <Setter Property="FontSize" Value="Small"/>
+            <Setter Property="TextColor" Value="Black"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+        </Style>
+        <Style TargetType="Switch">
+            <Setter Property="Margin" Value="20,0"/>
+            <Setter Property="HorizontalOptions" Value="Start"/>
+        </Style>
+        <Style TargetType="StackLayout">
+            <Setter Property="Margin" Value="0,10"/>
+            <Setter Property="Orientation" Value="Vertical"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="20"/>
+            <Setter Property="TextColor" Value="White"/>
+            <Setter Property="BackgroundColor" Value="Teal"/>
+            <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+        </Style>
+        <Style TargetType="controls:FlexEditor">
+            <Setter Property="Margin" Value="20,0"/>
+            <Setter Property="FontSize" Value="Medium"/>
+        </Style>
+        <Style TargetType="Entry">
+            <Setter Property="Margin" Value="20,0"/>
+            <Setter Property="FontSize" Value="Medium"/>
+        </Style>
+    </ContentPage.Resources>
+    
+    <ScrollView>
+        <FlexLayout Direction="Column" HorizontalOptions="FillAndExpand">
+            <StackLayout Orientation="Horizontal" Margin="0,20">
+                <ffimageloadingsvg:SvgCachedImage Source="cancel.svg"
+                                                  Margin="10"
+                                                  HeightRequest="40"
+                                                  WidthRequest="40">
+                    <ffimageloadingsvg:SvgCachedImage.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding GoBackCommand}"/>
+                    </ffimageloadingsvg:SvgCachedImage.GestureRecognizers>
+                </ffimageloadingsvg:SvgCachedImage>
+                <Label Text="Add a Quote" FontSize="40" Margin="0" VerticalOptions="Center"/>
+            </StackLayout>
+            
+            <!--    Quote        -->
+            <StackLayout BackgroundColor="#EBEBEB">
+                <Label Text="Let's hear your awesome design voice. :-)" Margin="20" FontAttributes="Bold"/>
+            </StackLayout>
+         
+            <Grid Margin="0,10" RowSpacing="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Text="Quote" HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand"/>
+                <controls:FlexEditor Grid.Row="1" x:Name="QuoteEditor" Text="{Binding DesignQuote.Quote}"
+                                     IsEnabled="{Binding IsNotBusy}" Placeholder="What's the Awesome Quote . . ."
+                                     VerticalOptions="FillAndExpand" MaxLength="250" TextChanged="QuoteTextChanged"/>
+                <Label x:Name="QuoteErrorLabel" Grid.Row="2" HorizontalOptions="FillAndExpand" FontSize="Micro"
+                       VerticalOptions="Center" FontAttributes="None"/>
+            </Grid>
+            
+            <StackLayout>
+                <Label Text="Author" HorizontalOptions="FillAndExpand" VerticalOptions="Center"/>
+                <Entry x:Name="AuthorName" IsEnabled="{Binding IsNotBusy}"
+                       Placeholder="Who should we thank for this quote (Optional)" MaxLength="40"/>
+            </StackLayout>
+            
+            <StackLayout>
+                <Label Text="Description Title" />
+                <Entry x:Name="DescriptionTitle" IsEnabled="{Binding IsNotBusy}"
+                       Placeholder="Description Title (Optional)" MaxLength="20"/>
+            </StackLayout>
+            
+            
+            <StackLayout>
+                <Label Text="Description" />
+                <controls:FlexEditor IsEnabled="{Binding IsNotBusy}" Placeholder="Let's hear more about this quote (Optional)"
+                                     MaxLength="300" VerticalOptions="FillAndExpand"/>
+            </StackLayout>
+            
+            <Label Text="Choose a color"/>
+            <ScrollView IsEnabled="{Binding IsNotBusy}" Orientation="Horizontal" HorizontalOptions="FillAndExpand" HorizontalScrollBarVisibility="Never">
+                <controls:ColorsList SelectedColor="{Binding SelectedColor}" ColorsSource="{Binding Colors}" />
+            </ScrollView>
+
+            <StackLayout>
+                <Label Text="What it would Look like"/>
+                <Frame HeightRequest="100" WidthRequest="100"
+                       BackgroundColor="{Binding SelectedColor.PrimaryColor}"
+                       HorizontalOptions="Center">
+                    <Label Text="Quote" FontSize="Large"
+                           VerticalOptions="CenterAndExpand"
+                           HorizontalOptions="CenterAndExpand"
+                           TextColor="{Binding SelectedColor.SecondaryColor}"/>
+                </Frame>
+            </StackLayout>
+            
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"/>
+            
+            <StackLayout Orientation="Vertical">
+                <Button x:Name="SubmitButton" IsEnabled="{Binding CanSubmit}" CornerRadius="5" Text="Submit Quote" Command="{Binding AddQuoteCommand}"/>
+                <Label FontSize="Small" Margin="20,0,20,20" Opacity=".5" FontAttributes="None">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Please keep your quotes design related. &#10;"/>
+                            <Span Text="Happy Surfing. :-)"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+            </StackLayout>
+            
+        </FlexLayout>
+    </ScrollView>
+</ContentPage>

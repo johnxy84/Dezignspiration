@@ -1,0 +1,42 @@
+{
+    "project_info": {
+        "project_number": "94878371956",
+        "firebase_url": "https://dezignspiration.firebaseio.com",
+        "project_id": "dezignspiration",
+        "storage_bucket": "dezignspiration.appspot.com"
+    },
+    "client": [
+        {
+            "client_info": {
+                "mobilesdk_app_id": "1:94878371956:android:4888aacafb88f112",
+                "android_client_info": {
+                    "package_name": "com.forefront.dezignspiration"
+                }
+            },
+            "oauth_client": [
+                {
+                    "client_id": "94878371956-ltskgg3163ed0d7ii2f7rqtg5ca87r3c.apps.googleusercontent.com",
+                    "client_type": 3
+                }
+            ],
+            "api_key": [
+                {
+                    "current_key": "AIzaSyBYhkv-k1ugAw-JhkDVMbCypkeR3Goiwx4"
+                }
+            ],
+            "services": {
+                "analytics_service": {
+                    "status": 1
+                },
+                "appinvite_service": {
+                    "status": 1,
+                    "other_platform_oauth_client": []
+                },
+                "ads_service": {
+                    "status": 2
+                }
+            }
+        }
+    ],
+    "configuration_version": "1"
+}

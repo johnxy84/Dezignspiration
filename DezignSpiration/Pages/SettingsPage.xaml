@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ffimageloadingsvg="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
+             x:Class="DezignSpiration.Pages.SettingsPage">
+    <ContentPage.Resources>
+        <Style TargetType="Label">
+            <Setter Property="Margin" Value="20"/>
+            <Setter Property="FontSize" Value="Default"/>
+            <Setter Property="TextColor" Value="Black"/>
+        </Style>
+        <Style TargetType="Switch">
+            <Setter Property="Margin" Value="20,0"/>
+            <Setter Property="HorizontalOptions" Value="Start"/>
+        </Style>
+        <Style TargetType="StackLayout">
+            <Setter Property="Margin" Value="0,10"/>
+            <Setter Property="Orientation" Value="Horizontal"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="20"/>
+            <Setter Property="TextColor" Value="White"/>
+            <Setter Property="BackgroundColor" Value="Teal"/>
+            <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+        </Style>
+    </ContentPage.Resources>
+    
+    <ScrollView>
+        <FlexLayout Direction="Column" HorizontalOptions="FillAndExpand">
+            <StackLayout Orientation="Horizontal" Margin="0,20">
+                <ffimageloadingsvg:SvgCachedImage Source="cancel.svg"
+                                                  Margin="10"
+                                                  HeightRequest="40"
+                                                  WidthRequest="40">
+                    <ffimageloadingsvg:SvgCachedImage.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding GoBackCommand}"/>
+                    </ffimageloadingsvg:SvgCachedImage.GestureRecognizers>
+                </ffimageloadingsvg:SvgCachedImage>
+                <Label Text="Settings" FontAttributes="Bold" FontSize="40" Margin="0" VerticalOptions="Center"/>
+            </StackLayout>
+            
+            <!--    Notification        -->
+            <StackLayout BackgroundColor="#EBEBEB">
+                <Label Text="Daily Quotes to inspire the designer in you" FontAttributes="Bold"/>
+            </StackLayout>
+            
+            <StackLayout Orientation="Horizontal" Margin="0,10">
+                <Label Text="Daily Reminder" HorizontalOptions="FillAndExpand" VerticalOptions="Center"/>
+                <Switch x:Name="ReminderSwitch" IsToggled="{Binding Config.IsDailyQuoteEnabled}"/>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal" Margin="0,10" IsVisible="{Binding Config.IsDailyQuoteEnabled}">
+                <Label Text="Send a quote Daily on " HorizontalOptions="StartAndExpand" VerticalOptions="Center"/>
+                <TimePicker Margin="10,0" Time="{Binding Config.DailyReminderTime}" HorizontalOptions="FillAndExpand"/>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal" Margin="0,10">
+                <Label Text="Receive random Quotes " HorizontalOptions="FillAndExpand" VerticalOptions="Center"/>
+                <Switch IsToggled="{Binding Config.IsRandomQuoteEnabled}"/>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal" Margin="0,10" IsVisible="{Binding ReminderSwitch,Path=IsToggled}">
+                <Label Text="Receive Push Notifications" HorizontalOptions="FillAndExpand" VerticalOptions="Center"/>
+                <Switch IsToggled="{Binding Config.IsReceivePushEnabled}"/>
+            </StackLayout>
+            
+            <!--    About        -->
+            <StackLayout BackgroundColor="#EBEBEB">
+                <Label Text="About" FontAttributes="Bold"/>
+            </StackLayout>
+            
+            <StackLayout Orientation="Vertical">
+                <Image Source="Icon.png" BackgroundColor="Fuchsia"
+                       HorizontalOptions="CenterAndExpand"
+                       Margin="10"
+                       HeightRequest="100" WidthRequest="100"/>
+                <Label Text="ApplicationName" Margin="0" HorizontalOptions="CenterAndExpand"/>
+                <Label Text="v 1.0" Margin="0" HorizontalOptions="CenterAndExpand"/>
+                <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding AddQuoteCommand}"/>
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
+            
+            <!--    Contribute        -->
+            <StackLayout BackgroundColor="#EBEBEB">
+                <Label Text="Contribute" FontAttributes="Bold"/>
+            </StackLayout>
+            
+            <StackLayout Orientation="Vertical">
+                <Button CornerRadius="5" Text="Add Quote" Command="{Binding AddQuoteCommand}"/>
+                <Label FontSize="Small" Margin="20,0,20,20" Opacity=".5">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Quotes here are mostly crowdsourced and may not be a 100% accurate. Please reach out to us if any displeases you. &#10;"/>
+                            <Span Text="Happy Surfing. :-)"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+            </StackLayout>
+        </FlexLayout>
+    </ScrollView>
+</ContentPage>
