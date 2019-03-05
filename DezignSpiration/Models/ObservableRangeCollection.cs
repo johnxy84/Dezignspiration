@@ -58,7 +58,7 @@ namespace DezignSpiration.Models
             }
 
             int startIndex = Count;
-            var changedItems = collection is List<T> ? (List<T>) collection : new List<T>(collection);
+            var changedItems = collection is List<T> ? (List<T>)collection : new List<T>(collection);
             foreach (var i in changedItems)
                 Items.Add(i);
 
@@ -93,7 +93,7 @@ namespace DezignSpiration.Models
                 return;
             }
 
-            var changedItems = collection is List<T> ? (List<T>) collection : new List<T>(collection);
+            var changedItems = collection is List<T> ? (List<T>)collection : new List<T>(collection);
             for (int i = 0; i < changedItems.Count; i++)
             {
                 if (!Items.Remove(changedItems[i]))
@@ -113,7 +113,7 @@ namespace DezignSpiration.Models
         /// <summary> 
         /// Clears the current collection and replaces it with the specified item. 
         /// </summary> 
-        public void Replace(T item) => ReplaceRange(new T[] {item});
+        public void Replace(T item) => ReplaceRange(new T[] { item });
 
         /// <summary> 
         /// Clears the current collection and replaces it with the specified collection. 

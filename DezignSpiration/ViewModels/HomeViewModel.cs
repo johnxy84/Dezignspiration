@@ -1,69 +1,158 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using DezignSpiration.Helpers;
 using DezignSpiration.Models;
-using DezignSpiration.Pages;
 using Newtonsoft.Json;
 using Xamarin.Forms;
+using DezignSpiration.Interfaces;
+using System.Linq;
 
 namespace DezignSpiration.ViewModels
 {
     public class HomeViewModel : BaseViewModel
     {
-        public HomeViewModel(INavigation navigation) : base(navigation)
-        {
-            if (Settings.IsFirstTime)
-            {
-                // Shuffle Default quotes 
-                Utils.ShuffleQuotes();
-                Settings.IsFirstTime = false;
-            }
-            MessagingCenter.Subscribe<QuoteViewModel>(this, Constants.UPDATE_PAGE_KEY, (s) =>
-            {
-                InitializePage();
-            });
-            MessagingCenter.Subscribe<App>(this, Constants.NETWORK_AVAILABLE_KEY, async (s) =>
-            {
-                await GetFreshQuotes();
-            });
+        private ObservableRangeCollection<DesignQuote> quotes = new ObservableRangeCollection<DesignQuote>();
+        private int currentIndex = Settings.CurrentIndex;
+        private readonly IQuotesRepository quotesRepository;
 
+        public ObservableRangeCollection<DesignQuote> Quotes
+        {
+            get => quotes;
+            set
+            {
+                SetProperty(ref quotes, value);
+            }
+        }
+
+        public int CurrentIndex
+        {
+            get => currentIndex;
+            set
+            {
+                if (SetProperty(ref currentIndex, value))
+                {
+                    UpdateSwipeAbility(currentIndex, value);
+                    Settings.CurrentIndex = currentIndex = value;
+                    UpdateQuotesCollection();
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public bool CanSwipe => Settings.SwipeCount < 10;
+
+        public Command SettingsCommand { get; }
+        public Command ShareCommand { get; }
+        public Command FlagCommand { get; }
+        public Command AddCommand { get; }
+
+        public HomeViewModel(IQuotesRepository quotesRepository)
+        {
+            SettingsCommand = new Command(ViewSettings);
+            ShareCommand = new Command(ShareQuote);
+            FlagCommand = new Command(FlagQuote);
+            AddCommand = new Command(AddClicked);
+            this.quotesRepository = quotesRepository;
+        }
+
+
+        private void UpdateSwipeAbility(int oldValue, int newValue)
+        {
+            //Reset swipe count if it's a new day
+            if ((Settings.SwipeDisabledDate - DateTime.Today).Days > 1)
+            {
+                Settings.SwipeCount = 0;
+            }
+
+            if (newValue > oldValue)
+            {
+                Settings.SwipeCount++;
+            }
+            else
+            {
+                Settings.SwipeCount--;
+            }
+
+            switch (Settings.SwipeCount)
+            {
+                case Constants.MAX_SWIPE_COUNT / 2:
+                    Helper?.ShowAlert($"Slow down champ, You've got {Constants.MAX_SWIPE_COUNT / 2} more forward swipes today", isLongAlert: true);
+                    break;
+                case Constants.MAX_SWIPE_COUNT:
+                    Helper?.ShowAlert("You've maxed out your swipes. Check back tommorow", isLongAlert: true);
+                    Settings.SwipeDisabledDate = DateTime.Today;
+                    Helper?.BeginSwipeEnableCountdown();
+                    break;
+            }
+            OnPropertyChanged(nameof(CanSwipe));
         }
 
         /// <summary>
         /// Initializes the page.
         /// </summary>
-        public void InitializePage()
+        public override async Task InitializeAsync(object navigationData)
         {
-            var currentQuote = Utils.GetDisplayQuote();
-            var page = new QuotePage
+            try
             {
-                BindingContext = new QuoteViewModel(Navigation, currentQuote)
-            };
-            MessagingCenter.Send(this, Constants.PAGE_UPDATED_KEY, page);
+                SubscribeToEvents();
+                LoadStoredQuotes();
+                Helper?.SetScheduledNotifications();
+            }
+            catch (Exception ex)
+            {
+                Utils.LogError(ex, "InitializeHomeViewModelError");
+                await Navigation.NavigateToAsync<CrashViewModel>();
+            }
+            await base.InitializeAsync(navigationData);
+        }
 
-            // Check if notifications have been set and set them if they should be set
-            Helper?.SetScheduledNotifications();
-            UpdateQuotes();
+        private void LoadStoredQuotes()
+        {
+            IsBusy = true;
+            Task.Run(async () =>
+            {
+                var storedQuotes = await quotesRepository.GetAllQuotes();
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    Quotes = new ObservableRangeCollection<DesignQuote>(storedQuotes);
+                });
+            });
+            IsBusy = false;
+        }
+
+        private void SubscribeToEvents()
+        {
+            MessagingCenter.Subscribe<NetworkAvailable>(this, Constants.NETWORK_AVAILABLE_KEY, async (s) =>
+            {
+                await GetFreshQuotes();
+            });
+
+            MessagingCenter.Subscribe<QuotesAdded, ObservableRangeCollection<DesignQuote>>(this, Constants.QUOTES_ADDED_KEY, (sender, quotes) =>
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    Quotes.AddRange(quotes, System.Collections.Specialized.NotifyCollectionChangedAction.Reset);
+                });
+            });
 
         }
 
         /// <summary>
         /// Updates the current quotes if need be.
         /// </summary>
-        void UpdateQuotes()
+        void UpdateQuotesCollection()
         {
-            int quotesLeft = Settings.QuotesData.Count - Settings.CurrentIndex;
-            bool isLastQuote = Settings.CurrentIndex >= Settings.QuotesData.Count - 1;
+            int quotesLeft = Quotes.Count - Settings.CurrentIndex;
+            bool isLastQuote = Settings.CurrentIndex >= Quotes.Count - 1;
 
-            if (isLastQuote)
+            // This was put because I couldn't think of anoter way to display this message "occasionally without being annoying
+            bool shouldShowAnnoyingMessage = (new Random(DateTime.Now.Millisecond).Next(1, 20) % 3) == 0;
+            if (isLastQuote && Quotes.Count != 0 && shouldShowAnnoyingMessage)
             {
-                Utils.ShuffleQuotes();
-                Task.Run(async () =>
-                {
-                    await GetFreshQuotes();
-                });
+                Helper?.ShowAlert("Uhmm we're getting you more quotes. Take a step back for now :-)", false);
             }
-            else if (quotesLeft < 5 && Settings.IsTimeToRefresh)
+
+            if (quotesLeft < 5 && Settings.ShouldRefreshQuotes)
             {
                 Task.Run(async () =>
                 {
@@ -72,47 +161,60 @@ namespace DezignSpiration.ViewModels
             }
         }
 
-        /// <summary>
-        /// Fetches new quotes quotes.
-        /// </summary>
-        public async Task GetFreshQuotes()
+        void AddClicked()
         {
-            try
+            const string addQuote = "Add Quote";
+            const string addColor = "Add Color";
+
+            Helper?.ShowOptions(string.Empty, new string[] { addQuote, addColor }, (choice) =>
             {
-
-                //await Task.Delay(5000);
-                var result = await App.NetworkClient.Get($"/v1/list/quotes?offset={Settings.QuotesData.Count}&limit={Constants.MAX_FETCH_QUOTE}");
-                var response = await result.Content.ReadAsStringAsync();
-                var quotesData = JsonConvert.DeserializeObject<ObservableRangeCollection<DesignQuote>>(response);
-
-                //Got data, do the needfuls
-                if (quotesData != null)
+                switch (choice)
                 {
-                    Settings.ShouldRefresh = false;
-                    Settings.QuotesData.AddRange(quotesData);
-
-                    // If Quotes has already been refreshed, set index to lates quotes
-                    if (Settings.ShouldRefresh)
-                    {
-                        Settings.CurrentIndex = Settings.QuotesData.Count - Constants.MAX_FETCH_QUOTE;
-                    }
-                    Helper?.ShowAlert("Yassss. You just got some fresh, new quotes. :-)");
+                    case addQuote:
+                        Navigation.NavigateToAsync<AddQuoteViewModel>(isModal: true);
+                        break;
+                    case addColor:
+                        Navigation.NavigateToAsync<AddColorViewModel>(isModal: true);
+                        break;
                 }
-            }
-            catch (Exception ex)
+            });
+        }
+
+        void FlagQuote()
+        {
+            Helper?.ShowOptions("Why are you flagging this quote?", Settings.FlagReasons.Select(flagReason => flagReason.Reason).ToArray(), choice =>
             {
-                Settings.ShouldRefresh = true;
-                Utils.LogError(ex, "RefreshCquotes");
-                Helper?.ShowAlert("Aww, we couldn't refresh quotes, we'll try again Later", true, false, "Try now", async (obj) =>
+                if (choice == null) return;
+                var flaggedQuote = Quotes[CurrentIndex];
+                Quotes.RemoveAt(CurrentIndex);
+                Task.Run(async () =>
                 {
-                    await GetFreshQuotes();
+                    int flagReasonId = Settings.FlagReasons.FirstOrDefault(flagReason => flagReason.Reason == (string)choice).Id;
+
+                    Helper?.ShowAlert("Thanks for keeping an eye out for us. We'll be reviewing this quote", isLongAlert: true);
+                    try
+                    {
+                        await quotesRepository.DeleteQuote(flaggedQuote);
+                        await quotesRepository.FlagQuote(flaggedQuote, flagReasonId);
+                        Settings.FlagedQuoteIds.Add(flaggedQuote.Id);
+                    }
+                    catch (Exception ex)
+                    {
+                        Utils.LogError(ex, "FlaggingPostError", JsonConvert.SerializeObject(flaggedQuote), flagReasonId.ToString());
+                    }
                 });
-            }
-            finally
-            {
-                NotificationUtils.ClearNotifications();
-                Helper?.SetScheduledNotifications();
-            }
+
+            });
+        }
+
+        void ShareQuote()
+        {
+            Helper?.ShareQuote(Quotes[CurrentIndex]);
+        }
+
+        void ViewSettings()
+        {
+            Navigation.NavigateToAsync<SettingsViewModel>(isModal: true);
         }
     }
 }

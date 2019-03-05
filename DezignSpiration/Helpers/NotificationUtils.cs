@@ -1,4 +1,5 @@
 ﻿using System;
+using DezignSpiration.Interfaces;
 using DezignSpiration.Models;
 using Xamarin.Forms;
 
@@ -35,24 +36,19 @@ namespace DezignSpiration.Helpers
 
         public static ScheduledNotification GetScheduledNotification(NotificationType notificationType)
         {
-            int randomIndex = App.Random.Next(0, Settings.QuotesData.Count);
-            DesignQuote designQuote = Settings.QuotesData[randomIndex];
-
             switch (notificationType)
             {
                 case NotificationType.DailyAlarm:
                     return new ScheduledNotification
                     {
-                        DesignQuote = Utils.GetDisplayQuote(),
                         NotificationType = notificationType,
                         TimeSpan = GetTimeToScheduleNotification(Settings.SettingsConfig.DailyReminderTime)
                     };
                 default:
                     // Assume it's a Random Notificataion by default
-                    var randomTimeSpan = new TimeSpan(App.Random.Next(3, 5), App.Random.Next(0, 59), 0);
+                    var randomTimeSpan = new TimeSpan(App.Random.Next(6, 9), App.Random.Next(0, 59), 0);
                     return new ScheduledNotification
                     {
-                        DesignQuote = Settings.QuotesData[randomIndex],
                         NotificationType = notificationType,
                         TimeSpan = randomTimeSpan
                     };

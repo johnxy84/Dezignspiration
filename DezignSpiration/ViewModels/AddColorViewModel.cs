@@ -3,17 +3,18 @@ using Xamarin.Forms;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using DezignSpiration.Helpers;
+using DezignSpiration.Interfaces;
 
 namespace DezignSpiration.ViewModels
 {
     public class AddColorViewModel : BaseViewModel
     {
         private readonly Regex colorRegex = new Regex(@"^[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3}$");
-
+        private readonly IColorsRepository colorsRepository;
         private Models.Color color = new Models.Color();
 
-        private string primaryColor = String.Empty;
-        private string secondaryColor = String.Empty;
+        private string primaryColor = string.Empty;
+        private string secondaryColor = string.Empty;
 
         public string PrimaryColor
         {
@@ -45,7 +46,13 @@ namespace DezignSpiration.ViewModels
             }
         }
 
-        public bool CanSubmit => IsNotBusy && colorRegex.IsMatch(PrimaryColor) && colorRegex.IsMatch(SecondaryColor);
+        public bool CanSubmit
+        {
+            get
+            {
+                return IsNotBusy && colorRegex.IsMatch(PrimaryColor) && colorRegex.IsMatch(SecondaryColor);
+            }
+        }
 
         public Models.Color Color
         {
@@ -60,10 +67,18 @@ namespace DezignSpiration.ViewModels
         public Command AddColorCommand { get; }
         public Command GoBackCommand { get; }
 
-        public AddColorViewModel(INavigation navigation) : base(navigation)
+        public AddColorViewModel(IColorsRepository colorsRepository)
         {
             AddColorCommand = new Command(async () => await SubmitColor());
-            GoBackCommand = new Command(() => { Navigation.PopModalAsync(); });
+            GoBackCommand = new Command(() => { Navigation.GoBackAsync(isModal: true); });
+            this.colorsRepository = colorsRepository;
+        }
+
+        public override Task InitializeAsync(object navigationData)
+        {
+            PrimaryColor = string.Empty;
+            SecondaryColor = string.Empty;
+            return base.InitializeAsync(navigationData);
         }
 
         async Task SubmitColor()
@@ -72,28 +87,18 @@ namespace DezignSpiration.ViewModels
             {
                 if (!CanSubmit)
                 {
-                    Helper?.ShowAlert("Please fill in valid Hex Colors", false);
+                    Helper?.ShowAlert("Please fill in valid Hex Colors");
                     return;
                 }
 
                 IsBusy = true;
-                        
-                // For Development Purposes
-                await Task.Delay(3000);
-                Helper?.ShowAlert("Your color is being reviewed and would be added soon just because it's Awesome!", false);
-                await Navigation.PopModalAsync();
-                return;
+                var deviceId = await Microsoft.AppCenter.AppCenter.GetInstallIdAsync();
 
-                var response = await App.NetworkClient.Post("/v1/colors", new
+                var added = await colorsRepository.AddColor(Color, deviceId.ToString());
+                if (added)
                 {
-                    primary_color = Color.PrimaryColor,
-                    secondary_color = Color.SecondaryColor
-                });
-
-                if (response.IsSuccessStatusCode)
-                {
-                    Helper?.ShowAlert("Your color is being reviewed and would be added soon just because it's Awesome!", false);
-                    await Navigation.PopModalAsync(true);
+                    Helper?.ShowAlert("Your color would be added soon just because it's Awesome!", false);
+                    await Navigation.GoBackAsync(isModal: true);
                 }
                 else
                 {

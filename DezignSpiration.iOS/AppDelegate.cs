@@ -1,11 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Foundation;
+﻿using Foundation;
 using UIKit;
-using FFImageLoading.Forms;
-using FFImageLoading.Forms.Touch;
+using Lottie.Forms.iOS.Renderers;
+using DezignSpiration.Interfaces;
+using DezignSpiration.Models;
+using System;
+using CarouselView.FormsPlugin.iOS;
+using DezignSpiration.iOS;
+
+[assembly: Xamarin.Forms.Dependency(typeof(AppDelegate))]
+
 
 namespace DezignSpiration.iOS
 {
@@ -13,7 +16,7 @@ namespace DezignSpiration.iOS
     // User Interface of the application, as well as listening (and optionally responding) to 
     // application events from iOS.
     [Register("AppDelegate")]
-    public partial class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
+    public partial class AppDelegate : Xamarin.Forms.Platform.iOS.FormsApplicationDelegate, IHelper
     {
         //
         // This method is invoked when the application has loaded and is ready to run. In this 
@@ -25,10 +28,52 @@ namespace DezignSpiration.iOS
         public override bool FinishedLaunching(UIApplication uiApplication, NSDictionary launchOptions)
         {
             FFImageLoading.Forms.Platform.CachedImageRenderer.Init();
-            global::Xamarin.Forms.Forms.Init();
+            Xamarin.Forms.Forms.Init();
+            AnimationViewRenderer.Init();
+            CarouselViewRenderer.Init();
             LoadApplication(new App());
 
             return base.FinishedLaunching(uiApplication, launchOptions);
+        }
+
+        public void OpenUrl(string url)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetScheduledNotifications()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShareQuote(DesignQuote quote)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowAlert(string message, bool isLongAlert = false, bool isToast = true, string actionMessage = null, Action<object> action = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowOptions(string title, string[] options, Action<object> choice, string cancelText = "Cancel")
+        {
+            throw new NotImplementedException();
+        }
+
+        public void BeginSwipeEnableCountdown()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CancelScheduledNotification(ScheduledNotification notificationData)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DisplayMessage(string title, string message, string positive, string negative, Action<bool> choice)
+        {
+            throw new NotImplementedException();
         }
     }
 }

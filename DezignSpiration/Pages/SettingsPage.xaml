@@ -1,7 +1,9 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:forms="clr-namespace:Lottie.Forms;assembly=Lottie.Forms"
              xmlns:ffimageloadingsvg="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
+             BackgroundColor="White"
              x:Class="DezignSpiration.Pages.SettingsPage">
     <ContentPage.Resources>
         <Style TargetType="Label">
@@ -15,12 +17,12 @@
         </Style>
         <Style TargetType="StackLayout">
             <Setter Property="Margin" Value="0,10"/>
-            <Setter Property="Orientation" Value="Horizontal"/>
         </Style>
         <Style TargetType="Button">
             <Setter Property="Margin" Value="20"/>
             <Setter Property="TextColor" Value="White"/>
             <Setter Property="BackgroundColor" Value="Teal"/>
+            <Setter Property="BorderRadius" Value="10"/>
             <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
         </Style>
     </ContentPage.Resources>
@@ -40,7 +42,7 @@
             </StackLayout>
             
             <!--    Notification        -->
-            <StackLayout BackgroundColor="#EBEBEB">
+            <StackLayout BackgroundColor="{StaticResource HeaderBackground}">
                 <Label Text="Daily Quotes to inspire the designer in you" FontAttributes="Bold"/>
             </StackLayout>
             
@@ -62,16 +64,16 @@
             </StackLayout>
             
             <!--    About        -->
-            <StackLayout BackgroundColor="#EBEBEB">
+            <StackLayout BackgroundColor="{StaticResource HeaderBackground}">
                 <Label Text="About" FontAttributes="Bold"/>
             </StackLayout>
             
             <StackLayout Orientation="Vertical">
-                <Image Source="Icon.png" BackgroundColor="Fuchsia"
+                <Image Source="Icon.png" 
                        HorizontalOptions="CenterAndExpand"
                        Margin="10"
                        HeightRequest="100" WidthRequest="100"/>
-                <Label Text="ApplicationName" Margin="0" HorizontalOptions="CenterAndExpand"/>
+                <Label Text="Dezignspiration" Margin="0" HorizontalOptions="CenterAndExpand"/>
                 <Label Text="v 1.0" Margin="0" HorizontalOptions="CenterAndExpand"/>
                 <StackLayout.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding AddQuoteCommand}"/>
@@ -79,20 +81,21 @@
             </StackLayout>
             
             <!--    Contribute        -->
-            <StackLayout BackgroundColor="#EBEBEB">
+            <StackLayout BackgroundColor="{StaticResource HeaderBackground}">
                 <Label Text="Contribute" FontAttributes="Bold"/>
             </StackLayout>
             
             <StackLayout Orientation="Vertical">
-                <Button CornerRadius="5" Text="Add Quote" Command="{Binding AddQuoteCommand}"/>
-                <Label FontSize="Small" Margin="20,0,20,20" Opacity=".5">
+                <Label FontSize="Small" Margin="20,0,20,20" Opacity=".5" FontAttributes="None">
                     <Label.FormattedText>
                         <FormattedString>
-                            <Span Text="Quotes here are mostly crowdsourced and may not be a 100% accurate. Please reach out to us if any displeases you. &#10;"/>
+                            <Span Text="Quotes are mostly crowdsourced and may not be a 100% accurate. Please reach out to us if any displeases you. &#10;"/>
                             <Span Text="Happy Surfing. :-)"/>
                         </FormattedString>
                     </Label.FormattedText>
                 </Label>
+                <Button CornerRadius="5" Text="Add Quote" Command="{Binding AddQuoteCommand}"/>
+                <Button CornerRadius="5" Text="Feedback" Command="{Binding FeedBackCommand}" Style="{Binding SecondaryButton}"/>
             </StackLayout>
         </FlexLayout>
     </ScrollView>

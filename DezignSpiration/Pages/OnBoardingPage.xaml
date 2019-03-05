@@ -1,10 +1,11 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              Title="OnBoarding"
-             xmlns:cv="clr-namespace:Xamarin.Forms;assembly=Xamarin.Forms.CarouselView"
+             xmlns:cv="clr-namespace:CarouselView.FormsPlugin.Abstractions;assembly=CarouselView.FormsPlugin.Abstractions"
              BackgroundColor="White"
-             x:Class="DezignSpiration.Pages.OnBoardinPage">
+             xmlns:forms="clr-namespace:Lottie.Forms;assembly=Lottie.Forms"
+             x:Class="DezignSpiration.Pages.OnBoardingPage">
     
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -46,22 +47,24 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <cv:CarouselView Grid.Row="0" VerticalOptions="FillAndExpand" HorizontalOptions="Fill" x:Name="Something">
-            <cv:CarouselView.ItemTemplate>
+        <cv:CarouselViewControl Position="{Binding SelectedPosition}" ItemsSource="{Binding OnBoardingItems}" Grid.Row="0" VerticalOptions="FillAndExpand"
+                                HorizontalOptions="FillAndExpand" ShowIndicators="false" CurrentPageIndicatorTintColor="{StaticResource MainColor}" x:Name="Carousel">
+            <cv:CarouselViewControl.ItemTemplate>
                 <DataTemplate>
-                    <StackLayout Orientation="Vertical">
-                        <Image HeightRequest="200" WidthRequest="200" BackgroundColor="{Binding Color}" HorizontalOptions="CenterAndExpand"
-                               VerticalOptions="CenterAndExpand"/>
-                        <Label Text="{Binding Text}" VerticalOptions="CenterAndExpand" TextColor="{StaticResource MainColor}"
-                               FontFamily="{StaticResource NeutonBold}" FontSize="Large" Margin="20" HorizontalTextAlignment="Center"/>
-                    </StackLayout>
+                    <FlexLayout Direction="Column" JustifyContent="Center">
+                        <forms:AnimationView Animation="{Binding Animation}" Speed="1" HeightRequest="200" WidthRequest="200" Loop="true" Margin="20"
+                                             AutoPlay="true" IsPlaying="True" FlexLayout.AlignSelf="Center"/>
+
+                        <Label Text="{Binding Text}" TextColor="{StaticResource MainColor}" FontFamily="{StaticResource NeutonBold}" 
+                               FontSize="Large" HorizontalTextAlignment="Center"/>
+                    </FlexLayout>
                 </DataTemplate>
-            </cv:CarouselView.ItemTemplate>
-        </cv:CarouselView>
-        <StackLayout Orientation="Horizontal" VerticalOptions="End" Grid.Row="1" BackgroundColor="White" HorizontalOptions="FillAndExpand">
-            <StackLayout x:Name="IndicatorsLayout" VerticalOptions="Center" Margin="10" Orientation="Horizontal"/>
-            <Button Text="Get Started" Margin="10" HorizontalOptions="EndAndExpand" TextColor="{StaticResource MainColor}" BorderWidth="2" CornerRadius="5"
-                    BorderColor="{StaticResource MainColor}" Clicked="GetStartedClicked" FontFamily="{StaticResource NeutonBold}" BackgroundColor="Transparent" />
+            </cv:CarouselViewControl.ItemTemplate>
+        </cv:CarouselViewControl>
+        <StackLayout Orientation="Horizontal" VerticalOptions="End" Grid.Row="1" HorizontalOptions="FillAndExpand">
+            <StackLayout x:Name="IndicatorsLayout" VerticalOptions="Center" Margin="20" Orientation="Horizontal" />
+            <Button Text="Get Started" Margin="20" HorizontalOptions="EndAndExpand" TextColor="{StaticResource MainColor}" Command="{Binding GetStartedCommand}"
+                    BorderWidth="1" CornerRadius="5" BorderColor="{StaticResource MainColor}" BackgroundColor="Transparent" />
         </StackLayout>
     </Grid>
 </ContentPage>

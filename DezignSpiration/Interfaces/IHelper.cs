@@ -1,14 +1,12 @@
 ﻿using System;
 using DezignSpiration.Models;
-namespace DezignSpiration.Helpers
+namespace DezignSpiration.Interfaces
 {
     public interface IHelper
     {
         void DisplayMessage(string title, string message, string positive, string negative, Action<bool> choice);
 
-        void ShowAlert(string message, bool isLongAlert = true, bool isToast = true, string actionMessage = null, Action<object> action = null);
-
-        void ScheduleNotification(ScheduledNotification scheduledNotification);
+        void ShowAlert(string message, bool isLongAlert = false, bool isToast = true, string actionMessage = null, Action<object> action = null);
 
         void CancelScheduledNotification(ScheduledNotification notificationData);
 
@@ -18,9 +16,8 @@ namespace DezignSpiration.Helpers
 
         void ShareQuote(DesignQuote quote);
 
-        void BackButtonPressed();
+        void ShowOptions(string title, string[] options, Action<object> choice, string cancelText = "Cancel");
 
-        void ShowOptions(string title, string[] options, Action<object> choice);
-
+        void BeginSwipeEnableCountdown();
     }
 }

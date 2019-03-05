@@ -3,8 +3,7 @@ using System.Threading.Tasks;
 using DezignSpiration.Models;
 using Xamarin.Forms;
 using DezignSpiration.Helpers;
-using System.Collections.ObjectModel;
-using Newtonsoft.Json;
+using DezignSpiration.Interfaces;
 
 namespace DezignSpiration.ViewModels
 {
@@ -12,8 +11,10 @@ namespace DezignSpiration.ViewModels
     {
         DesignQuote designQuote = new DesignQuote();
         Models.Color selectedColor = new Models.Color();
-        ObservableCollection<Models.Color> colors = new ObservableCollection<Models.Color>();
-        bool colorInverted;
+        ObservableRangeCollection<Models.Color> colors = new ObservableRangeCollection<Models.Color>();
+        private readonly IColorsRepository colorsRepository;
+        private readonly IQuotesRepository quotesRepository;
+        private bool isInitialized;
 
         public Command AddQuoteCommand { get; }
         public Command GoBackCommand { get; }
@@ -32,15 +33,16 @@ namespace DezignSpiration.ViewModels
 
         public Models.Color SelectedColor
         {
-            get =>  selectedColor;
+            get => selectedColor;
             set
             {
                 selectedColor = value;
+                designQuote.Color.Id = value.Id;
                 OnPropertyChanged();
             }
         }
 
-        public ObservableCollection<Models.Color> Colors
+        public ObservableRangeCollection<Models.Color> Colors
         {
             get => colors;
             set
@@ -51,44 +53,49 @@ namespace DezignSpiration.ViewModels
         }
 
 
-        public AddQuoteViewModel(INavigation navigation) : base(navigation)
+        public AddQuoteViewModel(IColorsRepository colorsRepository, IQuotesRepository quotesRepository)
         {
             AddQuoteCommand = new Command(async () => await SubmitQuote());
-            GoBackCommand = new Command(() => { Navigation.PopModalAsync(); });
+            GoBackCommand = new Command(() => { Navigation.GoBackAsync(isModal: true); });
+            this.colorsRepository = colorsRepository;
+            this.quotesRepository = quotesRepository;
+        }
 
-            Task.Run(async () => await RefreshColors());
+
+        public override async Task InitializeAsync(object navigationData)
+        {
+            DesignQuote = new DesignQuote
+            {
+                Quote = navigationData as string ?? string.Empty
+            };
+            if (!isInitialized)
+            {
+                Colors = new ObservableRangeCollection<Models.Color>(await colorsRepository.GetAllColors());
+                isInitialized = true;
+            }
+            await RefreshColors();
+            await base.InitializeAsync(navigationData);
         }
 
         async Task SubmitQuote()
         {
             try
             {
-                if(!CanSubmit)
+                if (!CanSubmit)
                 {
-                    Helper?.ShowAlert("Please check that your quote is valid", false);
+                    Helper?.ShowAlert("Your quote doesn't seem correct, please check again");
                     return;
                 }
                 IsBusy = true;
 
-                // For Development Purposes
-                await Task.Delay(3000);
-                Helper?.ShowAlert("Your quote is being reviewed and would be added to our quotes if it's OK", false);
-                await Navigation.PopModalAsync();
-                return;
+                var deviceId = await Microsoft.AppCenter.AppCenter.GetInstallIdAsync();
 
-                var response = await App.NetworkClient.Post("v1/quotes", new
-                {
-                    color_id = DesignQuote.Color.Id,
-                    quote = DesignQuote.Quote,
-                    description_title = DesignQuote.DescriptionTitle,
-                    description = DesignQuote.Description,
-                    author = DesignQuote.Author,
-                });
+                bool added = await quotesRepository.AddQuote(DesignQuote, deviceId.ToString());
 
-                if (response.IsSuccessStatusCode)
+                if (added)
                 {
-                    Helper?.ShowAlert("Your quote is being reviewed and would be added to our quotes if it's OK", false);
-                    await Navigation.PopModalAsync(true);
+                    Helper?.ShowAlert("Thanks for your awesome quote! You'll be seeing it soon", true);
+                    await Navigation.GoBackAsync(isModal: true);
                 }
                 else
                 {
@@ -110,34 +117,17 @@ namespace DezignSpiration.ViewModels
             {
                 IsBusy = false;
             }
-
         }
 
         async Task RefreshColors()
         {
-            try
+            if (!Settings.ShouldRefreshColors) return;
+            var freshColors = await colorsRepository.GetFreshColors();
+            if (freshColors != null)
             {
-                IsBusy = true;
-                // Check if date has passed to get new colors
-                //if (Settings.ShouldRefreshColors)
-                //{
-                    var response = await App.NetworkClient.Get($"v1/list/colors?page={Settings.ColorsData.Count}&limit={Constants.MAX_FETCH_QUOTE}");
-                    var content = await response.Content.ReadAsStringAsync();
-                    var updatedColors = JsonConvert.DeserializeObject<ObservableRangeCollection<Models.Color>>(content);
-                    Colors = Settings.ColorsData = updatedColors;
-                //}
-                //Colors = Settings.ColorsData;
+                Colors.AddRange(freshColors);
+                await colorsRepository.InsertColors(freshColors);
             }
-            catch (Exception ex)
-            {
-                Utils.LogError(ex, "ErrorFetchingColors");
-                Colors = Settings.ColorsData;
-            }
-            finally
-            {
-                IsBusy = false;
-            }
-
         }
     }
 }

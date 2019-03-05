@@ -15,13 +15,16 @@ namespace DezignSpiration.Droid
         public const float FONT_SCALE = 10f;
         public const int BORDER_MARGIN = 50;
         public const int STROKE_WIDTH = 20;
-        
+
         public const int DAILY_ALARM_REQUEST_CODE = 1;
         public const int RANDOM_ALARM_REQUEST_CODE = 2;
         public const int TOUCH_NOTIFICATON_REQUEST_CODE = 3;
         public const int SHARE_NOTIFICATION_REQUEST_CODE = 4;
+        public const int SWIPE_ENABLED_REQUEST_CODE = 5;
 
         public const string SHARE_NOTIFICATION_QUOTE_INTENT_ACTION = "Share Notification Quote";
         public const string NOTIFICATION_QUOTE_ACTION = "Notification Quote";
+
+        public const string SWIPE_ENABLED_ACTION = "Swipe Enabled";
     }
 }

@@ -1,59 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using Xamarin.Forms;
 using DezignSpiration.Helpers;
+using DezignSpiration.ViewModels;
 using DezignSpiration.Models;
 
 namespace DezignSpiration.Pages
 {
-    public partial class OnBoardinPage : ContentPage
+    public partial class OnBoardingPage : ContentPage
     {
         List<BoxView> indicators = new List<BoxView>();
-        List<OnBoardItem> onBoardTexts = new List<OnBoardItem> {
-                new OnBoardItem {
-                    Text = "Daily Inspirational quotes to Fire up your creative juices!",
-                    Color = "Blue"
-                },
-                new OnBoardItem {
-                    Text = "Share cool and meaningful quotes with your peers and socials",
-                    Color = "Red",
-                },
-        };
 
-        public OnBoardinPage()
+
+        OnBoardingViewModel onBoardingViewModel;
+
+        public OnBoardingPage()
         {
-
             InitializeComponent();
             NavigationPage.SetHasNavigationBar(this, false);
+            BindingContext = onBoardingViewModel = App.ViewModelLocator.OnBoardingViewModel;
             SetupPageIndicators();
             SelectVisualState(0);
-
-            Something.ItemsSource = onBoardTexts;
-            Something.ItemSelected += OnboardPageChanged;
+            Settings.IsFirstTime = false;
+            MessagingCenter.Subscribe<OnBoardingViewModel, int>(this, Constants.ONBOARDING_PAGE_CHANGED, (sender, position) =>
+            {
+                var x = Carousel;
+                SelectVisualState(position);
+            });
         }
 
         void SetupPageIndicators()
         {
-            foreach (var text in onBoardTexts)
+            foreach (var text in onBoardingViewModel.OnBoardingItems)
             {
                 var boxView = new BoxView();
                 IndicatorsLayout.Children.Add(boxView);
                 indicators.Add(boxView);
             }
         }
-        void GetStartedClicked(object sender, EventArgs e)
-        {
-            Navigation.PushAsync(new HomePage());
-        }
 
-        void OnboardPageChanged(object sender, SelectedItemChangedEventArgs e)
-        {
-            if (sender is CarouselView pages)
-            {
-                SelectVisualState(pages.Position);
-            }
-        }
+        //void OnboardPageChanged(object sender, SelectedPositionChangedEventArgs e)
+        //{
+        //    //if (sender is Xamarin.Forms.CarouselView pages)
+        //    //{
+        //    //    SelectVisualState(pages.Position);
+        //    //}
+        //}
 
         void SelectVisualState(int pageIndex)
         {

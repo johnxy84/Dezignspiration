@@ -1,6 +1,5 @@
 ﻿using System;
 using Xamarin.Forms;
-using DezignSpiration.ViewModels;
 using DezignSpiration.Controls;
 
 namespace DezignSpiration.Pages
@@ -12,14 +11,15 @@ namespace DezignSpiration.Pages
         public AddQuotePage()
         {
             InitializeComponent();
-            BindingContext = new AddQuoteViewModel(Navigation);
+            var addQuoteViewModel = App.ViewModelLocator.AddQuoteViewModel;
+            BindingContext = addQuoteViewModel;
         }
 
         public void QuoteTextChanged(object sender, EventArgs e)
         {
-            if(sender is FlexEditor quoteEditor && hasTypedQuote)
+            if (sender is FlexEditor quoteEditor && hasTypedQuote)
             {
-                if(quoteEditor.Text.Length < 10)
+                if (quoteEditor.Text.Length < 10)
                 {
                     QuoteErrorLabel.Text = "Can you make it a teeny bit Longer?";
                     QuoteErrorLabel.TextColor = Color.DarkRed;
@@ -30,7 +30,6 @@ namespace DezignSpiration.Pages
                     QuoteErrorLabel.TextColor = Color.DarkGreen;
                 }
             }
-
             hasTypedQuote = true;
         }
     }

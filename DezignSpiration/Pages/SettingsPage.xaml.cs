@@ -12,7 +12,7 @@ namespace DezignSpiration.Pages
         public SettingsPage()
         {
             InitializeComponent();
-            BindingContext = settingsViewModel = new SettingsViewModel(Navigation);
+            BindingContext = settingsViewModel = App.ViewModelLocator.SettingsViewModel;
         }
 
         protected override void OnDisappearing()

@@ -23,70 +23,73 @@ namespace DezignSpiration.Helpers
 
         #region Setting Constants
 
-        private const string IndexKey = "currentIndex";
-        // The index should start from -1 so pre-increment (++index) would begin at 0
-        private static readonly int IndexDefault = -1;
-        private const string CurrentDateKey = "currentDateIndex";
-        private static readonly DateTime CurrentDateDefault = DateTime.Today.AddDays(-1);
-        private const string QuotesKey = "quotesKey";
-        private static readonly string QuotesDefault = JsonConvert.SerializeObject(Utils.GetDefaultQuotes());
-        private const string ConfigKey = "configKey";
-        private static readonly string ConfigDefault = JsonConvert.SerializeObject(new Config());
-        private const string SyncDateKey = "syncDateKey";
-        private static readonly DateTime SyncDateDefault = DateTime.Now;
-        private const string IsFirstTimeKey = "isFirstTimeKey";
-        private const string IsDailyNotificationSetKey = "isDailyNotificationSetKey";
-        private const string IsRandomNotificationSetKey = "isRandomNotificationSetKey";
-        private const string DailyAlarmKey = "dailyAlarmKey";
-        private const string RandomAlarmKey = "randomAlarmKey";
-        private const string NotificationCountKey = "notificationCountKey";
-        private const string ShouldRefresKey = "shouldRefreshKey";
-        private const string LastRetryTimeKey = "lastRetryTimeKey";
-        private const string LastRefreshColorsTimeKey = "lastRefreshColorsTimeKey";
-        private const string ColorsKey = "colorsKey";
-        private static readonly string ColorsDefault = JsonConvert.SerializeObject(new ObservableRangeCollection<Color> {
-            new Color {
-                Id = 1,
-                PrimaryColor = "#257873",
-                SecondaryColor = "#f8d591"
-            },        
-            new Color {
-                Id = 2,
-                PrimaryColor = "#003d73",
-                SecondaryColor = "#1ecfd6"
-            },         
-            new Color {
-                Id = 3,
-                PrimaryColor = "#36688d",
-                SecondaryColor = "#f3cd05"
-            }
-        });
+        private const string IndexKey = nameof(IndexKey);
+        private const string CurrentDateKey = nameof(CurrentDateKey);
+        private const string FlagReasonsKey = nameof(FlagReasonsKey);
+        private const string ConfigKey = nameof(ConfigKey);
+        private const string IsFirstTimeKey = nameof(IsFirstTimeKey);
+        private const string IsDailyNotificationSetKey = nameof(IsDailyNotificationSetKey);
+        private const string IsRandomNotificationSetKey = nameof(IsRandomNotificationSetKey);
+        private const string DailyAlarmKey = nameof(DailyAlarmKey);
+        private const string RandomAlarmKey = nameof(RandomAlarmKey);
+        private const string NotificationCountKey = nameof(NotificationCountKey);
+        private const string ShouldRefresKey = nameof(ShouldRefresKey);
+        private const string LastRetryTimeKey = nameof(LastRetryTimeKey);
+        private const string LastRefreshColorsTimeKey = nameof(LastRefreshColorsTimeKey);
+        private const string LastRefreshFlagReasonsTimeKey = nameof(LastRefreshFlagReasonsTimeKey);
+        private const string ColorsKey = nameof(ColorsKey);
+        private const string FlaggedQuotesKey = nameof(FlaggedQuotesKey);
+        private const string CanSwipeKey = nameof(CanSwipeKey);
+        private const string SwipeCountKey = nameof(SwipeCountKey);
+        private const string SwipeDisabledDateKey = nameof(SwipeDisabledDateKey);
 
         #endregion
 
 
+        #region Defaults
+
+        private static readonly string flagReasonsDefault = JsonConvert.SerializeObject(Utils.GetDefaultFlagReasons());
+        private static readonly string flaggedQuotesDefault = JsonConvert.SerializeObject(new ObservableRangeCollection<int>());
+        private static readonly string configDefault = JsonConvert.SerializeObject(new Config());
+        private static readonly DateTime defaultDate = DateTime.Now;
+
+        #endregion
+
         public static int CurrentIndex
         {
-            get => AppSettings.GetValueOrDefault(IndexKey, IndexDefault);
-            set => AppSettings.AddOrUpdateValue(IndexKey, value);
+            get => AppSettings.GetValueOrDefault(IndexKey, 0);
+            set
+            {
+                AppSettings.AddOrUpdateValue(IndexKey, value);
+                CurrentDate = DateTime.Today;
+            }
+        }
+
+        public static int SwipeCount
+        {
+            get => AppSettings.GetValueOrDefault(SwipeCountKey, 0);
+            set
+            {
+                AppSettings.AddOrUpdateValue(SwipeCountKey, value);
+            }
         }
 
         public static DateTime CurrentDate
         {
-            get => AppSettings.GetValueOrDefault(CurrentDateKey, CurrentDateDefault);
+            get => AppSettings.GetValueOrDefault(CurrentDateKey, defaultDate);
             set => AppSettings.AddOrUpdateValue(CurrentDateKey, value);
         }
 
-        public static ObservableRangeCollection<DesignQuote> QuotesData
+        public static ObservableRangeCollection<FlagReason> FlagReasons
         {
-            get => JsonConvert.DeserializeObject<ObservableRangeCollection<DesignQuote>>(AppSettings.GetValueOrDefault(QuotesKey, QuotesDefault));
-            set => AppSettings.AddOrUpdateValue(QuotesKey, JsonConvert.SerializeObject(value));
+            get => JsonConvert.DeserializeObject<ObservableRangeCollection<FlagReason>>(AppSettings.GetValueOrDefault(FlagReasonsKey, flagReasonsDefault));
+            set => AppSettings.AddOrUpdateValue(FlagReasonsKey, JsonConvert.SerializeObject(value));
         }
 
-        public static DateTime SyncDate
+        public static ObservableRangeCollection<int> FlagedQuoteIds
         {
-            get => AppSettings.GetValueOrDefault(SyncDateKey, SyncDateDefault);
-            set => AppSettings.AddOrUpdateValue(SyncDateKey, value);
+            get => JsonConvert.DeserializeObject<ObservableRangeCollection<int>>(AppSettings.GetValueOrDefault(FlaggedQuotesKey, flaggedQuotesDefault));
+            set => AppSettings.AddOrUpdateValue(FlagReasonsKey, JsonConvert.SerializeObject(value));
         }
 
         public static bool IsFirstTime
@@ -97,7 +100,7 @@ namespace DezignSpiration.Helpers
 
         public static Config SettingsConfig
         {
-            get => JsonConvert.DeserializeObject<Config>(AppSettings.GetValueOrDefault(ConfigKey, ConfigDefault));
+            get => JsonConvert.DeserializeObject<Config>(AppSettings.GetValueOrDefault(ConfigKey, configDefault));
             set => AppSettings.AddOrUpdateValue(ConfigKey, JsonConvert.SerializeObject(value));
         }
 
@@ -107,7 +110,11 @@ namespace DezignSpiration.Helpers
             set => AppSettings.AddOrUpdateValue(IsDailyNotificationSetKey, value);
         }
 
-        public static bool ShouldRefresh
+        /// <summary>
+        /// Gets or sets a value indicating whether this the quotes collection is due for refreshing
+        /// </summary>
+        /// <value><c>true</c> if should refresh; otherwise, <c>false</c>.</value>
+        public static bool ShouldRetryQuotes
         {
             get => AppSettings.GetValueOrDefault(ShouldRefresKey, false);
             set => AppSettings.AddOrUpdateValue(ShouldRefresKey, value);
@@ -145,25 +152,33 @@ namespace DezignSpiration.Helpers
 
         public static DateTime LastRetryTime
         {
-            get => AppSettings.GetValueOrDefault(LastRetryTimeKey, DateTime.Now);
-            set => AppSettings.AddOrUpdateValue(LastRetryTimeKey, value);
+            get => AppSettings.GetValueOrDefault(LastRetryTimeKey, defaultDate);
+            set => AppSettings.AddOrUpdateValue(LastRetryTimeKey, DateTime.SpecifyKind(value, DateTimeKind.Utc));
         }
 
-        public static bool IsTimeToRefresh => (LastRetryTime - DateTime.Now).TotalMinutes > 5;
+        public static bool ShouldRefreshQuotes => (DateTime.Now - LastRetryTime).TotalMinutes > 2;
 
         public static DateTime LastColorRefreshTime
         {
-            get => AppSettings.GetValueOrDefault(LastRefreshColorsTimeKey, DateTime.Now);
-            set => AppSettings.AddOrUpdateValue(LastRefreshColorsTimeKey, value);
+            get => AppSettings.GetValueOrDefault(LastRefreshColorsTimeKey, defaultDate);
+            set => AppSettings.AddOrUpdateValue(LastRefreshColorsTimeKey, DateTime.SpecifyKind(value, DateTimeKind.Utc));
         }
 
-        public static bool ShouldRefreshColors => (LastColorRefreshTime - DateTime.Now).Days > 14;
+        public static bool ShouldRefreshColors => (DateTime.Now - LastColorRefreshTime).Days > 14;
 
-        public static ObservableRangeCollection<Color> ColorsData
+        public static DateTime LastFlagReasonsRefreshTime
         {
-            get => JsonConvert.DeserializeObject<ObservableRangeCollection<Color>>(AppSettings.GetValueOrDefault(ColorsKey, ColorsDefault));
-            set => AppSettings.AddOrUpdateValue(ColorsKey, JsonConvert.SerializeObject(value));
+            get => AppSettings.GetValueOrDefault(LastRefreshFlagReasonsTimeKey, defaultDate);
+            set => AppSettings.AddOrUpdateValue(LastRefreshFlagReasonsTimeKey, DateTime.SpecifyKind(value, DateTimeKind.Utc));
         }
+
+        public static DateTime SwipeDisabledDate
+        {
+            get => AppSettings.GetValueOrDefault(SwipeDisabledDateKey, defaultDate.AddDays(-1));
+            set => AppSettings.AddOrUpdateValue(SwipeDisabledDateKey, DateTime.SpecifyKind(value, DateTimeKind.Utc));
+        }
+
+        public static bool ShouldRefreshFlagReasons => (DateTime.Now - LastFlagReasonsRefreshTime).Days > 30;
 
     }
 }

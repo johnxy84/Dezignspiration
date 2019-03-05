@@ -1,15 +1,16 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using SQLite;
 
 namespace DezignSpiration.Models
 {
-    public class Color: ObservableObject
+    public class Color : ObservableObject
     {
         private string primaryColor = "#ffffff"; // White
         private string secondaryColor = "#000000"; // Black
         private int id;
 
         [JsonProperty("id")]
+        [PrimaryKey]
         public int Id
         {
             get => id;
@@ -41,5 +42,20 @@ namespace DezignSpiration.Models
                 OnPropertyChanged();
             }
         }
+    }
+
+    public class ColorsResponse
+    {
+        [JsonProperty("status")]
+        public string Status { get; set; }
+
+        [JsonProperty("data")]
+        public ColorResponseData Data { get; set; }
+    }
+
+    public class ColorResponseData
+    {
+        [JsonProperty("colors")]
+        public ObservableRangeCollection<Color> Colors { get; set; }
     }
 }

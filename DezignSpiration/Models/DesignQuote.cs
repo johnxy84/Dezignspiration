@@ -1,6 +1,9 @@
 ﻿using System;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using SQLite;
+using SQLiteNetExtensions.Attributes;
+
 namespace DezignSpiration.Models
 {
     public class DesignQuote : ObservableObject
@@ -16,10 +19,12 @@ namespace DezignSpiration.Models
         private bool colorsInverted;
 
         [JsonProperty("id")]
+        [PrimaryKey]
         public int Id
         {
             get => id;
-            set {
+            set
+            {
                 id = value;
                 OnPropertyChanged();
             }
@@ -36,7 +41,7 @@ namespace DezignSpiration.Models
             }
         }
 
-        // MAximum length = 250
+        // Maximum length = 250
         [JsonProperty("quote")]
         public string Quote
         {
@@ -55,40 +60,6 @@ namespace DezignSpiration.Models
             set
             {
                 author = value;
-                author = string.IsNullOrWhiteSpace(value) ? "Anonymous" : value;
-                OnPropertyChanged();
-            }
-        }
-
-        [JsonProperty("authorUrl")]
-        public string AuthorUrl
-        {
-            get => authorUrl;
-            set
-            {
-                authorUrl = value;
-                OnPropertyChanged();
-            }
-        }
-
-        [JsonProperty("description_title")]
-        public string DescriptionTitle
-        {
-            get => descriptionTitle;
-            set
-            {
-                descriptionTitle = value;
-                OnPropertyChanged();
-            }
-        }
-
-        [JsonProperty("description")]
-        public string Description
-        {
-            get => description;
-            set
-            {
-                description = value;
                 OnPropertyChanged();
             }
         }
@@ -104,14 +75,25 @@ namespace DezignSpiration.Models
             }
         }
 
+        [JsonIgnore]
+        [ForeignKey(typeof(Color))]
+        public int ColorId
+        {
+            get => Color.Id;
+            set
+            {
+                Color.Id = value;
+            }
+        }
 
         [JsonProperty("color")]
+        [OneToOne]
         public Color Color
         {
             get => color;
             set
             {
-                if(ColorsInverted)
+                if (ColorsInverted)
                 {
                     color = new Color
                     {
@@ -128,6 +110,7 @@ namespace DezignSpiration.Models
         }
 
         [JsonIgnore]
+        [Ignore]
         public Dictionary<string, string> ColorMap
         {
             get
@@ -141,12 +124,23 @@ namespace DezignSpiration.Models
         }
 
         [JsonIgnore]
-        public double QuoteFontSize { 
-            get => Quote.Length > 150 ? 30 : 35;
-        }
+        [Ignore]
+        public double QuoteFontSize => Quote.Length > 150 ? 30 : 35;
 
-        [JsonIgnore]
-        public bool HasDescription => !string.IsNullOrWhiteSpace(Description);
+    }
 
+    public class DesignQuoteResponse
+    {
+        [JsonProperty("status")]
+        public string Status { get; set; }
+
+        [JsonProperty("data")]
+        public DesignResponseData Data { get; set; }
+    }
+
+    public class DesignResponseData
+    {
+        [JsonProperty("quotes")]
+        public ObservableRangeCollection<DesignQuote> Quotes { get; set; }
     }
 }

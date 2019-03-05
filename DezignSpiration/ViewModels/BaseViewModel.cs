@@ -1,8 +1,11 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using DezignSpiration.Helpers;
 using DezignSpiration.Models;
 using Xamarin.Forms;
+using DezignSpiration.Interfaces;
+using CommonServiceLocator;
+using Constants = DezignSpiration.Helpers.Constants;
 
 namespace DezignSpiration.ViewModels
 {
@@ -11,6 +14,8 @@ namespace DezignSpiration.ViewModels
         private bool isBusy;
         private bool isNotBusy = true;
         protected IHelper Helper;
+        private readonly IQuotesRepository quotesRepository;
+        private readonly IColorsRepository colorsRepository;
 
         #region Properties
 
@@ -26,7 +31,7 @@ namespace DezignSpiration.ViewModels
 
         public bool IsNotBusy
         {
-            get => isNotBusy; 
+            get => isNotBusy;
             set
             {
                 if (SetProperty(ref isNotBusy, value))
@@ -34,42 +39,65 @@ namespace DezignSpiration.ViewModels
             }
         }
 
-        public INavigation Navigation { get; set; }
+        public INavigationService Navigation { get; set; }
 
         #endregion
 
-
-        public BaseViewModel(INavigation navigation = null)
+        public BaseViewModel()
         {
-            Navigation = navigation;
+            Navigation = ServiceLocator.Current.GetInstance<INavigationService>();
+            quotesRepository = ServiceLocator.Current.GetInstance<IQuotesRepository>();
+            colorsRepository = ServiceLocator.Current.GetInstance<IColorsRepository>();
             Helper = DependencyService.Get<IHelper>();
         }
 
-
-        public async Task PushModalAsync(Page page)
+        /// <summary>
+        /// Fetches new quotes quotes.
+        /// <paramref name="shouldAllowRetry"/>
+        /// </summary>
+        public async Task<bool> GetFreshQuotes(bool shouldAllowRetry = true)
         {
-            if (Navigation != null)
-                await Navigation.PushModalAsync(page);
+            Settings.LastRetryTime = DateTime.Now;
+            try
+            {
+                // Get new Colors before dragging down new quotes to prevent db constraint errors
+                await colorsRepository.GetFreshColors();
+                var newQuotes = await quotesRepository.GetFreshQuotes();
+                if (newQuotes != null)
+                {
+                    MessagingCenter.Send(QuotesAdded.Message, Constants.QUOTES_ADDED_KEY, newQuotes);
+                    Settings.ShouldRetryQuotes = false;
+                    Helper?.ShowAlert("Yassss. You just got some fresh, new quotes. :-)");
+                    await quotesRepository.InsertQuotes(newQuotes);
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Settings.ShouldRetryQuotes = true;
+                Utils.LogError(ex, "RefreshQuotesException");
+
+                Helper?.ShowAlert("We couldn't get more quotes, we'll try again Later", true, false, shouldAllowRetry ? "Try now" : string.Empty, async (obj) =>
+                {
+                    if (shouldAllowRetry)
+                    {
+                        await GetFreshQuotes();
+                    }
+                });
+
+                return false;
+            }
+            finally
+            {
+                NotificationUtils.ClearNotifications();
+                Helper?.SetScheduledNotifications();
+            }
         }
 
-        public async Task PopModalAsync()
+        public virtual Task InitializeAsync(object navigationData)
         {
-            if (Navigation != null)
-                await Navigation.PopModalAsync();
+            return Task.FromResult(false);
         }
-
-        public async Task PushAsync(Page page)
-        {
-            if (Navigation != null)
-                await Navigation.PushAsync(page);
-        }
-
-        public async Task PopAsync()
-        {
-            if (Navigation != null)
-                await Navigation.PopAsync();
-        }
-
     }
 }
-

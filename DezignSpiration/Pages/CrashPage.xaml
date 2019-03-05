@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             BackgroundColor="{StaticResource MainColor}"
+             x:Class="DezignSpiration.Pages.CrashPage">
+    
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Color x:Key="MainColor">Black</Color>
+            <Color x:Key="SecondaryColor">White</Color>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                        <Label FontAttributes="Bold" LineHeight="1.5" FontSize="40" TextColor="{StaticResource SecondaryColor}">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="These &#xA;" />
+                                    <Span Text="Are &#xA;" />
+                                    <Span Text="Not &#xA;" />
+                                    <Span Text="The &#xA;" />
+                                    <Span Text="Quotes &#xA;" />
+                                    <Span Text="You &#xA;" />
+                                    <Span Text="Seek &#xA;" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    <ActivityIndicator Grid.Column="1"  IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Margin="20"/>
+                </Grid>
+                <Label Text="We're sorry, something must have gone wrong, try refreshing or restarting the app" TextColor="{StaticResource SecondaryColor}"/>
+                <Button Text="Refresh Quotes" BorderRadius="10" Command="{Binding RefreshCommand}" IsEnabled="{Binding IsNotBusy}" Margin="20"/>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

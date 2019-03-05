@@ -11,32 +11,87 @@ using DezignSpiration.Models;
 using Android.Content;
 using Java.Lang;
 using Android.Support.Design.Widget;
+using Android.Runtime;
+using DezignSpiration.Interfaces;
+using CarouselView.FormsPlugin.Android;
+using Lottie.Forms.Droid;
 
 [assembly: Xamarin.Forms.Dependency(typeof(MainActivity))]
 
 namespace DezignSpiration.Droid
 {
-    [Activity(Label = "ApplicationName", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
-    public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity, IHelper
+    [Activity(Label = "Dezignspiration", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [IntentFilter(new[] { Intent.ActionSend }, Categories = new[] { Intent.CategoryDefault }, DataMimeType = @"text/plain")]
+    [IntentFilter(new[] { Intent.ActionProcessText }, Categories = new[] { Intent.CategoryDefault }, DataMimeType = @"text/plain")]
+    public class MainActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivity, IHelper, IButton
     {
 
         public static MainActivity Instance { get; private set; }
+        private App appInstance;
         private bool doubleBackToExitPressedOnce;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
             Instance = this;
-
             Window.SetFlags(WindowManagerFlags.Fullscreen, WindowManagerFlags.Fullscreen);
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(savedInstanceState);
+            Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             NotificationHelper.CreateNotificationChannel(Application.Context);
             FFImageLoading.Forms.Platform.CachedImageRenderer.Init(true);
-            global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
+            CarouselViewRenderer.Init();
+            Xamarin.Forms.Forms.Init(this, savedInstanceState);
+            AnimationViewRenderer.Init();
+            appInstance = new App();
+
+            HandleIntent(Intent);
+
+
             StartService(new Intent(Application.Context, typeof(KillStopper)));
-            LoadApplication(new App());
+            LoadApplication(appInstance);
+        }
+
+        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Permission[] grantResults)
+        {
+            Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+
+        protected override void OnNewIntent(Intent intent)
+        {
+            base.OnNewIntent(intent);
+            HandleIntent(intent);
+        }
+
+        void HandleIntent(Intent intent)
+        {
+            try
+            {
+                var receivedText = string.Empty;
+
+                switch (intent.Action)
+                {
+                    case Intent.ActionSend:
+                        receivedText = intent.GetStringExtra(Intent.ExtraText);
+                        break;
+                    case Intent.ActionProcessText:
+                        receivedText = Intent.GetCharSequenceExtra(Intent.ExtraProcessText);
+                        break;
+                }
+
+                if (!string.IsNullOrWhiteSpace(receivedText))
+                {
+                    appInstance?.ProcessShareAction(receivedText);
+                }
+
+            }
+            catch (System.Exception ex)
+            {
+                Utils.LogError(ex, "ErrorProcessingShareIntent");
+            }
+
         }
 
         public void DisplayMessage(string title, string message, string positive, string negative, Action<bool> choice)
@@ -65,11 +120,11 @@ namespace DezignSpiration.Droid
             });
         }
 
-        public void ShowAlert(string message, bool isLongAlert = true, bool isToast = true, string actionMessage = null, Action<object> action = null)
+        public void ShowAlert(string message, bool isLongAlert = false, bool isToast = true, string actionMessage = null, Action<object> action = null)
         {
             RunOnUiThread(() =>
             {
-                if(isToast)
+                if (isToast)
                 {
                     Toast.MakeText(Application.Context, message, isLongAlert ? ToastLength.Long : ToastLength.Short).Show();
                     return;
@@ -89,13 +144,7 @@ namespace DezignSpiration.Droid
 
                 snackBar.Show();
 
-                //Toast.MakeText(Instance, message, isLongAlert? ToastLength.Long: ToastLength.Short).Show();
             });
-        }
-
-        public void ScheduleNotification(ScheduledNotification scheduledNotification)
-        {
-            NotificationHelper.ScheduledNotification(Application.Context, scheduledNotification);
         }
 
         public void CancelScheduledNotification(ScheduledNotification scheduledNotification)
@@ -146,8 +195,9 @@ namespace DezignSpiration.Droid
             Helper.ShareQuote(Instance, quote);
         }
 
-        public void ShowOptions(string title, string[] options, Action<object> action = null)
+        public void ShowOptions(string title, string[] options, Action<object> action = null, string cancelText = "")
         {
+            AlertDialog dialog = null;
             AlertDialog.Builder builder = Build.VERSION.SdkInt >= BuildVersionCodes.LollipopMr1
                 ? new AlertDialog.Builder(Instance, Android.Resource.Style.ThemeDeviceDefaultDialogAlert)
                 : new AlertDialog.Builder(Instance);
@@ -156,14 +206,23 @@ namespace DezignSpiration.Droid
             {
                 if (!IsFinishing)
                 {
-                    builder.SetTitle(title)
-                       .SetItems(options, (sender, e) =>
-                       {
+                    dialog = builder.SetTitle(title)
+                        .SetItems(options, (sender, e) =>
+                        {
                             action?.Invoke(options[e.Which]);
-                       })
-                       .Show();
+                        })
+                        .SetNegativeButton(cancelText, (s, e) =>
+                        {
+                            dialog?.Dismiss();
+                        })
+                        .Show();
                 }
             });
+        }
+
+        public void BeginSwipeEnableCountdown()
+        {
+            NotificationHelper.ScheduleSwipeEnabledNotification(Application.Context);
         }
     }
 }

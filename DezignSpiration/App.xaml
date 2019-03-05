@@ -1,7 +1,13 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Application xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="DezignSpiration.App">
+<?xml version="1.0" encoding="utf-8"?>
+<Application xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DezignSpiration.App">
     <Application.Resources>
         <ResourceDictionary>
+            <Color x:Key="PrimaryColor">#009688</Color>
+            <Color x:Key="SecondaryColor">#FF5722</Color>
+            <Color x:Key="HeaderBackground">#EBEBEB</Color>
+
             <OnPlatform x:TypeArguments="x:String" x:Key="NeutonBold">
                 <On Platform="Android" Value="Neuton-Bold.ttf#Neuton" />
                 <On Platform="iOS" Value="Neuton-Bold" />
@@ -10,6 +16,44 @@
                 <On Platform="Android" Value="Neuton-Light.ttf#Neuton" />
                 <On Platform="iOS" Value="Neuton-Light" />
             </OnPlatform>
+            <Style TargetType="Button">
+                <Setter Property="Margin" Value="20"/>
+                <Setter Property="TextColor" Value="White"/>
+                <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor}"/>
+                <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+                <Setter Property="CornerRadius" Value="5"/>
+            </Style>
+            <Style TargetType="Button" x:Key="SecondaryButton">
+                <Setter Property="Margin" Value="20"/>
+                <Setter Property="TextColor" Value="Black"/>
+                <Setter Property="BackgroundColor" Value="Transparent"/>
+                <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+                <Setter Property="CornerRadius" Value="5"/>
+                <Setter Property="BorderWidth" Value="1"/>
+                <Setter Property="BorderColor" Value="Black"/>
+            </Style>
+            <Style TargetType="Label">
+                <Setter Property="Margin" Value="20,0"/>
+                <Setter Property="FontSize" Value="Default"/>
+                <Setter Property="TextColor" Value="Black"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="VerticalOptions" Value="Center"/>
+            </Style>
+            <Style TargetType="Label" x:Key="InfoLabel">
+                <Setter Property="FontSize" Value="Micro"/>
+                <Setter Property="FontAttributes" Value="None"/>
+                <Setter Property="VerticalOptions" Value="Center"/>
+                <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+            </Style>
+            <Style TargetType="Entry">
+                <Setter Property="Margin" Value="20,0"/>
+                <Setter Property="FontSize" Value="Medium"/>
+            </Style>
+            <Style TargetType="StackLayout">
+                <Setter Property="Margin" Value="0,15"/>
+                <Setter Property="Orientation" Value="Vertical"/>
+            </Style>
+                        
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -16,14 +16,14 @@ namespace DezignSpiration.Pages
         public AddColorPage()
         {
             InitializeComponent();
-            BindingContext = new AddColorViewModel(Navigation);
+            BindingContext = App.ViewModelLocator.AddColorViewModel;
         }
 
         void PrimaryTextCompleted(object sender, EventArgs e)
         {
-            if(sender is Entry primaryEntry && hasTypedPrimaryColor)
+            if (sender is Entry primaryEntry && hasTypedPrimaryColor)
             {
-                if(!colorRegex.IsMatch(primaryEntry.Text))
+                if (!colorRegex.IsMatch(primaryEntry.Text))
                 {
                     PrimaryErrorLabel.Text = "Please type a valid hex color code";
                     PrimaryErrorLabel.TextColor = Color.DarkRed;

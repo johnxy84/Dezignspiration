@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -9,9 +9,9 @@
     <ProjectTypeGuids>{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TemplateGuid>{6143fdea-f3c2-4a09-aafa-6e230626515e}</TemplateGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>DesignSpiration.iOS</RootNamespace>
+    <RootNamespace>DezignSpiration.iOS</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
-    <AssemblyName>DesignSpiration.iOS</AssemblyName>
+    <AssemblyName>DezignSpiration.iOS</AssemblyName>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
@@ -28,7 +28,6 @@
     <MtouchLink>None</MtouchLink>
     <MtouchDebug>true</MtouchDebug>
 <CodesignKey>iPhone Developer</CodesignKey>
-<AssemblyName>DezignSpiration.iOS</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -39,7 +38,6 @@
     <MtouchLink>None</MtouchLink>
     <MtouchArch>x86_64</MtouchArch>
     <ConsolePause>false</ConsolePause>
-<AssemblyName>DezignSpiration.iOS</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
     <DebugSymbols>true</DebugSymbols>
@@ -151,24 +149,49 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms">
-      <Version>3.4.0.1008975</Version>
+      <Version>3.5.0.129452</Version>
     </PackageReference>
     <PackageReference Include="Xam.Plugins.Settings">
       <Version>3.1.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Azure.Mobile.Client.SQLiteStore">
-      <Version>4.0.2</Version>
+      <Version>4.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.Essentials">
+      <Version>1.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="System.Reflection.Emit">
+      <Version>4.3.0</Version>
+      <ExcludeAssets>all</ExcludeAssets>
+  </PackageReference>
+    <PackageReference Include="Com.Airbnb.Xamarin.Forms.Lottie">
+      <Version>2.6.3</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\DesignSpiration\DesignSpiration.csproj">
+    <ProjectReference Include="..\DezignSpiration\DezignSpiration.csproj">
       <Project>{6D1908F0-48F3-4498-80A5-8CA5F910381F}</Project>
       <Name>DezignSpiration</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\Neuton-Bold.ttf" />
+    <BundleResource Include="Resources\loading.json" />
+    <BundleResource Include="Resources\bouncy_balls.json" />
+    <BundleResource Include="Resources\fluid_loading_animation.json" />
+    <BundleResource Include="Resources\soft_loading.json" />
+    <BundleResource Include="Resources\back.svg" />
+    <BundleResource Include="Resources\cancel.svg" />
+    <BundleResource Include="Resources\check.svg" />
+    <BundleResource Include="Resources\close.svg" />
+    <BundleResource Include="Resources\flag.svg" />
+    <BundleResource Include="Resources\info.svg" />
+    <BundleResource Include="Resources\plus.svg" />
+    <BundleResource Include="Resources\settings.svg" />
+    <BundleResource Include="Resources\share.svg" />
+    <BundleResource Include="Resources\fireworks.json" />
+    <BundleResource Include="Resources\anon.json" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Resources\Neuton-Light.ttf" />

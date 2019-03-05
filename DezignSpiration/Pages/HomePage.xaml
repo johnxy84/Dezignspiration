@@ -1,6 +1,78 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<CarouselPage xmlns="http://xamarin.com/schemas/2014/forms"
-            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-            CurrentPageChanged="PageChanged"
-            x:Class="DezignSpiration.Pages.HomePage">
-</CarouselPage>
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Name="MainPage"
+             xmlns:ffimageloadingsvg="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             xmlns:cv="clr-namespace:CarouselView.FormsPlugin.Abstractions;assembly=CarouselView.FormsPlugin.Abstractions"
+             xmlns:controls="clr-namespace:DezignSpiration.Controls;assembly=DezignSpiration"
+             BackgroundColor="White"
+             x:Class="DezignSpiration.Pages.HomePage">
+             
+    <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+        <controls:Loader VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"/>
+        <cv:CarouselViewControl x:Name="HomeCarousel" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" IsSwipeEnabled="{Binding CanSwipe}"
+                         IsVisible="{Binding IsNotBusy}" Position="{Binding CurrentIndex}" ItemsSource="{Binding Quotes}">
+            <cv:CarouselViewControl.Resources>
+                <Style TargetType="Label">
+                    <Setter Property="Margin" Value="10" />
+                    <Setter Property="TextColor" Value="{Binding Color.SecondaryColor}" />
+                    <Setter Property="FontFamily" Value="{StaticResource NeutonLight}" />
+                </Style>
+                <Style TargetType="Frame">
+                    <Setter Property="BackgroundColor" Value="Transparent" />
+                    <Setter Property="CornerRadius" Value="5" />
+                    <Setter Property="BorderColor" Value="{Binding Color.SecondaryColor}" />
+                    <Setter Property="Padding" Value="0" />
+                    <Setter Property="Margin" Value="10" />
+                </Style>
+                <Style TargetType="ffimageloadingsvg:SvgCachedImage">
+                    <Setter Property="Margin" Value="10" />
+                    <Setter Property="HeightRequest" Value="40" />
+                    <Setter Property="WidthRequest" Value="40" />
+                    <Setter Property="Aspect" Value="AspectFit" />
+                </Style>
+            </cv:CarouselViewControl.Resources>
+            <cv:CarouselViewControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid BackgroundColor="{Binding Color.PrimaryColor}" VerticalOptions="FillAndExpand">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="100" />
+                        </Grid.RowDefinitions>
+                        <!--        Quote and Author Layout           -->
+                        <ScrollView VerticalOptions="Fill" Padding="10,0" InputTransparent="true" Grid.Row="0">
+                            <StackLayout Orientation="Vertical" VerticalOptions="CenterAndExpand">
+                                <Label FontSize="{Binding QuoteFontSize}" FontAttributes="Bold" FontFamily="{StaticResource NeutonBold}" Text="{Binding Quote}" VerticalOptions="StartAndExpand" />
+                                <Label Text="{Binding Author}" FontFamily="{StaticResource NeutonBold}" FontSize="Large" />
+                            </StackLayout>
+                        </ScrollView>
+                        <!--             Secondary Buttons               -->
+                        <FlexLayout Direction="Row" JustifyContent="SpaceAround" AlignItems="Center" Margin="0,5" Grid.Row="1">
+                            <ffimageloadingsvg:SvgCachedImage HorizontalOptions="Start" ReplaceStringMap="{Binding ColorMap}" Source="settings.svg">
+                                <ffimageloadingsvg:SvgCachedImage.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Path=BindingContext.SettingsCommand, Source={x:Reference MainPage}}" />
+                                </ffimageloadingsvg:SvgCachedImage.GestureRecognizers>
+                            </ffimageloadingsvg:SvgCachedImage>
+                            <ffimageloadingsvg:SvgCachedImage HorizontalOptions="Start" ReplaceStringMap="{Binding ColorMap}" Source="share.svg">
+                                <ffimageloadingsvg:SvgCachedImage.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Path=BindingContext.ShareCommand, Source={x:Reference MainPage}}" />
+                                </ffimageloadingsvg:SvgCachedImage.GestureRecognizers>
+                            </ffimageloadingsvg:SvgCachedImage>
+                            <ffimageloadingsvg:SvgCachedImage HorizontalOptions="Start" ReplaceStringMap="{Binding ColorMap}" Source="plus.svg">
+                                <ffimageloadingsvg:SvgCachedImage.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Path=BindingContext.AddCommand, Source={x:Reference MainPage}}" />
+                                </ffimageloadingsvg:SvgCachedImage.GestureRecognizers>
+                            </ffimageloadingsvg:SvgCachedImage>
+                            <ffimageloadingsvg:SvgCachedImage HorizontalOptions="Start" ReplaceStringMap="{Binding ColorMap}" Source="flag.svg">
+                                <ffimageloadingsvg:SvgCachedImage.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Path=BindingContext.FlagCommand, Source={x:Reference MainPage}}" />
+                                </ffimageloadingsvg:SvgCachedImage.GestureRecognizers>
+                            </ffimageloadingsvg:SvgCachedImage>
+                        </FlexLayout>
+                    </Grid>
+                </DataTemplate>
+            </cv:CarouselViewControl.ItemTemplate>
+        </cv:CarouselViewControl>
+    </Grid>
+</ContentPage>
