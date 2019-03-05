@@ -5,7 +5,7 @@ echo " - AppSecret: $APP_SECRET"
 
 # Updating secrets
 
-IdFile=$BUILD_REPOSITORY_LOCALPATH/src/DezignSpiration/DezignSpiration/Helpers/Constants.cs
+IdFile=$BUILD_REPOSITORY_LOCALPATH/DezignSpiration/Helpers/Constants.cs
 
 echo "Path to Constants => ${IdFile}"
 
