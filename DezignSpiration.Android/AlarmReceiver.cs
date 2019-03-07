@@ -6,6 +6,7 @@ using Android.Support.V4.App;
 using Newtonsoft.Json;
 using DezignSpiration.Interfaces;
 using CommonServiceLocator;
+using System.Linq;
 
 namespace DezignSpiration.Droid
 {
@@ -47,22 +48,23 @@ namespace DezignSpiration.Droid
                         var quotesRepository = ServiceLocator.Current.GetInstance<IQuotesRepository>();
                         var colorsRepository = ServiceLocator.Current.GetInstance<IColorsRepository>();
                         DesignQuote designQuote;
-                        switch (notificationType)
-                        {
-                            case NotificationType.RandomAlarm:
-                                int randomIndex = App.Random.Next(0, await quotesRepository.CountQuotes());
-                                designQuote = await quotesRepository.GetQuote(randomIndex);
-                                NotificationUtils.UpdateScheduledNotification(NotificationType.RandomAlarm, false);
-                                break;
-                            // Assume default alarm 
-                            default:
-                                designQuote = await quotesRepository.GetQuote(Utils.GetCurrentDisplayIndex());
-                                NotificationUtils.UpdateScheduledNotification(NotificationType.DailyAlarm, false);
-                                break;
-                        }
 
                         try
                         {
+                            switch (notificationType)
+                            {
+                                case NotificationType.RandomAlarm:
+                                    int randomIndex = App.Random.Next(0, await quotesRepository.CountQuotes());
+                                    designQuote = await quotesRepository.GetRandomQuote();
+                                    NotificationUtils.UpdateScheduledNotification(NotificationType.RandomAlarm, false);
+                                    break;
+                                // Assume default alarm 
+                                default:
+                                    designQuote = (await quotesRepository.GetAllQuotes()).ElementAt(Utils.GetCurrentDisplayIndex());
+                                    NotificationUtils.UpdateScheduledNotification(NotificationType.DailyAlarm, false);
+                                    break;
+                            }
+
                             NotificationHelper.SendScheduledNotification(context, notificationType, designQuote);
                             NotificationHelper.SetScheduledNotifications(context);
                         }

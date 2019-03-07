@@ -58,8 +58,8 @@ namespace DezignSpiration.ViewModels
 
         private void UpdateSwipeAbility(int oldValue, int newValue)
         {
-            //Reset swipe count if it's a new day
-            if ((Settings.SwipeDisabledDate - DateTime.Today).Days > 1)
+            //Reset swipe count if it's a new day and should reset
+            if ((Settings.SwipeDisabledDate - DateTime.Today).Days > 1 && Settings.SwipeCount >= Constants.MAX_SWIPE_COUNT)
             {
                 Settings.SwipeCount = 0;
             }

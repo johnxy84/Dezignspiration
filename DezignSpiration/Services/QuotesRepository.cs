@@ -54,6 +54,21 @@ namespace DezignSpiration.Services
             return await database.GetAsync<DesignQuote>(quoteId);
         }
 
+        public async Task<DesignQuote> GetRandomQuote()
+        {
+            var sql = $"select * from {nameof(DesignQuote)} order by random() limit 1";
+            try
+            {
+                return await database.FindWithQueryAsync<DesignQuote>(sql);
+
+            }
+            catch (Exception ex)
+            {
+                Utils.LogError(ex, "ErrorGettingRandomQuote");
+                return null;
+            }
+        }
+
         public async Task<List<DesignQuote>> GetAllQuotes()
         {
             try

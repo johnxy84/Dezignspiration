@@ -23,5 +23,7 @@ namespace DezignSpiration.Interfaces
 
         Task<bool> AddQuote(DesignQuote quote, string deviceId = null);
 
+        Task<DesignQuote> GetRandomQuote();
+
     }
 }
