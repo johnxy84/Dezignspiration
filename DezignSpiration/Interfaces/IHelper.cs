@@ -14,7 +14,7 @@ namespace DezignSpiration.Interfaces
 
         void OpenUrl(string url);
 
-        void ShareQuote(DesignQuote quote);
+        void ShareQuote(DesignQuote quote, bool isLongQuote = false);
 
         void ShowOptions(string title, string[] options, Action<object> choice, string cancelText = "Cancel");
 

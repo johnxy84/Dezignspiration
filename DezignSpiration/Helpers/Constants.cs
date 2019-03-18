@@ -24,6 +24,8 @@
         public const string APP_CENTER_SECRET = "APP_SECRET";
 
         public const int MAX_SWIPE_COUNT = 10;
+
+        public const int MAX_QUOTE_LENGTH = 250;
     }
 }
 

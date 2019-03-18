@@ -24,7 +24,7 @@ namespace DezignSpiration.Droid
             Bitmap bitmap = Bitmap.CreateBitmap(width, height, Bitmap.Config.Argb8888);
             Canvas canvas = new Canvas(bitmap);
             canvas.DrawColor(GetColorFromHex(backgroundColor));
-            
+
             // new antialiased Paint
             TextPaint paint = new TextPaint(PaintFlags.AntiAlias)
             {
@@ -66,11 +66,29 @@ namespace DezignSpiration.Droid
             return bitmap;
         }
 
-        public static void ShareQuote(Context context, DesignQuote designQuote)
+        public static void ShareQuote(Context context, DesignQuote designQuote, bool isLongQuote)
         {
             string text = $"{designQuote.Quote} \n\n\n{designQuote.Author}\n{Helpers.Constants.BRAND_NAME}";
-            Bitmap bitmap = GetBitmap(context, text , designQuote.Color.PrimaryColor, designQuote.Color.SecondaryColor);
-            ShareImage(context, bitmap);
+            if (isLongQuote)
+            {
+                ShareText(context, text);
+            }
+            else
+            {
+                Bitmap bitmap = GetBitmap(context, text, designQuote.Color.PrimaryColor, designQuote.Color.SecondaryColor);
+                ShareImage(context, bitmap);
+            }
+        }
+
+        public static void ShareText(Context context, string text)
+        {
+            Intent shareIntent = new Intent(Intent.ActionSend);
+            //shareIntent.SetAction(Intent.ActionSend);
+            shareIntent.AddFlags(ActivityFlags.ClearWhenTaskReset);
+            shareIntent.PutExtra(Intent.ExtraText, text);
+            shareIntent.SetType("text/plain");
+
+            context.StartActivity(Intent.CreateChooser(shareIntent, "Share Quote"));
         }
 
         public static void ShareImage(Context context, Bitmap bitmap)
@@ -138,7 +156,7 @@ namespace DezignSpiration.Droid
 
         public static float GetFontSize(string text)
         {
-            return text.Length <= 100 ? 70 : text.Length <= 150 ? 65 : 60 ;
+            return text.Length <= 100 ? 70 : text.Length <= 150 ? 65 : 60;
         }
     }
 

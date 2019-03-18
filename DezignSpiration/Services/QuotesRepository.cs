@@ -133,13 +133,15 @@ namespace DezignSpiration.Services
             }
         }
 
-        public async Task<bool> AddQuote(DesignQuote quote, string deviceId = null)
+        public async Task<bool> AddQuote(DesignQuote quote, bool isAnonymous, string deviceId = null)
         {
+            var author = isAnonymous || string.IsNullOrWhiteSpace(quote.Author) ? null : quote.Author;
+
             var response = await httpClient.Post("/api/v1/quotes", new
             {
                 color = quote.Color.Id,
                 quote = quote.Quote,
-                author = !string.IsNullOrWhiteSpace(quote.Author) ? quote.Author : null,
+                author,
                 device_id = deviceId
             });
             return response.IsSuccessStatusCode;

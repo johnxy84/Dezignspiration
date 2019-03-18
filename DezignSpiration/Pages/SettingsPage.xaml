@@ -9,21 +9,11 @@
         <Style TargetType="Label">
             <Setter Property="Margin" Value="20"/>
             <Setter Property="FontSize" Value="Default"/>
-            <Setter Property="TextColor" Value="Black"/>
+            <Setter Property="TextColor" Value="{StaticResource PrimaryColor}"/>
         </Style>
-        <Style TargetType="Switch">
-            <Setter Property="Margin" Value="20,0"/>
-            <Setter Property="HorizontalOptions" Value="Start"/>
-        </Style>
+
         <Style TargetType="StackLayout">
             <Setter Property="Margin" Value="0,10"/>
-        </Style>
-        <Style TargetType="Button">
-            <Setter Property="Margin" Value="20"/>
-            <Setter Property="TextColor" Value="White"/>
-            <Setter Property="BackgroundColor" Value="Teal"/>
-            <Setter Property="BorderRadius" Value="10"/>
-            <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
         </Style>
     </ContentPage.Resources>
     
@@ -58,7 +48,7 @@
                 <Label Text="Receive random Quotes " HorizontalOptions="FillAndExpand" VerticalOptions="Center"/>
                 <Switch IsToggled="{Binding Config.IsRandomQuoteEnabled}"/>
             </StackLayout>
-            <StackLayout Orientation="Horizontal" Margin="0,10" IsVisible="{Binding ReminderSwitch,Path=IsToggled}">
+            <StackLayout Orientation="Horizontal" Margin="0,10">
                 <Label Text="Receive Push Notifications" HorizontalOptions="FillAndExpand" VerticalOptions="Center"/>
                 <Switch IsToggled="{Binding Config.IsReceivePushEnabled}"/>
             </StackLayout>
@@ -69,14 +59,14 @@
             </StackLayout>
             
             <StackLayout Orientation="Vertical">
-                <Image Source="Icon.png" 
+                <Image Source="AppIcon.png" 
                        HorizontalOptions="CenterAndExpand"
                        Margin="10"
                        HeightRequest="100" WidthRequest="100"/>
                 <Label Text="Dezignspiration" Margin="0" HorizontalOptions="CenterAndExpand"/>
                 <Label Text="v 1.0" Margin="0" HorizontalOptions="CenterAndExpand"/>
                 <StackLayout.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding AddQuoteCommand}"/>
+                        <TapGestureRecognizer Command="{Binding WebsiteCommand}"/>
                 </StackLayout.GestureRecognizers>
             </StackLayout>
             
@@ -94,8 +84,8 @@
                         </FormattedString>
                     </Label.FormattedText>
                 </Label>
-                <Button CornerRadius="5" Text="Add Quote" Command="{Binding AddQuoteCommand}"/>
-                <Button CornerRadius="5" Text="Feedback" Command="{Binding FeedBackCommand}" Style="{Binding SecondaryButton}"/>
+                <Button Text="Add Quote" Command="{Binding AddQuoteCommand}"/>
+                <Button Text="Feedback" Command="{Binding FeedBackCommand}"/>
             </StackLayout>
         </FlexLayout>
     </ScrollView>

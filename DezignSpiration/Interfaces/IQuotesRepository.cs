@@ -21,7 +21,7 @@ namespace DezignSpiration.Interfaces
 
         Task<bool> FlagQuote(DesignQuote quote, int flagReasonId);
 
-        Task<bool> AddQuote(DesignQuote quote, string deviceId = null);
+        Task<bool> AddQuote(DesignQuote quote, bool isAnonymous, string deviceId = null);
 
         Task<DesignQuote> GetRandomQuote();
 

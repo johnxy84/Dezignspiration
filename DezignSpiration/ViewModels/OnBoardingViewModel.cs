@@ -41,7 +41,7 @@ namespace DezignSpiration.ViewModels
                     },
                     new OnBoardItem {
                         Text = "Get your Design voice heard",
-                        Animation = "soft_loading.json"
+                        Animation = "speaker.json"
                     },
                     new OnBoardItem {
                         Text = "Be you or be Anonymous",

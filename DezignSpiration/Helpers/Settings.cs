@@ -1,8 +1,7 @@
 ﻿using System;
 using DezignSpiration.Models;
 using Newtonsoft.Json;
-using Plugin.Settings;
-using Plugin.Settings.Abstractions;
+using Xamarin.Essentials;
 
 namespace DezignSpiration.Helpers
 {
@@ -13,13 +12,6 @@ namespace DezignSpiration.Helpers
     /// </summary>
     public static class Settings
     {
-        private static ISettings AppSettings
-        {
-            get
-            {
-                return CrossSettings.Current;
-            }
-        }
 
         #region Setting Constants
 
@@ -42,6 +34,7 @@ namespace DezignSpiration.Helpers
         private const string CanSwipeKey = nameof(CanSwipeKey);
         private const string SwipeCountKey = nameof(SwipeCountKey);
         private const string SwipeDisabledDateKey = nameof(SwipeDisabledDateKey);
+        private const string LengthyQuoteShareKey = nameof(LengthyQuoteShareKey);
 
         #endregion
 
@@ -57,57 +50,57 @@ namespace DezignSpiration.Helpers
 
         public static int CurrentIndex
         {
-            get => AppSettings.GetValueOrDefault(IndexKey, 0);
+            get => Preferences.Get(IndexKey, 0);
             set
             {
-                AppSettings.AddOrUpdateValue(IndexKey, value);
+                Preferences.Set(IndexKey, value);
                 CurrentDate = DateTime.Today;
             }
         }
 
         public static int SwipeCount
         {
-            get => AppSettings.GetValueOrDefault(SwipeCountKey, 0);
+            get => Preferences.Get(SwipeCountKey, 0);
             set
             {
-                AppSettings.AddOrUpdateValue(SwipeCountKey, value);
+                Preferences.Set(SwipeCountKey, value);
             }
         }
 
         public static DateTime CurrentDate
         {
-            get => AppSettings.GetValueOrDefault(CurrentDateKey, defaultDate);
-            set => AppSettings.AddOrUpdateValue(CurrentDateKey, value);
+            get => Preferences.Get(CurrentDateKey, defaultDate);
+            set => Preferences.Set(CurrentDateKey, value);
         }
 
         public static ObservableRangeCollection<FlagReason> FlagReasons
         {
-            get => JsonConvert.DeserializeObject<ObservableRangeCollection<FlagReason>>(AppSettings.GetValueOrDefault(FlagReasonsKey, flagReasonsDefault));
-            set => AppSettings.AddOrUpdateValue(FlagReasonsKey, JsonConvert.SerializeObject(value));
+            get => JsonConvert.DeserializeObject<ObservableRangeCollection<FlagReason>>(Preferences.Get(FlagReasonsKey, flagReasonsDefault));
+            set => Preferences.Set(FlagReasonsKey, JsonConvert.SerializeObject(value));
         }
 
         public static ObservableRangeCollection<int> FlagedQuoteIds
         {
-            get => JsonConvert.DeserializeObject<ObservableRangeCollection<int>>(AppSettings.GetValueOrDefault(FlaggedQuotesKey, flaggedQuotesDefault));
-            set => AppSettings.AddOrUpdateValue(FlagReasonsKey, JsonConvert.SerializeObject(value));
+            get => JsonConvert.DeserializeObject<ObservableRangeCollection<int>>(Preferences.Get(FlaggedQuotesKey, flaggedQuotesDefault));
+            set => Preferences.Set(FlagReasonsKey, JsonConvert.SerializeObject(value));
         }
 
         public static bool IsFirstTime
         {
-            get => AppSettings.GetValueOrDefault(IsFirstTimeKey, true);
-            set => AppSettings.AddOrUpdateValue(IsFirstTimeKey, value);
+            get => Preferences.Get(IsFirstTimeKey, true);
+            set => Preferences.Set(IsFirstTimeKey, value);
         }
 
         public static Config SettingsConfig
         {
-            get => JsonConvert.DeserializeObject<Config>(AppSettings.GetValueOrDefault(ConfigKey, configDefault));
-            set => AppSettings.AddOrUpdateValue(ConfigKey, JsonConvert.SerializeObject(value));
+            get => JsonConvert.DeserializeObject<Config>(Preferences.Get(ConfigKey, configDefault));
+            set => Preferences.Set(ConfigKey, JsonConvert.SerializeObject(value));
         }
 
         public static bool IsDailyNotificationSet
         {
-            get => AppSettings.GetValueOrDefault(IsDailyNotificationSetKey, false);
-            set => AppSettings.AddOrUpdateValue(IsDailyNotificationSetKey, value);
+            get => Preferences.Get(IsDailyNotificationSetKey, false);
+            set => Preferences.Set(IsDailyNotificationSetKey, value);
         }
 
         /// <summary>
@@ -116,69 +109,75 @@ namespace DezignSpiration.Helpers
         /// <value><c>true</c> if should refresh; otherwise, <c>false</c>.</value>
         public static bool ShouldRetryQuotes
         {
-            get => AppSettings.GetValueOrDefault(ShouldRefresKey, false);
-            set => AppSettings.AddOrUpdateValue(ShouldRefresKey, value);
+            get => Preferences.Get(ShouldRefresKey, false);
+            set => Preferences.Set(ShouldRefresKey, value);
         }
 
         public static bool IsRandomNotificationSet
         {
-            get => AppSettings.GetValueOrDefault(IsRandomNotificationSetKey, false);
-            set => AppSettings.AddOrUpdateValue(IsRandomNotificationSetKey, value);
+            get => Preferences.Get(IsRandomNotificationSetKey, false);
+            set => Preferences.Set(IsRandomNotificationSetKey, value);
         }
 
         public static ScheduledNotification DailyNotificationData
         {
-            get => JsonConvert.DeserializeObject<ScheduledNotification>(AppSettings.GetValueOrDefault(DailyAlarmKey, null));
-            set => AppSettings.AddOrUpdateValue(DailyAlarmKey, JsonConvert.SerializeObject(value));
+            get => JsonConvert.DeserializeObject<ScheduledNotification>(Preferences.Get(DailyAlarmKey, null));
+            set => Preferences.Set(DailyAlarmKey, JsonConvert.SerializeObject(value));
         }
 
         public static ScheduledNotification RandomNotificationData
         {
-            get => JsonConvert.DeserializeObject<ScheduledNotification>(AppSettings.GetValueOrDefault(RandomAlarmKey, null));
-            set => AppSettings.AddOrUpdateValue(RandomAlarmKey, JsonConvert.SerializeObject(value));
+            get => JsonConvert.DeserializeObject<ScheduledNotification>(Preferences.Get(RandomAlarmKey, null));
+            set => Preferences.Set(RandomAlarmKey, JsonConvert.SerializeObject(value));
         }
 
         public static int NotificationCount
         {
-            get => AppSettings.GetValueOrDefault(NotificationCountKey, 0);
+            get => Preferences.Get(NotificationCountKey, 0);
             set
             {
                 // Reset if this value reaches the max int value
                 // Meaning the User has gotten that amount of notifications
                 if (value == int.MaxValue) value = 0;
-                AppSettings.AddOrUpdateValue(NotificationCountKey, value);
+                Preferences.Set(NotificationCountKey, value);
             }
         }
 
         public static DateTime LastRetryTime
         {
-            get => AppSettings.GetValueOrDefault(LastRetryTimeKey, defaultDate);
-            set => AppSettings.AddOrUpdateValue(LastRetryTimeKey, DateTime.SpecifyKind(value, DateTimeKind.Utc));
+            get => Preferences.Get(LastRetryTimeKey, defaultDate);
+            set => Preferences.Set(LastRetryTimeKey, DateTime.SpecifyKind(value, DateTimeKind.Utc));
         }
 
         public static bool ShouldRefreshQuotes => (DateTime.Now - LastRetryTime).TotalMinutes > 2;
 
         public static DateTime LastColorRefreshTime
         {
-            get => AppSettings.GetValueOrDefault(LastRefreshColorsTimeKey, defaultDate);
-            set => AppSettings.AddOrUpdateValue(LastRefreshColorsTimeKey, DateTime.SpecifyKind(value, DateTimeKind.Utc));
+            get => Preferences.Get(LastRefreshColorsTimeKey, defaultDate);
+            set => Preferences.Set(LastRefreshColorsTimeKey, DateTime.SpecifyKind(value, DateTimeKind.Utc));
         }
 
         public static bool ShouldRefreshColors => (DateTime.Now - LastColorRefreshTime).Days > 14;
 
         public static DateTime LastFlagReasonsRefreshTime
         {
-            get => AppSettings.GetValueOrDefault(LastRefreshFlagReasonsTimeKey, defaultDate);
-            set => AppSettings.AddOrUpdateValue(LastRefreshFlagReasonsTimeKey, DateTime.SpecifyKind(value, DateTimeKind.Utc));
+            get => Preferences.Get(LastRefreshFlagReasonsTimeKey, defaultDate);
+            set => Preferences.Set(LastRefreshFlagReasonsTimeKey, DateTime.SpecifyKind(value, DateTimeKind.Utc));
         }
 
         public static DateTime SwipeDisabledDate
         {
-            get => AppSettings.GetValueOrDefault(SwipeDisabledDateKey, defaultDate.AddDays(-1));
-            set => AppSettings.AddOrUpdateValue(SwipeDisabledDateKey, DateTime.SpecifyKind(value, DateTimeKind.Utc));
+            get => Preferences.Get(SwipeDisabledDateKey, defaultDate.AddDays(-1));
+            set => Preferences.Set(SwipeDisabledDateKey, DateTime.SpecifyKind(value, DateTimeKind.Utc));
         }
 
         public static bool ShouldRefreshFlagReasons => (DateTime.Now - LastFlagReasonsRefreshTime).Days > 30;
+
+        public static bool HasShownLengthyQuoteWarning
+        {
+            get => Preferences.Get(LengthyQuoteShareKey, false);
+            set => Preferences.Set(LengthyQuoteShareKey, value);
+        }
 
     }
 }
