@@ -25,6 +25,8 @@ namespace DezignSpiration.ViewModels
 
         public OnBoardingViewModel OnBoardingViewModel => container.Resolve<OnBoardingViewModel>();
 
+        public FeedbackViewModel FeedbackViewModel => container.Resolve<FeedbackViewModel>();
+
         public void RegisterViewModels()
         {
             container.RegisterType<HomeViewModel>(new ContainerControlledLifetimeManager());
@@ -33,6 +35,7 @@ namespace DezignSpiration.ViewModels
             container.RegisterType<SettingsViewModel>(new ContainerControlledLifetimeManager());
             container.RegisterType<CrashViewModel>(new ContainerControlledLifetimeManager());
             container.RegisterType<OnBoardingViewModel>(new ContainerControlledLifetimeManager());
+            container.RegisterType<FeedbackViewModel>(new ContainerControlledLifetimeManager());
         }
     }
 }

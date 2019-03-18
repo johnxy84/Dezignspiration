@@ -2,7 +2,6 @@
 using Xamarin.Forms;
 using DezignSpiration.Models;
 using DezignSpiration.Helpers;
-using DezignSpiration.Pages;
 using Microsoft.AppCenter.Push;
 namespace DezignSpiration.ViewModels
 {
@@ -10,29 +9,27 @@ namespace DezignSpiration.ViewModels
     {
         public Config Config { get; } = Settings.SettingsConfig;
 
-        public Command GoBackCommand { get; }
-        public Command GitHubCommand { get; }
+        public Command WebsiteCommand { get; }
         public Command AddQuoteCommand { get; }
         public Command FeedBackCommand { get; }
 
         public SettingsViewModel()
         {
-            GoBackCommand = new Command(GoBack);
-            GitHubCommand = new Command(() =>
+
+            WebsiteCommand = new Command(() =>
             {
-                Helper?.OpenUrl(Constants.GIT_URL);
+                Helper?.OpenUrl(Constants.BASE_URL);
             });
             AddQuoteCommand = new Command(() =>
             {
                 Navigation.NavigateToAsync<AddQuoteViewModel>(isModal: true);
             });
-            FeedBackCommand = new Command(() => { Helper?.ShowAlert("Feedback Clicked"); });
+            FeedBackCommand = new Command(() =>
+            {
+                Navigation.NavigateToAsync<FeedbackViewModel>(isModal: true);
+            });
         }
 
-        void GoBack(object obj)
-        {
-            Navigation.GoBackAsync(isModal: true);
-        }
 
         public void SaveSettings()
         {

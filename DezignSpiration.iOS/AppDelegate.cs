@@ -46,7 +46,7 @@ namespace DezignSpiration.iOS
             throw new NotImplementedException();
         }
 
-        public void ShareQuote(DesignQuote quote)
+        public void ShareQuote(DesignQuote quote, bool isLongQuote = false)
         {
             throw new NotImplementedException();
         }

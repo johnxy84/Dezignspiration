@@ -49,7 +49,17 @@
                 <Label x:Name="QuoteErrorLabel" Grid.Row="2" Style="{StaticResource InfoLabel}"/>
             </Grid>
             
+            <StackLayout Orientation="Horizontal" Margin="0,10">
+                <Label Text="Post Anonymously" HorizontalOptions="FillAndExpand" VerticalOptions="Center"/>
+                <Switch IsToggled="{Binding IsAnonymous}"/>
+            </StackLayout>
+            
             <StackLayout>
+                <StackLayout.Triggers>
+                    <DataTrigger TargetType="StackLayout" Binding="{Binding IsAnonymous}" Value="True">
+                        <Setter Property="IsVisible" Value="False"/>
+                    </DataTrigger>
+                </StackLayout.Triggers>
                 <Label Text="Who said this (Optional)" HorizontalOptions="FillAndExpand" VerticalOptions="Center"/>
                 <Entry x:Name="AuthorName" IsEnabled="{Binding IsNotBusy}" Text="{Binding DesignQuote.Author}"
                        Placeholder="Anonymuos by default" MaxLength="40"/>

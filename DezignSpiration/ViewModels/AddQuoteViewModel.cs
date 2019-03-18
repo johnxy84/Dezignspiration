@@ -15,6 +15,7 @@ namespace DezignSpiration.ViewModels
         private readonly IColorsRepository colorsRepository;
         private readonly IQuotesRepository quotesRepository;
         private bool isInitialized;
+        private bool isAnonymous;
 
         public Command AddQuoteCommand { get; }
         public Command GoBackCommand { get; }
@@ -49,6 +50,19 @@ namespace DezignSpiration.ViewModels
             {
                 colors = value;
                 OnPropertyChanged();
+            }
+        }
+
+        public bool IsAnonymous
+        {
+            get => isAnonymous;
+            set
+            {
+                if (SetProperty(ref isAnonymous, value))
+                {
+                    isAnonymous = value;
+                    OnPropertyChanged();
+                }
             }
         }
 
@@ -90,7 +104,7 @@ namespace DezignSpiration.ViewModels
 
                 var deviceId = await Microsoft.AppCenter.AppCenter.GetInstallIdAsync();
 
-                bool added = await quotesRepository.AddQuote(DesignQuote, deviceId.ToString());
+                bool added = await quotesRepository.AddQuote(DesignQuote, IsAnonymous, deviceId.ToString());
 
                 if (added)
                 {

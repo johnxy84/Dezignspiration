@@ -209,7 +209,19 @@ namespace DezignSpiration.ViewModels
 
         void ShareQuote()
         {
-            Helper?.ShareQuote(Quotes[CurrentIndex]);
+            bool isLongQuote = Quotes[currentIndex].Quote.Length > Constants.MAX_QUOTE_LENGTH;
+            if (!Settings.HasShownLengthyQuoteWarning && isLongQuote)
+            {
+                Helper?.DisplayMessage(string.Empty, "We can't generate an Image because the quote is too long, we'll be sharing it as text instead. :-)", "OK", string.Empty, (s) =>
+                {
+                    Helper?.ShareQuote(Quotes[CurrentIndex], isLongQuote);
+                });
+                Settings.HasShownLengthyQuoteWarning = true;
+            }
+            else
+            {
+                Helper?.ShareQuote(Quotes[CurrentIndex], isLongQuote);
+            }
         }
 
         void ViewSettings()

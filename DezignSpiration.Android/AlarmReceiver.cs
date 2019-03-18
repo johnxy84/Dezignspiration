@@ -27,7 +27,7 @@ namespace DezignSpiration.Droid
                             // Close Notification Drawer
                             context.SendBroadcast(new Intent(Intent.ActionCloseSystemDialogs));
 
-                            Helper.ShareQuote(context, designQuote);
+                            Helper.ShareQuote(context, designQuote, designQuote.Quote.Length > Helpers.Constants.MAX_QUOTE_LENGTH);
                             var notificationManager = NotificationManagerCompat.From(context);
 
                             // Get notificationID which is the current count - 1

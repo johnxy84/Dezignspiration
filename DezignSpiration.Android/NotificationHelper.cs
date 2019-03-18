@@ -50,7 +50,7 @@ namespace DezignSpiration.Droid
             var notificationBuilder = new NotificationCompat.Builder(context, Constants.NOTIFICTAIONTYPE_CHANNEL_ID)
                         .SetContentTitle(designQuote.Author)
                         .SetSound(RingtoneManager.GetDefaultUri(RingtoneType.Notification))
-                        .SetSmallIcon(Resource.Mipmap.icon)
+                        .SetSmallIcon(Resource.Drawable.notify_icon)
                         .SetContentIntent(tappedPendingIntent)
                         .SetPriority(NotificationCompat.PriorityDefault)
                         .SetStyle(new NotificationCompat.BigTextStyle().BigText(designQuote.Quote))

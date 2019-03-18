@@ -39,12 +39,17 @@ namespace DezignSpiration.ViewModels
             }
         }
 
+        public Command GoBackCommand { get; }
         public INavigationService Navigation { get; set; }
 
         #endregion
 
         public BaseViewModel()
         {
+            GoBackCommand = new Command(() =>
+            {
+                Navigation.GoBackAsync(isModal: true);
+            });
             Navigation = ServiceLocator.Current.GetInstance<INavigationService>();
             quotesRepository = ServiceLocator.Current.GetInstance<IQuotesRepository>();
             colorsRepository = ServiceLocator.Current.GetInstance<IColorsRepository>();

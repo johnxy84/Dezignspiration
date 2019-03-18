@@ -46,8 +46,7 @@ namespace DezignSpiration.Helpers
                     };
                 default:
                     // Assume it's a Random Notificataion by default
-                    //var randomTimeSpan = new TimeSpan(App.Random.Next(6, 9), App.Random.Next(0, 59), 0);
-                    var randomTimeSpan = TimeSpan.FromSeconds(20);
+                    var randomTimeSpan = new TimeSpan(App.Random.Next(6, 9), App.Random.Next(0, 59), 0);
                     return new ScheduledNotification
                     {
                         NotificationType = notificationType,

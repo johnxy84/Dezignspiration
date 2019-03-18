@@ -20,7 +20,7 @@ using Lottie.Forms.Droid;
 
 namespace DezignSpiration.Droid
 {
-    [Activity(Label = "Dezignspiration", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "Dezignspiration", Theme = "@style/MainTheme", ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     [IntentFilter(new[] { Intent.ActionSend }, Categories = new[] { Intent.CategoryDefault }, DataMimeType = @"text/plain")]
     [IntentFilter(new[] { Intent.ActionProcessText }, Categories = new[] { Intent.CategoryDefault }, DataMimeType = @"text/plain")]
     public class MainActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivity, IHelper, IButton
@@ -190,9 +190,9 @@ namespace DezignSpiration.Droid
             new Handler().PostDelayed(() => { doubleBackToExitPressedOnce = false; }, 2000);
         }
 
-        public void ShareQuote(DesignQuote quote)
+        public void ShareQuote(DesignQuote quote, bool isLongQuote = false)
         {
-            Helper.ShareQuote(Instance, quote);
+            Helper.ShareQuote(Instance, quote, isLongQuote);
         }
 
         public void ShowOptions(string title, string[] options, Action<object> action = null, string cancelText = "")
