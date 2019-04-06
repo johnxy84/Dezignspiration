@@ -23,7 +23,7 @@
         // We'll swap out these bad boys during build #AppCenter Roxx
         public const string APP_CENTER_SECRET = "APP_SECRET";
 
-        public const string API_SECRET = "API_SECRET";
+        public const string API_SECRET = "API_SECRET_VALUE";
 
         public const int MAX_SWIPE_COUNT = 10;
 
