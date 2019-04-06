@@ -21,12 +21,12 @@
             </StackLayout>
             
             <StackLayout BackgroundColor="{StaticResource HeaderBackground}">
-                <Label Text="Feedback is always welcomed. The Good, The bad and the Plain Ol' Ugly" FontAttributes="Bold" Margin="20"/>
+                <Label Text="The Good, The bad and the Plain Ol' Ugly" FontAttributes="Bold" Margin="20"/>
             </StackLayout>
             
             <StackLayout>
                 <Label Text="What's your Story"/>
-                <Entry Placeholder="Let's Hear your feedback thus far"/>
+                <Entry Placeholder="How's your experience thus far" Text="{Binding Feedback.FeedbackContent}"/>
             </StackLayout>
             
             <StackLayout>
@@ -36,7 +36,7 @@
             
             <StackLayout>
                 <Label Text="Can we Get in Touch?"/>
-                <Entry Placeholder="(Optional) Email, Phone, GPS, Twitter, FB"/>
+                <Entry Placeholder="(Optional) Email, Phone, GPS, Twitter, P.O Box" Text="{Binding Feedback.Contact}"/>
             </StackLayout>
             
             <controls:Loader HeightRequest="100" HorizontalOptions="Center" IsVisible="{Binding IsBusy}"/>

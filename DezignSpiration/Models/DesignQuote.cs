@@ -10,13 +10,9 @@ namespace DezignSpiration.Models
     {
         private string quote = string.Empty;
         private string author = string.Empty;
-        private string authorUrl = string.Empty;
-        private string description = string.Empty;
         private Color color = new Color();
-        private string descriptionTitle = string.Empty;
         private int id;
         private int flagCount;
-        private bool colorsInverted;
 
         [JsonProperty("id")]
         [PrimaryKey]
@@ -64,16 +60,6 @@ namespace DezignSpiration.Models
             }
         }
 
-        [JsonProperty("colors_inverted")]
-        public bool ColorsInverted
-        {
-            get => colorsInverted;
-            set
-            {
-                colorsInverted = value;
-                OnPropertyChanged();
-            }
-        }
 
         [JsonIgnore]
         [ForeignKey(typeof(Color))]
@@ -93,18 +79,7 @@ namespace DezignSpiration.Models
             get => color;
             set
             {
-                if (ColorsInverted)
-                {
-                    color = new Color
-                    {
-                        PrimaryColor = value.SecondaryColor,
-                        SecondaryColor = value.PrimaryColor
-                    };
-                }
-                else
-                {
-                    color = value;
-                }
+                color = value;
                 OnPropertyChanged();
             }
         }

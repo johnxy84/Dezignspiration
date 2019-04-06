@@ -36,11 +36,6 @@ namespace DezignSpiration.iOS
             return base.FinishedLaunching(uiApplication, launchOptions);
         }
 
-        public void OpenUrl(string url)
-        {
-            throw new NotImplementedException();
-        }
-
         public void SetScheduledNotifications()
         {
             throw new NotImplementedException();
@@ -61,7 +56,7 @@ namespace DezignSpiration.iOS
             throw new NotImplementedException();
         }
 
-        public void BeginSwipeEnableCountdown()
+        public void BeginSwipeEnableCountdown(int hours)
         {
             throw new NotImplementedException();
         }

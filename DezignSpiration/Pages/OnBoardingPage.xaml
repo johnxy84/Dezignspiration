@@ -25,7 +25,7 @@
                                 <VisualState.Setters><!--
                                     <Setter Property="HeightRequest" Value="15" />
                                     <Setter Property="WidthRequest" Value="15" />-->
-                                    <Setter Property="BackgroundColor" Value="{StaticResource MainColor}" />
+                                    <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor}" />
                                 </VisualState.Setters>
                             </VisualState>
                             <VisualState x:Name="UnSelected">
@@ -55,7 +55,7 @@
                         <forms:AnimationView Animation="{Binding Animation}" Speed="1" HeightRequest="200" WidthRequest="200" Loop="true" Margin="20"
                                              AutoPlay="true" IsPlaying="True" FlexLayout.AlignSelf="Center"/>
 
-                        <Label Text="{Binding Text}" TextColor="{StaticResource MainColor}" FontFamily="{StaticResource NeutonBold}" 
+                        <Label Text="{Binding Text}" TextColor="{StaticResource PrimaryColor}" FontFamily="{StaticResource NeutonBold}" 
                                FontSize="Large" HorizontalTextAlignment="Center"/>
                     </FlexLayout>
                 </DataTemplate>
@@ -63,8 +63,7 @@
         </cv:CarouselViewControl>
         <StackLayout Orientation="Horizontal" VerticalOptions="End" Grid.Row="1" HorizontalOptions="FillAndExpand">
             <StackLayout x:Name="IndicatorsLayout" VerticalOptions="Center" Margin="20" Orientation="Horizontal" />
-            <Button Text="Get Started" Margin="20" HorizontalOptions="EndAndExpand" TextColor="{StaticResource MainColor}" Command="{Binding GetStartedCommand}"
-                    BorderWidth="1" CornerRadius="5" BorderColor="{StaticResource MainColor}" BackgroundColor="Transparent" />
+            <Button Text="Get Started" HorizontalOptions="EndAndExpand" Command="{Binding GetStartedCommand}" Style="{StaticResource SecondaryButton}"/>
         </StackLayout>
     </Grid>
 </ContentPage>

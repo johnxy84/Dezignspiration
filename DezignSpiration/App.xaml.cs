@@ -32,7 +32,7 @@ namespace DezignSpiration
         {
             InitializeComponent();
             UnityContainer container = new UnityContainer();
-            dbConnection = new SQLiteAsyncConnection(Utils.GetDatabasePath())
+            dbConnection = new SQLiteAsyncConnection(Utils.DatabasePath)
             {
                 Tracer = new Action<string>(q => Debug.WriteLine(q)),
                 Trace = true

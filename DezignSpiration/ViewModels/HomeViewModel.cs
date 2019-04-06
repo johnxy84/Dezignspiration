@@ -12,8 +12,9 @@ namespace DezignSpiration.ViewModels
     public class HomeViewModel : BaseViewModel
     {
         private ObservableRangeCollection<DesignQuote> quotes = new ObservableRangeCollection<DesignQuote>();
-        private int currentIndex = Settings.CurrentIndex;
+        private int currentIndex = Utils.GetCurrentDisplayIndex();
         private readonly IQuotesRepository quotesRepository;
+        private bool canSwipe = Settings.SwipeCount < Constants.MAX_SWIPE_COUNT;
 
         public ObservableRangeCollection<DesignQuote> Quotes
         {
@@ -29,9 +30,9 @@ namespace DezignSpiration.ViewModels
             get => currentIndex;
             set
             {
+                UpdateSwipeAbility(currentIndex, value);
                 if (SetProperty(ref currentIndex, value))
                 {
-                    UpdateSwipeAbility(currentIndex, value);
                     Settings.CurrentIndex = currentIndex = value;
                     UpdateQuotesCollection();
                     OnPropertyChanged();
@@ -39,7 +40,20 @@ namespace DezignSpiration.ViewModels
             }
         }
 
-        public bool CanSwipe => Settings.SwipeCount < 10;
+        public bool CanSwipe
+        {
+            get
+            {
+                return canSwipe;
+            }
+            set
+            {
+                if (SetProperty(ref canSwipe, value))
+                {
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         public Command SettingsCommand { get; }
         public Command ShareCommand { get; }
@@ -68,7 +82,7 @@ namespace DezignSpiration.ViewModels
             {
                 Settings.SwipeCount++;
             }
-            else
+            else if (newValue < oldValue)
             {
                 Settings.SwipeCount--;
             }
@@ -76,15 +90,16 @@ namespace DezignSpiration.ViewModels
             switch (Settings.SwipeCount)
             {
                 case Constants.MAX_SWIPE_COUNT / 2:
-                    Helper?.ShowAlert($"Slow down champ, You've got {Constants.MAX_SWIPE_COUNT / 2} more forward swipes today", isLongAlert: true);
+                    if (Utils.ShouldShowAnnoyingMessage)
+                        Helper?.ShowAlert($"Slow down champ, You've got {Constants.MAX_SWIPE_COUNT / 2} more forward swipes today", isLongAlert: true);
                     break;
                 case Constants.MAX_SWIPE_COUNT:
-                    Helper?.ShowAlert("You've maxed out your swipes. Check back tommorow", isLongAlert: true);
+                    Helper?.ShowAlert("You've maxed out your swipes. Try taking a breath of fresh air and come back later", isLongAlert: true);
                     Settings.SwipeDisabledDate = DateTime.Today;
                     Helper?.BeginSwipeEnableCountdown();
+                    CanSwipe = false;
                     break;
             }
-            OnPropertyChanged(nameof(CanSwipe));
         }
 
         /// <summary>
@@ -145,9 +160,7 @@ namespace DezignSpiration.ViewModels
             int quotesLeft = Quotes.Count - Settings.CurrentIndex;
             bool isLastQuote = Settings.CurrentIndex >= Quotes.Count - 1;
 
-            // This was put because I couldn't think of anoter way to display this message "occasionally without being annoying
-            bool shouldShowAnnoyingMessage = (new Random(DateTime.Now.Millisecond).Next(1, 20) % 3) == 0;
-            if (isLastQuote && Quotes.Count != 0 && shouldShowAnnoyingMessage)
+            if (isLastQuote && Quotes.Count != 0 && Utils.ShouldShowAnnoyingMessage)
             {
                 Helper?.ShowAlert("Uhmm we're getting you more quotes. Take a step back for now :-)", false);
             }

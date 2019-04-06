@@ -40,8 +40,8 @@ namespace DezignSpiration.Droid
             paint.TextSize = GetFontSize(text);
             paint.TextAlign = Paint.Align.Left;
 
-            // set text width to canvas width minus screen padding in dp
-            int textWidth = canvas.Width - 100;
+            // set text width to canvas width minus screen padding(10 percent of width) in dp
+            int textWidth = canvas.Width - (10 / 100 * width);
 
             var textPreview = new SpannableString(text);
             // Reduce the text of the brand name
@@ -68,7 +68,7 @@ namespace DezignSpiration.Droid
 
         public static void ShareQuote(Context context, DesignQuote designQuote, bool isLongQuote)
         {
-            string text = $"{designQuote.Quote} \n\n\n{designQuote.Author}\n{Helpers.Constants.BRAND_NAME}";
+            string text = GetImageText(designQuote);
             if (isLongQuote)
             {
                 ShareText(context, text);
@@ -78,6 +78,11 @@ namespace DezignSpiration.Droid
                 Bitmap bitmap = GetBitmap(context, text, designQuote.Color.PrimaryColor, designQuote.Color.SecondaryColor);
                 ShareImage(context, bitmap);
             }
+        }
+
+        public static string GetImageText(DesignQuote designQuote)
+        {
+            return $"{designQuote.Quote} \n\n\n{designQuote.Author}\n{Helpers.Constants.BRAND_NAME}";
         }
 
         public static void ShareText(Context context, string text)

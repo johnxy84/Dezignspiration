@@ -35,7 +35,7 @@
                     <ActivityIndicator Grid.Column="1"  IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Margin="20"/>
                 </Grid>
                 <Label Text="We're sorry, something must have gone wrong, try refreshing or restarting the app" TextColor="{StaticResource SecondaryColor}"/>
-                <Button Text="Refresh Quotes" BorderRadius="10" Command="{Binding RefreshCommand}" IsEnabled="{Binding IsNotBusy}" Margin="20"/>
+                <Button Text="Refresh Quotes" Command="{Binding RefreshCommand}" IsEnabled="{Binding IsNotBusy}" />
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>

@@ -97,7 +97,7 @@ namespace DezignSpiration.Droid
         public void DisplayMessage(string title, string message, string positive, string negative, Action<bool> choice)
         {
             AlertDialog.Builder builder = Build.VERSION.SdkInt >= BuildVersionCodes.LollipopMr1
-                ? new AlertDialog.Builder(Instance, Android.Resource.Style.ThemeDeviceDefaultDialogAlert)
+                ? new AlertDialog.Builder(Instance, Resource.Style.AppCompatDialogStyle)
                 : new AlertDialog.Builder(Instance);
 
             RunOnUiThread(() =>
@@ -171,12 +171,6 @@ namespace DezignSpiration.Droid
             NotificationHelper.SetScheduledNotifications(Application.Context);
         }
 
-        public void OpenUrl(string url)
-        {
-            Intent browserIntent = new Intent(Intent.ActionView, Android.Net.Uri.Parse(url));
-            Instance?.StartActivity(browserIntent);
-        }
-
         public void BackButtonPressed()
         {
             if (doubleBackToExitPressedOnce)
@@ -199,7 +193,7 @@ namespace DezignSpiration.Droid
         {
             AlertDialog dialog = null;
             AlertDialog.Builder builder = Build.VERSION.SdkInt >= BuildVersionCodes.LollipopMr1
-                ? new AlertDialog.Builder(Instance, Android.Resource.Style.ThemeDeviceDefaultDialogAlert)
+                ? new AlertDialog.Builder(Instance, Resource.Style.AppCompatDialogStyle)
                 : new AlertDialog.Builder(Instance);
 
             RunOnUiThread(() =>
@@ -220,9 +214,9 @@ namespace DezignSpiration.Droid
             });
         }
 
-        public void BeginSwipeEnableCountdown()
+        public void BeginSwipeEnableCountdown(int hours)
         {
-            NotificationHelper.ScheduleSwipeEnabledNotification(Application.Context);
+            NotificationHelper.ScheduleSwipeEnabledNotification(Application.Context, hours);
         }
     }
 }

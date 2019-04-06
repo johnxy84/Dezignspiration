@@ -63,7 +63,8 @@ namespace DezignSpiration.Helpers
             get => Preferences.Get(SwipeCountKey, 0);
             set
             {
-                Preferences.Set(SwipeCountKey, value);
+                // Count shouldn't be going below zero because reasons
+                Preferences.Set(SwipeCountKey, value < 0 ? 0 : value);
             }
         }
 

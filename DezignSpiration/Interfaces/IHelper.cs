@@ -12,12 +12,10 @@ namespace DezignSpiration.Interfaces
 
         void SetScheduledNotifications();
 
-        void OpenUrl(string url);
-
         void ShareQuote(DesignQuote quote, bool isLongQuote = false);
 
         void ShowOptions(string title, string[] options, Action<object> choice, string cancelText = "Cancel");
 
-        void BeginSwipeEnableCountdown();
+        void BeginSwipeEnableCountdown(int hours = 12);
     }
 }
