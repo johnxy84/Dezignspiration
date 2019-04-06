@@ -1,8 +1,6 @@
 ﻿using System;
 using Android.App;
 using Android.Content;
-using DezignSpiration.Helpers;
-using Android.Widget;
 
 namespace DezignSpiration.Droid
 {
@@ -12,12 +10,11 @@ namespace DezignSpiration.Droid
     {
         public override void OnReceive(Context context, Intent intent)
         {
-
-            if (intent.Action == Intent.ActionBootCompleted)
+            if (intent.Action == Intent.ActionBootCompleted || intent.Action == Intent.ActionReboot)
             {
                 NotificationHelper.SetFreshNotifications(context);
             }
         }
-        
+
     }
 }

@@ -8625,10 +8625,10 @@ namespace DezignSpiration.Droid
 			public const int share = 2130837824;
 			
 			// aapt resource value: 0x7f020141
-			public const int splash = 2130837825;
+			public const int splash_screen = 2130837825;
 			
 			// aapt resource value: 0x7f020142
-			public const int splash_screen = 2130837826;
+			public const int SplashScreen = 2130837826;
 			
 			// aapt resource value: 0x7f020143
 			public const int tooltip_frame_dark = 2130837827;

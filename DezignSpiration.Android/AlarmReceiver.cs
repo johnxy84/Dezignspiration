@@ -43,7 +43,6 @@ namespace DezignSpiration.Droid
 
                 case Constants.NOTIFICATION_QUOTE_ACTION:
                     {
-                        Settings.SwipeCount = 0;
                         NotificationType notificationType = intent.GetStringExtra(Constants.NOTIFICTAIONTYPE_KEY) == NotificationType.RandomAlarm.ToString() ? NotificationType.RandomAlarm : NotificationType.DailyAlarm;
                         var quotesRepository = ServiceLocator.Current.GetInstance<IQuotesRepository>();
                         var colorsRepository = ServiceLocator.Current.GetInstance<IColorsRepository>();
@@ -54,7 +53,6 @@ namespace DezignSpiration.Droid
                             switch (notificationType)
                             {
                                 case NotificationType.RandomAlarm:
-                                    int randomIndex = App.Random.Next(0, await quotesRepository.CountQuotes());
                                     designQuote = await quotesRepository.GetRandomQuote();
                                     NotificationUtils.UpdateScheduledNotification(NotificationType.RandomAlarm, false);
                                     break;

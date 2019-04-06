@@ -46,12 +46,14 @@ namespace DezignSpiration.Droid
             // Add This notification to the intent just in case the user needs to share it
             shareIntent.PutExtra(Constants.SHARE_NOTIFICATION_QUOTE_INTENT_ACTION, JsonConvert.SerializeObject(designQuote));
             PendingIntent shareNotificationPendingIntent = PendingIntent.GetBroadcast(context, Constants.SHARE_NOTIFICATION_REQUEST_CODE, shareIntent, PendingIntentFlags.CancelCurrent);
+            var bitmapImage = Helper.GetBitmap(context, Helper.GetImageText(designQuote), designQuote.Color.PrimaryColor, designQuote.Color.SecondaryColor);
 
             var notificationBuilder = new NotificationCompat.Builder(context, Constants.NOTIFICTAIONTYPE_CHANNEL_ID)
                         .SetContentTitle(designQuote.Author)
                         .SetSound(RingtoneManager.GetDefaultUri(RingtoneType.Notification))
                         .SetSmallIcon(Resource.Drawable.notify_icon)
                         .SetContentIntent(tappedPendingIntent)
+                        .SetContentText(designQuote.Quote)
                         .SetPriority(NotificationCompat.PriorityDefault)
                         .SetStyle(new NotificationCompat.BigTextStyle().BigText(designQuote.Quote))
                         .AddAction(Resource.Drawable.share, "Share Quote", shareNotificationPendingIntent)
@@ -175,14 +177,14 @@ namespace DezignSpiration.Droid
             NotificationManagerCompat.From(Application.Context).Notify(DateTime.Now.Millisecond, notificationBuilder.Build());
         }
 
-        public static void ScheduleSwipeEnabledNotification(Context context)
+        public static void ScheduleSwipeEnabledNotification(Context context, int hours)
         {
             Intent intent = new Intent(context, typeof(AlarmReceiver));
             intent.SetAction(Constants.SWIPE_ENABLED_ACTION);
             var pendingIntent = PendingIntent.GetBroadcast(context, Constants.SWIPE_ENABLED_REQUEST_CODE, intent, PendingIntentFlags.UpdateCurrent);
             AlarmManager alarmManager = (AlarmManager)context.GetSystemService(Context.AlarmService);
-            // schedule for 24 hours time
-            double totalMilliseconds = (DateTime.Now.AddDays(1) - DateTime.Now).TotalMilliseconds;
+            // schedule for 12 hours time
+            double totalMilliseconds = (DateTime.Now.AddHours(hours) - DateTime.Now).TotalMilliseconds;
             long elapsedTime = (long)(Java.Lang.JavaSystem.CurrentTimeMillis() + totalMilliseconds);
 
             alarmManager.Set(AlarmType.RtcWakeup, elapsedTime, pendingIntent);

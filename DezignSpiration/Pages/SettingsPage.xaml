@@ -11,7 +11,6 @@
             <Setter Property="FontSize" Value="Default"/>
             <Setter Property="TextColor" Value="{StaticResource PrimaryColor}"/>
         </Style>
-
         <Style TargetType="StackLayout">
             <Setter Property="Margin" Value="0,10"/>
         </Style>
@@ -84,8 +83,9 @@
                         </FormattedString>
                     </Label.FormattedText>
                 </Label>
-                <Button Text="Add Quote" Command="{Binding AddQuoteCommand}"/>
-                <Button Text="Feedback" Command="{Binding FeedBackCommand}"/>
+                <Button Text="Add Quote" Command="{Binding AddQuoteCommand}" Margin="20,10"/>
+                <Button Text="Feedback" Command="{Binding FeedBackCommand}" Style="{StaticResource SecondaryButton}" Margin="20,10"/>
+                <Button Text="Leave a Review" Command="{Binding ReviewCommand}" Style="{StaticResource SecondaryButton}" Margin="20,10"/>
             </StackLayout>
         </FlexLayout>
     </ScrollView>

@@ -41,7 +41,7 @@
     <WarningLevel>4</WarningLevel>
     <AndroidManagedSymbols>true</AndroidManagedSymbols>
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
-<AndroidSupportedAbis>armeabi-v7a;x86</AndroidSupportedAbis>
+    <AndroidSupportedAbis>armeabi-v7a;x86</AndroidSupportedAbis>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
@@ -112,7 +112,6 @@
     <AndroidResource Include="Resources\drawable\splash_screen.xml" />
     <AndroidResource Include="Resources\drawable-xxhdpi\Launcher.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\Launcher.png" />
-    <AndroidResource Include="Resources\drawable\AppIcon.png" />
     <AndroidResource Include="Resources\mipmap-hdpi\launcherIcon.png" />
     <AndroidResource Include="Resources\mipmap-mdpi\launcherIcon.png" />
     <AndroidResource Include="Resources\mipmap-xhdpi\launcherIcon.png" />
@@ -123,11 +122,13 @@
     <AndroidResource Include="Resources\drawable-xhdpi\notify_icon.png" />
     <AndroidResource Include="Resources\drawable-mdpi\notify_icon.png" />
     <AndroidResource Include="Resources\drawable-hdpi\notify_icon.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\splash.jpg" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\splash.jpg" />
-    <AndroidResource Include="Resources\drawable-xhdpi\splash.jpg" />
-    <AndroidResource Include="Resources\drawable-mdpi\splash.jpg" />
-    <AndroidResource Include="Resources\drawable-hdpi\splash.jpg" />
+    <AndroidResource Include="Resources\drawable\AppIcon.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\SplashScreen.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\SplashScreen.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\SplashScreen.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\SplashScreen.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\SplashScreen.png" />
+    <AndroidResource Include="Resources\drawable-ldpi\SplashScreen.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable\" />

@@ -41,7 +41,7 @@ namespace DezignSpiration.Helpers
 
         public static ObservableRangeCollection<DesignQuote> GetDefaultQuotes()
         {
-            return Shuffle(new ObservableRangeCollection<DesignQuote>
+            return new ObservableRangeCollection<DesignQuote>
             {
                 new DesignQuote {
                     Id = 1,
@@ -49,7 +49,7 @@ namespace DezignSpiration.Helpers
                         " Rather, the idea is the result of careful study and observation and the design is a product of that idea.",
                     Author = "Paul Rand",
                     Color = new Color {
-                        Id = 3,
+                        Id = 5,
                         PrimaryColor = "#222060",
                         SecondaryColor = "#EC192B"
                     },
@@ -69,11 +69,10 @@ namespace DezignSpiration.Helpers
                     Quote = "Design is concerned with how things work, how they are controlled and the nature of the interaction between" +
                         " people and technology. When done well, the results are briliiant, pleasurable products.",
                     Author = "Don Norman",
-                    ColorsInverted = true,
                     Color = new Color {
                         Id = 4,
-                        PrimaryColor = "#3c2f2f",
-                        SecondaryColor = "#FEC664"
+                        PrimaryColor = "#3C2F2F",
+                        SecondaryColor = "#FFF1E6"
                     }
                 },
                 new DesignQuote {
@@ -91,79 +90,78 @@ namespace DezignSpiration.Helpers
                     Quote = "It's through Mistakes that you can grow. You have to get bad in order to get good.",
                     Author = "Paula Scher",
                     Color = new Color{
-                        Id = 3,
+                        Id = 1,
                         PrimaryColor = "#FDD32B",
                         SecondaryColor = "#06070D"
                     }
                 },
-                //new DesignQuote {
-                //    Id = 6,
-                //    Quote = "Any intelligent fool can make things bigger and more complex." +
-                //        " It takes a touch of genius- and a lot of courage- to move in the opposite direction.",
-                //    Author = "E. F Schumacher",
-                //    Color = new Color{
-                //        Id = 2,
-                //        PrimaryColor = "#0091E5",
-                //        SecondaryColor = "#FAECAA"
-                //    }
-                //},
-                //new DesignQuote {
-                //    Id = 7,
-                //    Quote = "If you think Good design is expensive, you should look at the cost of Bad Design.",
-                //    Author = "Ralph Speth",
-                //    Color = new Color{
-                //        Id = 5,
-                //        PrimaryColor = "#EC192B",
-                //        SecondaryColor = "#222060"
-                //    }
+                new DesignQuote {
+                    Id = 6,
+                    Quote = "Any intelligent fool can make things bigger and more complex." +
+                        " It takes a touch of genius- and a lot of courage- to move in the opposite direction.",
+                    Author = "E. F Schumacher",
+                    Color = new Color{
+                        Id = 2,
+                        PrimaryColor = "#0091E5",
+                        SecondaryColor = "#FAECAA"
+                    }
+                },
+                new DesignQuote {
+                    Id = 7,
+                    Quote = "If you think Good design is expensive, you should look at the cost of Bad Design.",
+                    Author = "Ralph Speth",
+                    Color = new Color{
+                        Id = 5,
+                        PrimaryColor = "#222060",
+                        SecondaryColor = "#EC192B"
+                    }
 
-                //},
-                //new DesignQuote {
-                //    Id = 8,
-                //    Quote = "Good design is Obvious. Great design is Transparent.",
-                //    Author = "Joe Soparano",
-                //    Color = new Color{
-                //        Id = 3,
-                //        PrimaryColor = "#24b4a5",
-                //        SecondaryColor = "#8fedc2"
-                //    }
+                },
+                new DesignQuote {
+                    Id = 8,
+                    Quote = "Good design is Obvious. Great design is Transparent.",
+                    Author = "Joe Soparano",
+                    Color = new Color{
+                        Id = 3,
+                        PrimaryColor = "#2B463C",
+                        SecondaryColor = "#B1D182"
+                    }
 
-                //},
-                //new DesignQuote {
-                //    Id = 9,
-                //    Quote = "The challenge is about taking things that are complex and making them simpler" +
-                //        " and more understandable.",
-                //    Author = "Robert Greenberg",
-                //    Color = new Color {
-                //        Id = 4,
-                //        PrimaryColor = "#3c2f2f",
-                //        SecondaryColor = "#FEC664"
-                //    }
+                },
+                new DesignQuote {
+                    Id = 9,
+                    Quote = "The challenge is about taking things that are complex and making them simpler" +
+                        " and more understandable.",
+                    Author = "Robert Greenberg",
+                    Color = new Color {
+                        Id = 4,
+                        PrimaryColor = "#3C2F2F",
+                        SecondaryColor = "#FFF1E6"
+                    }
 
-                //},
-                //new DesignQuote {
-                //    Id = 10,
-                //    Quote = "I strive for two things in design: simplicity and clarity. Great design is born of those two things.",
-                //    Author = "Lindo Leader",
-                //    ColorsInverted = true,
-                //    Color = new Color {
-                //        Id = 2,
-                //        PrimaryColor = "#FDD32B",
-                //        SecondaryColor = "#06070D"
-                //    }
+                },
+                new DesignQuote {
+                    Id = 10,
+                    Quote = "I strive for two things in design: simplicity and clarity. Great design is born of those two things.",
+                    Author = "Lindo Leader",
+                    Color = new Color {
+                        Id = 2,
+                        PrimaryColor = "#0091E5",
+                        SecondaryColor = "#FAECAA"
+                    }
 
-                //},
-                //new DesignQuote {
-                //    Id = 11,
-                //    Quote = "Great design will not sell an inferior product, but it will enable a great product to achieve it's maximum potential.",
-                //    Author = "Thomas Watson, Jr",
-                //    Color = new Color {
-                //        Id = 2,
-                //        PrimaryColor = "#0091E5",
-                //        SecondaryColor = "#FAECAA"
-                //    }
-                //}
-            });
+                },
+                new DesignQuote {
+                    Id = 11,
+                    Quote = "Great design will not sell an inferior product, but it will enable a great product to achieve it's maximum potential.",
+                    Author = "Thomas Watson, Jr",
+                    Color = new Color {
+                        Id = 1,
+                        PrimaryColor = "#FDD32B",
+                        SecondaryColor = "#06070D"
+                    }
+                }
+            };
         }
 
         public static ObservableRangeCollection<FlagReason> GetDefaultFlagReasons()
@@ -200,7 +198,7 @@ namespace DezignSpiration.Helpers
 
         public static ObservableRangeCollection<Color> GetDefaultColors()
         {
-            return Shuffle(new ObservableRangeCollection<Color> {
+            return new ObservableRangeCollection<Color> {
                 new Color {
                     Id = 1,
                     PrimaryColor = "#FDD32B",
@@ -213,20 +211,20 @@ namespace DezignSpiration.Helpers
                 },
                 new Color {
                     Id = 3,
-                    PrimaryColor = "#24b4a5",
-                    SecondaryColor = "#8fedc2"
+                    PrimaryColor = "#2B463C",
+                    SecondaryColor = "#B1D182"
                 },
                 new Color {
                     Id = 4,
-                    PrimaryColor = "#3c2f2f",
-                    SecondaryColor = "#fff1e6"
+                    PrimaryColor = "#3C2F2F",
+                    SecondaryColor = "#FFF1E6"
                 },
                 new Color {
                     Id = 5,
                     PrimaryColor = "#222060",
                     SecondaryColor = "#EC192B"
                 }
-            });
+            };
         }
 
         public static void LogError(Exception ex, params string[] extraParams)
@@ -263,10 +261,20 @@ namespace DezignSpiration.Helpers
             };
         }
 
-        public static string GetDatabasePath()
+        public static string DatabasePath
         {
-            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "dezignspiration.db");
-            return path;
+            get
+            {
+                var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "dezignspiration.db");
+                return path;
+            }
         }
+
+        /// <summary>
+        /// Should Help decide if you should show an annoying message ti the user.
+        /// This was put because I couldn't think of anoter way to display messages "occasionally" without being annoying
+        /// </summary>
+        /// <returns><c>boolean</c>,
+        public static bool ShouldShowAnnoyingMessage => App.Random.Next(1, 20) % 3 == 0;
     }
 }
