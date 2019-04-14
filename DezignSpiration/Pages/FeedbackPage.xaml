@@ -5,43 +5,48 @@
              xmlns:controls="clr-namespace:DezignSpiration.Controls;assembly=DezignSpiration"
              BackgroundColor="White"
              x:Class="DezignSpiration.Pages.FeedbackPage">
+    
     <ContentPage.Content>
-        <FlexLayout Direction="Column">
-            <StackLayout Orientation="Horizontal" Margin="0,20">
-                <ffimageloadingsvg:SvgCachedImage Source="cancel.svg"
-                                                  Margin="10"
-                                                  InputTransparent="{Binding IsBusy}"
-                                                  HeightRequest="40"
-                                                  WidthRequest="40">
-                    <ffimageloadingsvg:SvgCachedImage.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding GoBackCommand}"/>
-                    </ffimageloadingsvg:SvgCachedImage.GestureRecognizers>
-                </ffimageloadingsvg:SvgCachedImage>
-                <Label Text="Feedback" FontSize="40" Margin="0" VerticalOptions="Center"/>
-            </StackLayout>
-            
-            <StackLayout BackgroundColor="{StaticResource HeaderBackground}">
-                <Label Text="The Good, The bad and the Plain Ol' Ugly" FontAttributes="Bold" Margin="20"/>
-            </StackLayout>
-            
-            <StackLayout>
-                <Label Text="What's your Story"/>
-                <Entry Placeholder="How's your experience thus far" Text="{Binding Feedback.FeedbackContent}"/>
-            </StackLayout>
-            
-            <StackLayout>
-                <Label Text="Category"/>
-                <Picker ItemsSource="{Binding Categories}" Margin="20,0" SelectedIndex="{Binding SelectedCategory}" />
-            </StackLayout>
-            
-            <StackLayout>
-                <Label Text="Can we Get in Touch?"/>
-                <Entry Placeholder="(Optional) Email, Phone, GPS, Twitter, P.O Box" Text="{Binding Feedback.Contact}"/>
-            </StackLayout>
-            
-            <controls:Loader HeightRequest="100" HorizontalOptions="Center" IsVisible="{Binding IsBusy}"/>
-            
-            <Button Text="Submit Feedback" Command="{Binding SubmitFeedbackCommand}" IsEnabled="{Binding IsNotBusy}"/>
-        </FlexLayout>
+        <ScrollView>
+            <FlexLayout Direction="Column">
+                <StackLayout Orientation="Horizontal" Margin="0,20">
+                    <ffimageloadingsvg:SvgCachedImage Source="cancel.svg"
+                                                      Margin="10"
+                                                      InputTransparent="{Binding IsBusy}"
+                                                      HeightRequest="40"
+                                                      WidthRequest="40">
+                        <ffimageloadingsvg:SvgCachedImage.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding GoBackCommand}"/>
+                        </ffimageloadingsvg:SvgCachedImage.GestureRecognizers>
+                    </ffimageloadingsvg:SvgCachedImage>
+                    <Label Text="Feedback" FontSize="40" Margin="0" VerticalOptions="Center"/>
+                </StackLayout>
+                
+                <StackLayout BackgroundColor="{StaticResource HeaderBackground}">
+                    <Label Text="The Good, The bad and the Plain Ol' Ugly" FontAttributes="Bold" Margin="20"/>
+                </StackLayout>
+                
+                <StackLayout>
+                    <Label Text="What's your Story"/>
+                   <controls:FlexEditor Grid.Row="1" x:Name="QuoteEditor" Text="{Binding Feedback.FeedbackContent}"
+                                        IsEnabled="{Binding IsNotBusy}" Placeholder="How's your experience thus far"
+                                        VerticalOptions="FillAndExpand" />
+                </StackLayout>
+                
+                <StackLayout>
+                    <Label Text="Category"/>
+                    <Picker ItemsSource="{Binding Categories}" Margin="20,0" SelectedIndex="{Binding SelectedCategory}" IsEnabled="{Binding IsNotBusy}"/>
+                </StackLayout>
+                
+                <StackLayout>
+                    <Label Text="Can we Get in Touch?"/>
+                    <Entry Placeholder="(Optional) Email, Phone, GPS, Twitter, P.O Box" Text="{Binding Feedback.Contact}" IsEnabled="{Binding IsNotBusy}"/>
+                </StackLayout>
+                
+                <controls:Loader HeightRequest="100" HorizontalOptions="Center" IsVisible="{Binding IsBusy}"/>
+                
+                <Button Text="Submit Feedback" Command="{Binding SubmitFeedbackCommand}" IsEnabled="{Binding IsNotBusy}"/>
+            </FlexLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

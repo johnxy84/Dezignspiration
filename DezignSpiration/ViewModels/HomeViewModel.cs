@@ -111,7 +111,7 @@ namespace DezignSpiration.ViewModels
             {
                 SubscribeToEvents();
                 LoadStoredQuotes();
-                Helper?.SetScheduledNotifications();
+                Helper?.SetScheduledNotifications(App.notificationService.Notifications);
             }
             catch (Exception ex)
             {
@@ -216,7 +216,6 @@ namespace DezignSpiration.ViewModels
                         Utils.LogError(ex, "FlaggingPostError", JsonConvert.SerializeObject(flaggedQuote), flagReasonId.ToString());
                     }
                 });
-
             });
         }
 

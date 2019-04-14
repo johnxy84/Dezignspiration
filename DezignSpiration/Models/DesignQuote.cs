@@ -15,7 +15,6 @@ namespace DezignSpiration.Models
         private int flagCount;
 
         [JsonProperty("id")]
-        [PrimaryKey]
         public int Id
         {
             get => id;

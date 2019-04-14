@@ -45,26 +45,16 @@ namespace DezignSpiration.Droid
                     {
                         NotificationType notificationType = intent.GetStringExtra(Constants.NOTIFICTAIONTYPE_KEY) == NotificationType.RandomAlarm.ToString() ? NotificationType.RandomAlarm : NotificationType.DailyAlarm;
                         var quotesRepository = ServiceLocator.Current.GetInstance<IQuotesRepository>();
-                        var colorsRepository = ServiceLocator.Current.GetInstance<IColorsRepository>();
                         DesignQuote designQuote;
-
                         try
                         {
-                            switch (notificationType)
-                            {
-                                case NotificationType.RandomAlarm:
-                                    designQuote = await quotesRepository.GetRandomQuote();
-                                    NotificationUtils.UpdateScheduledNotification(NotificationType.RandomAlarm, false);
-                                    break;
-                                // Assume default alarm 
-                                default:
-                                    designQuote = (await quotesRepository.GetAllQuotes()).ElementAt(Utils.GetCurrentDisplayIndex());
-                                    NotificationUtils.UpdateScheduledNotification(NotificationType.DailyAlarm, false);
-                                    break;
-                            }
+                            INotification notification = App.notificationService.GetNotification(notificationType);
+                            designQuote = await notification.GetDesignQuote(quotesRepository);
+                            notification.ToggleNotificationIsSet(false);
 
-                            NotificationHelper.SendScheduledNotification(context, notificationType, designQuote);
-                            NotificationHelper.SetScheduledNotifications(context);
+
+                            await NotificationHelper.SendScheduledNotification(context, notification);
+                            NotificationHelper.SetScheduledNotifications(context, App.notificationService.Notifications);
                         }
                         catch (Exception ex)
                         {

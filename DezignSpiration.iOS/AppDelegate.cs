@@ -6,6 +6,7 @@ using DezignSpiration.Models;
 using System;
 using CarouselView.FormsPlugin.iOS;
 using DezignSpiration.iOS;
+using System.Collections.Generic;
 
 [assembly: Xamarin.Forms.Dependency(typeof(AppDelegate))]
 
@@ -36,7 +37,22 @@ namespace DezignSpiration.iOS
             return base.FinishedLaunching(uiApplication, launchOptions);
         }
 
-        public void SetScheduledNotifications()
+        public void BeginSwipeEnableCountdown(int hours = 12)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CancelScheduledNotification(INotification notificationData)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DisplayMessage(string title, string message, string positive, string negative, Action<bool> choice)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetScheduledNotifications(List<INotification> notifications)
         {
             throw new NotImplementedException();
         }
@@ -52,21 +68,6 @@ namespace DezignSpiration.iOS
         }
 
         public void ShowOptions(string title, string[] options, Action<object> choice, string cancelText = "Cancel")
-        {
-            throw new NotImplementedException();
-        }
-
-        public void BeginSwipeEnableCountdown(int hours)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void CancelScheduledNotification(ScheduledNotification notificationData)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DisplayMessage(string title, string message, string positive, string negative, Action<bool> choice)
         {
             throw new NotImplementedException();
         }

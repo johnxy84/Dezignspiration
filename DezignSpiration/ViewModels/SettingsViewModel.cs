@@ -41,8 +41,8 @@ namespace DezignSpiration.ViewModels
         public void SaveSettings()
         {
             Settings.SettingsConfig = Config;
-            NotificationUtils.ClearNotifications();
-            Helper?.SetScheduledNotifications();
+            App.notificationService.ClearNotifications();
+            Helper?.SetScheduledNotifications(App.notificationService.Notifications);
             Push.SetEnabledAsync(Config.IsReceivePushEnabled);
         }
     }

@@ -4,6 +4,7 @@ using Microsoft.AppCenter.Analytics;
 using DezignSpiration.Models;
 using Microsoft.AppCenter.Crashes;
 using System.IO;
+using System.Linq;
 
 namespace DezignSpiration.Helpers
 {
@@ -16,15 +17,7 @@ namespace DezignSpiration.Helpers
         /// <param name="collection">Collection to shuffle.</param>
         public static ObservableRangeCollection<T> Shuffle<T>(ObservableRangeCollection<T> collection)
         {
-            ObservableRangeCollection<T> randomList = new ObservableRangeCollection<T>();
-
-            int randomIndex = 0;
-            while (collection.Count > 0)
-            {
-                randomIndex = App.Random.Next(0, collection.Count);
-                randomList.Add(collection[randomIndex]);
-                collection.RemoveAt(randomIndex);
-            }
+            ObservableRangeCollection<T> randomList = new ObservableRangeCollection<T>(collection.OrderBy(item => App.Random.Next(0, collection.Count)).ToList());
 
             return randomList;
         }
@@ -41,7 +34,7 @@ namespace DezignSpiration.Helpers
 
         public static ObservableRangeCollection<DesignQuote> GetDefaultQuotes()
         {
-            return new ObservableRangeCollection<DesignQuote>
+            return Shuffle(new ObservableRangeCollection<DesignQuote>
             {
                 new DesignQuote {
                     Id = 1,
@@ -161,7 +154,7 @@ namespace DezignSpiration.Helpers
                         SecondaryColor = "#06070D"
                     }
                 }
-            };
+            });
         }
 
         public static ObservableRangeCollection<FlagReason> GetDefaultFlagReasons()
@@ -198,7 +191,7 @@ namespace DezignSpiration.Helpers
 
         public static ObservableRangeCollection<Color> GetDefaultColors()
         {
-            return new ObservableRangeCollection<Color> {
+            return Shuffle(new ObservableRangeCollection<Color> {
                 new Color {
                     Id = 1,
                     PrimaryColor = "#FDD32B",
@@ -224,7 +217,7 @@ namespace DezignSpiration.Helpers
                     PrimaryColor = "#222060",
                     SecondaryColor = "#EC192B"
                 }
-            };
+            });
         }
 
         public static void LogError(Exception ex, params string[] extraParams)
@@ -268,6 +261,21 @@ namespace DezignSpiration.Helpers
                 var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "dezignspiration.db");
                 return path;
             }
+        }
+
+        public static TimeSpan GetTimeToScheduleNotification(TimeSpan scheduledTime)
+        {
+            // Convert both time to seconds
+            double currentTimeInSeconds = DateTime.Now.TimeOfDay.TotalSeconds;
+            double scheduledTimeInSeconds = scheduledTime.TotalSeconds;
+            // Total seconds in a day
+            double maxTimeInSeconds = 86400;
+
+            double requiredTime = currentTimeInSeconds > scheduledTimeInSeconds
+                ? (maxTimeInSeconds - currentTimeInSeconds) + scheduledTimeInSeconds
+                : scheduledTimeInSeconds - currentTimeInSeconds;
+
+            return TimeSpan.FromSeconds(requiredTime);
         }
 
         /// <summary>

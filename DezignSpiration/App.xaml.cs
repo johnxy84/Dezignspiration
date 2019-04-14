@@ -25,12 +25,20 @@ namespace DezignSpiration
         public static Random Random = new Random(DateTime.Now.Millisecond);
         public static ViewModelLocator ViewModelLocator;
         public static SQLiteAsyncConnection dbConnection;
+        public static NotificationService notificationService;
+
         private INavigationService navigationService;
 
 
         public App()
         {
             InitializeComponent();
+            InitializeFields();
+            InitializeNavigation();
+        }
+
+        private void InitializeFields()
+        {
             UnityContainer container = new UnityContainer();
             dbConnection = new SQLiteAsyncConnection(Utils.DatabasePath)
             {
@@ -39,7 +47,7 @@ namespace DezignSpiration
             };
             ViewModelLocator = new ViewModelLocator(container);
             SetupDI(container);
-            InitializeNavigation();
+
         }
 
         private void SetupDI(UnityContainer container)
@@ -52,6 +60,9 @@ namespace DezignSpiration
 
             IServiceLocator serviceLocator = new UnityServiceLocator(container);
             ServiceLocator.SetLocatorProvider(() => serviceLocator);
+
+            var helper = DependencyService.Get<IHelper>();
+            notificationService = new NotificationService(helper);
         }
 
         private Task InitializeNavigation()
