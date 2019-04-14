@@ -34,9 +34,9 @@
         // We'll swap out these bad boys during build #AppCenter Roxx
         public const string APP_CENTER_SECRET = "APP_SECRET";
 
-        public const string CLIENT_SECRET = "CLIENT_ID_KEY";
+        public const string CLIENT_SECRET = "CLIENT_ID_SECRET_KEY";
 
-        public const string CLIENT_ID = "CLIENT_ID_SECRET_KEY";
+        public const string CLIENT_ID = "CLIENT_ID_KEY";
     }
 }
 
