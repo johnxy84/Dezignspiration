@@ -37,7 +37,7 @@ namespace DezignSpiration.iOS
             return base.FinishedLaunching(uiApplication, launchOptions);
         }
 
-        public void BeginSwipeEnableCountdown(int hours = 12)
+        public void BeginSwipeEnableCountdown(double hours = 12)
         {
             throw new NotImplementedException();
         }

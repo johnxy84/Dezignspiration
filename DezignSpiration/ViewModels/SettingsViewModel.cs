@@ -18,10 +18,12 @@ namespace DezignSpiration.ViewModels
 
         public SettingsViewModel()
         {
-
             WebsiteCommand = new Command(() =>
             {
-                Browser.OpenAsync(new Uri(Constants.BASE_URL), BrowserLaunchMode.SystemPreferred);
+                Browser.OpenAsync(new Uri(Constants.BASE_URL), new BrowserLaunchOptions
+                {
+                    LaunchMode = BrowserLaunchMode.SystemPreferred
+                });
             });
             AddQuoteCommand = new Command(() =>
             {
@@ -34,7 +36,10 @@ namespace DezignSpiration.ViewModels
             ReviewCommand = new Command(() =>
             {
                 var storeUrl = Device.RuntimePlatform == Device.Android ? Constants.PLAY_STORE_URL : Constants.APP_STORE_URL;
-                Browser.OpenAsync(new Uri(storeUrl), BrowserLaunchMode.SystemPreferred);
+                Browser.OpenAsync(new Uri(storeUrl), new BrowserLaunchOptions
+                {
+                    LaunchMode = BrowserLaunchMode.SystemPreferred
+                });
             });
         }
 

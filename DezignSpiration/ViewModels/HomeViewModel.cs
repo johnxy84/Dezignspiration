@@ -69,39 +69,6 @@ namespace DezignSpiration.ViewModels
             this.quotesRepository = quotesRepository;
         }
 
-
-        private void UpdateSwipeAbility(int oldValue, int newValue)
-        {
-            //Reset swipe count if it's a new day and should reset
-            if ((Settings.SwipeDisabledDate - DateTime.Today).Days > 1 && Settings.SwipeCount >= Constants.MAX_SWIPE_COUNT)
-            {
-                Settings.SwipeCount = 0;
-            }
-
-            if (newValue > oldValue)
-            {
-                Settings.SwipeCount++;
-            }
-            else if (newValue < oldValue)
-            {
-                Settings.SwipeCount--;
-            }
-
-            switch (Settings.SwipeCount)
-            {
-                case Constants.MAX_SWIPE_COUNT / 2:
-                    if (Utils.ShouldShowAnnoyingMessage)
-                        Helper?.ShowAlert($"Slow down champ, You've got {Constants.MAX_SWIPE_COUNT / 2} more forward swipes today", isLongAlert: true);
-                    break;
-                case Constants.MAX_SWIPE_COUNT:
-                    Helper?.ShowAlert("You've maxed out your swipes. Try taking a breath of fresh air and come back later", isLongAlert: true);
-                    Settings.SwipeDisabledDate = DateTime.Today;
-                    Helper?.BeginSwipeEnableCountdown();
-                    CanSwipe = false;
-                    break;
-            }
-        }
-
         /// <summary>
         /// Initializes the page.
         /// </summary>
@@ -150,6 +117,44 @@ namespace DezignSpiration.ViewModels
                 });
             });
 
+            MessagingCenter.Subscribe<SwipeToggled, bool>(this, Constants.SWIPE_TOGGLED, (sender, isSwipeEnabled) =>
+            {
+                CanSwipe = isSwipeEnabled;
+                Settings.SwipeCount = isSwipeEnabled ? 0 : Settings.SwipeCount;
+            });
+
+        }
+
+        private void UpdateSwipeAbility(int oldValue, int newValue)
+        {
+            //Reset swipe count if it's past wait time and should reset
+            // Worst case Scenario if for some weird reason, countdown didn't fire 
+            if ((DateTime.Now - Settings.SwipeDisabledDate).Hours > Constants.HOURS_TILL_COOL_DOWN && Settings.SwipeCount >= Constants.MAX_SWIPE_COUNT)
+            {
+                Settings.SwipeCount = 0;
+            }
+
+            if (newValue > oldValue)
+            {
+                Settings.SwipeCount++;
+            }
+            else if (newValue < oldValue)
+            {
+                Settings.SwipeCount--;
+            }
+
+            switch (Settings.SwipeCount)
+            {
+                case Constants.MAX_SWIPE_COUNT / 2:
+                    Helper?.ShowAlert($"Slow down champ, You've got {Constants.MAX_SWIPE_COUNT / 2} more forward swipes today", isLongAlert: true);
+                    break;
+                case Constants.MAX_SWIPE_COUNT:
+                    Helper?.ShowAlert("You've maxed out your swipes. Try taking a breath of fresh air and come back later", isLongAlert: true);
+                    Settings.SwipeDisabledDate = DateTime.Now;
+                    Helper?.BeginSwipeEnableCountdown(Constants.HOURS_TILL_COOL_DOWN);
+                    CanSwipe = false;
+                    break;
+            }
         }
 
         /// <summary>
@@ -178,6 +183,8 @@ namespace DezignSpiration.ViewModels
         {
             const string addQuote = "Add Quote";
             const string addColor = "Add Color";
+
+            Utils.TrackEvent("AddClicked");
 
             Helper?.ShowOptions(string.Empty, new string[] { addQuote, addColor }, (choice) =>
             {
@@ -210,6 +217,7 @@ namespace DezignSpiration.ViewModels
                         await quotesRepository.DeleteQuote(flaggedQuote);
                         await quotesRepository.FlagQuote(flaggedQuote, flagReasonId);
                         Settings.FlagedQuoteIds.Add(flaggedQuote.Id);
+                        Utils.TrackEvent("QuoteFlagged", choice.ToString());
                     }
                     catch (Exception ex)
                     {
@@ -234,6 +242,8 @@ namespace DezignSpiration.ViewModels
             {
                 Helper?.ShareQuote(Quotes[CurrentIndex], isLongQuote);
             }
+            Utils.TrackEvent("QuoteShared");
+
         }
 
         void ViewSettings()

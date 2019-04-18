@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using DezignSpiration.Interfaces;
 using CommonServiceLocator;
 using System.Linq;
+using Xamarin.Forms;
 
 namespace DezignSpiration.Droid
 {
@@ -43,15 +44,13 @@ namespace DezignSpiration.Droid
 
                 case Constants.NOTIFICATION_QUOTE_ACTION:
                     {
-                        NotificationType notificationType = intent.GetStringExtra(Constants.NOTIFICTAIONTYPE_KEY) == NotificationType.RandomAlarm.ToString() ? NotificationType.RandomAlarm : NotificationType.DailyAlarm;
-                        var quotesRepository = ServiceLocator.Current.GetInstance<IQuotesRepository>();
-                        DesignQuote designQuote;
                         try
                         {
+                            NotificationType notificationType = intent.GetStringExtra(Constants.NOTIFICTAIONTYPE_KEY) == NotificationType.RandomAlarm.ToString() ? NotificationType.RandomAlarm : NotificationType.DailyAlarm;
+                            var quotesRepository = ServiceLocator.Current.GetInstance<IQuotesRepository>();
                             INotification notification = App.notificationService.GetNotification(notificationType);
-                            designQuote = await notification.GetDesignQuote(quotesRepository);
+                            DesignQuote designQuote = await notification.GetDesignQuote(quotesRepository);
                             notification.ToggleNotificationIsSet(false);
-
 
                             await NotificationHelper.SendScheduledNotification(context, notification);
                             NotificationHelper.SetScheduledNotifications(context, App.notificationService.Notifications);
@@ -68,6 +67,7 @@ namespace DezignSpiration.Droid
                         // Reset counter
                         Settings.SwipeCount = 0;
                         NotificationHelper.SendSwipeEnabledNotification(context);
+                        MessagingCenter.Send(SwipeToggled.Message, Helpers.Constants.SWIPE_TOGGLED, true);
                     }
                     catch (Exception ex)
                     {

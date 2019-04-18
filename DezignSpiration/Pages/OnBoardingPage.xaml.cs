@@ -27,6 +27,7 @@ namespace DezignSpiration.Pages
                 var x = Carousel;
                 SelectVisualState(position);
             });
+            Utils.TrackEvent("OnboardingPage");
         }
 
         void SetupPageIndicators()
@@ -38,14 +39,6 @@ namespace DezignSpiration.Pages
                 indicators.Add(boxView);
             }
         }
-
-        //void OnboardPageChanged(object sender, SelectedPositionChangedEventArgs e)
-        //{
-        //    //if (sender is Xamarin.Forms.CarouselView pages)
-        //    //{
-        //    //    SelectVisualState(pages.Position);
-        //    //}
-        //}
 
         void SelectVisualState(int pageIndex)
         {

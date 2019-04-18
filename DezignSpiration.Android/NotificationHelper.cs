@@ -29,8 +29,6 @@ namespace DezignSpiration.Droid
                 {
                     Description = Constants.NOTIFICATION_CHANNEL_DESCRIPTION
                 };
-                // Register the channel with the system; you can't change the importance
-                // or other notification behaviors after this
                 NotificationManager notificationManager = (NotificationManager)context.GetSystemService(Context.NotificationService);
                 notificationManager?.CreateNotificationChannel(channel);
             }
@@ -54,16 +52,16 @@ namespace DezignSpiration.Droid
             PendingIntent shareNotificationPendingIntent = PendingIntent.GetBroadcast(context, Constants.SHARE_NOTIFICATION_REQUEST_CODE, shareIntent, PendingIntentFlags.CancelCurrent);
 
             var notificationBuilder = new NotificationCompat.Builder(context, Constants.NOTIFICTAIONTYPE_CHANNEL_ID)
-                        .SetContentTitle(designQuote.Author)
-                        .SetSound(RingtoneManager.GetDefaultUri(RingtoneType.Notification))
-                        .SetSmallIcon(Resource.Drawable.notify_icon)
-                        .SetContentIntent(tappedPendingIntent)
-                        .SetContentText(designQuote.Quote)
-                        .SetPriority(NotificationCompat.PriorityDefault)
-                        .SetStyle(new NotificationCompat.BigTextStyle().BigText(designQuote.Quote))
-                        .AddAction(Resource.Drawable.share, "Share Quote", shareNotificationPendingIntent)
-                        .SetContentText(designQuote.Quote)
-                        .SetAutoCancel(true);
+                .SetContentTitle(designQuote.Author)
+                .SetSound(RingtoneManager.GetDefaultUri(RingtoneType.Notification))
+                .SetSmallIcon(Resource.Drawable.notify_icon)
+                .SetContentIntent(tappedPendingIntent)
+                .SetContentText(designQuote.Quote)
+                .SetPriority(NotificationCompat.PriorityDefault)
+                .SetStyle(new NotificationCompat.BigTextStyle().BigText(designQuote.Quote))
+                .AddAction(Resource.Drawable.share, "Share Quote", shareNotificationPendingIntent)
+                .SetContentText(designQuote.Quote)
+                .SetAutoCancel(true);
 
             if (notification.GetNotificationType() == NotificationType.DailyAlarm)
             {
@@ -126,7 +124,6 @@ namespace DezignSpiration.Droid
         {
             try
             {
-
                 // Clear Notifications to enable us create new ones
                 App.notificationService.ClearNotifications();
 
@@ -157,13 +154,13 @@ namespace DezignSpiration.Droid
             NotificationManagerCompat.From(Application.Context).Notify(DateTime.Now.Millisecond, notificationBuilder.Build());
         }
 
-        public static void ScheduleSwipeEnabledNotification(Context context, int hours)
+        public static void ScheduleSwipeEnabledNotification(Context context, double hours)
         {
             Intent intent = new Intent(context, typeof(AlarmReceiver));
             intent.SetAction(Constants.SWIPE_ENABLED_ACTION);
             var pendingIntent = PendingIntent.GetBroadcast(context, Constants.SWIPE_ENABLED_REQUEST_CODE, intent, PendingIntentFlags.UpdateCurrent);
             AlarmManager alarmManager = (AlarmManager)context.GetSystemService(Context.AlarmService);
-            // schedule for 12 hours time
+            // schedule for X hours time
             double totalMilliseconds = (DateTime.Now.AddHours(hours) - DateTime.Now).TotalMilliseconds;
             long elapsedTime = (long)(Java.Lang.JavaSystem.CurrentTimeMillis() + totalMilliseconds);
 

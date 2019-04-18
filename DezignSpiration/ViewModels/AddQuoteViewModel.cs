@@ -109,6 +109,7 @@ namespace DezignSpiration.ViewModels
                 if (added)
                 {
                     Helper?.ShowAlert("Thanks for your awesome quote! You'll be seeing it soon", true);
+                    Utils.TrackEvent("QuoteAdded");
                     await Navigation.GoBackAsync(isModal: true);
                 }
                 else

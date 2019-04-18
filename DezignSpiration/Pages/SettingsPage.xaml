@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:forms="clr-namespace:Lottie.Forms;assembly=Lottie.Forms"
              xmlns:ffimageloadingsvg="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
+             xmlns:controls="clr-namespace:DezignSpiration.Controls;assembly=DezignSpiration"
              BackgroundColor="White"
              x:Class="DezignSpiration.Pages.SettingsPage">
     <ContentPage.Resources>
@@ -41,7 +42,7 @@
             </StackLayout>
             <StackLayout Orientation="Horizontal" Margin="0,10" IsVisible="{Binding Config.IsDailyQuoteEnabled}">
                 <Label Text="Send a quote Daily on " HorizontalOptions="StartAndExpand" VerticalOptions="Center"/>
-                <TimePicker Margin="10,0" Time="{Binding Config.DailyReminderTime}" HorizontalOptions="End"/>
+                <controls:ModTimePicker Margin="10,0" Time="{Binding Config.DailyReminderTime}" HorizontalOptions="End"/>
             </StackLayout>
             <StackLayout Orientation="Horizontal" Margin="0,10">
                 <Label Text="Receive random Quotes " HorizontalOptions="FillAndExpand" VerticalOptions="Center"/>
@@ -49,7 +50,7 @@
             </StackLayout>
             <StackLayout Orientation="Horizontal" Margin="0,10" IsVisible="{Binding Config.IsRandomQuoteEnabled}">
                 <Label Text="How much?" HorizontalOptions="StartAndExpand" VerticalOptions="Center"/>
-                <Picker ItemsSource="{Binding Config.RandomQuoteFrequencies}" SelectedIndex="{Binding Config.SelectedRandomQuoteIndex}" Margin="20" HorizontalOptions="End"/>
+                <controls:ModPicker ItemsSource="{Binding Config.RandomQuoteFrequencies}" SelectedIndex="{Binding Config.SelectedRandomQuoteIndex}" Margin="20" HorizontalOptions="End"/>
             </StackLayout>
             <StackLayout Orientation="Horizontal" Margin="0,10">
                 <Label Text="Receive Push Notifications" HorizontalOptions="FillAndExpand" VerticalOptions="Center"/>

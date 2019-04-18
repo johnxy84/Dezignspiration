@@ -48,4 +48,20 @@ namespace DezignSpiration.Helpers
             }
         }
     }
+
+    public class SwipeToggled
+    {
+        private static SwipeToggled message;
+        public static SwipeToggled Message
+        {
+            get
+            {
+                if (message == null)
+                {
+                    message = new SwipeToggled();
+                }
+                return message;
+            }
+        }
+    }
 }

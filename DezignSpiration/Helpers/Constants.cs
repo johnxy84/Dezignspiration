@@ -37,6 +37,9 @@
         public const string CLIENT_SECRET = "CLIENT_ID_SECRET_KEY";
 
         public const string CLIENT_ID = "CLIENT_ID_KEY";
+
+        public const string SWIPE_TOGGLED = "swipe_toggled";
+
+        public const double HOURS_TILL_COOL_DOWN = 12;
     }
 }
-

@@ -84,7 +84,6 @@ namespace DezignSpiration.Models
 
         public RandomQuoteFrequency()
         {
-
         }
 
         public RandomQuoteFrequency(string title, int minHour, int maxHour)

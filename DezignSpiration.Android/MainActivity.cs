@@ -196,7 +196,7 @@ namespace DezignSpiration.Droid
             });
         }
 
-        public void BeginSwipeEnableCountdown(int hours)
+        public void BeginSwipeEnableCountdown(double hours)
         {
             NotificationHelper.ScheduleSwipeEnabledNotification(Application.Context, hours);
         }

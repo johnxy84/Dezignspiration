@@ -17,6 +17,6 @@ namespace DezignSpiration.Interfaces
 
         void ShowOptions(string title, string[] options, Action<object> choice, string cancelText = "Cancel");
 
-        void BeginSwipeEnableCountdown(int hours = 12);
+        void BeginSwipeEnableCountdown(double hours = 12);
     }
 }

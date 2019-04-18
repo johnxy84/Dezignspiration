@@ -75,6 +75,7 @@ namespace DezignSpiration.ViewModels
                 if (result.IsSuccessStatusCode)
                 {
                     Helper?.ShowAlert("Thanks for your feedback, we'll be reviewing it");
+                    Utils.TrackEvent("FeedbackAdded");
                     await Navigation.GoBackAsync(isModal: true);
                 }
                 else

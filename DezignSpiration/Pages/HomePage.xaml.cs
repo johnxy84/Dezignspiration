@@ -16,6 +16,7 @@ namespace DezignSpiration.Pages
             InitializeComponent();
             NavigationPage.SetHasNavigationBar(this, false);
             BindingContext = homeViewModel = App.ViewModelLocator.HomeViewModel;
+            Utils.TrackEvent("HomePage");
         }
 
         protected override bool OnBackButtonPressed()
