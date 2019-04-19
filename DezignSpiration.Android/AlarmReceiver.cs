@@ -54,6 +54,7 @@ namespace DezignSpiration.Droid
 
                             await NotificationHelper.SendScheduledNotification(context, notification);
                             NotificationHelper.SetScheduledNotifications(context, App.notificationService.Notifications);
+                            MessagingCenter.Send(SwipeToggled.Message, Helpers.Constants.SWIPE_TOGGLED, true);
                         }
                         catch (Exception ex)
                         {

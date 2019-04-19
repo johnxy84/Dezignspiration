@@ -65,12 +65,10 @@ namespace DezignSpiration.ViewModels
         }
 
         public Command AddColorCommand { get; }
-        public Command GoBackCommand { get; }
 
         public AddColorViewModel(IColorsRepository colorsRepository)
         {
             AddColorCommand = new Command(async () => await SubmitColor());
-            GoBackCommand = new Command(() => { Navigation.GoBackAsync(isModal: true); });
             this.colorsRepository = colorsRepository;
         }
 
