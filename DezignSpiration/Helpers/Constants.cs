@@ -30,7 +30,6 @@
 
         public const string AUTH_URL = "https://johnxy84.auth0.com";
 
-
         // We'll swap out these bad boys during build #AppCenter Roxx
         public const string APP_CENTER_SECRET = "APP_SECRET";
 
