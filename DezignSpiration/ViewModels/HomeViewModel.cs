@@ -146,7 +146,10 @@ namespace DezignSpiration.ViewModels
             switch (Settings.SwipeCount)
             {
                 case Constants.MAX_SWIPE_COUNT / 2:
-                    Helper?.ShowAlert($"Slow down champ, You've got {Constants.MAX_SWIPE_COUNT / 2} more forward swipes today", isLongAlert: true);
+                    if (Utils.ShouldShowAnnoyingMessage)
+                    {
+                        Helper?.ShowAlert($"Slow down champ, You've got {Constants.MAX_SWIPE_COUNT / 2} more forward swipes today", isLongAlert: true);
+                    }
                     break;
                 case Constants.MAX_SWIPE_COUNT:
                     Helper?.ShowAlert("You've maxed out your swipes. Try taking a breath of fresh air and come back later", isLongAlert: true);

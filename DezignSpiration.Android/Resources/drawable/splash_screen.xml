@@ -3,4 +3,4 @@
     <item>
         <color android:color="#06070D" />
     </item>
-    <item><bitmap android:src="@drawable/SplashScreen" android:tileMode="disabled" android:gravity="fill" /></item></layer-list>
+    <item><bitmap android:src="@drawable/Launcher" android:tileMode="disabled" android:gravity="center" /></item></layer-list>
