@@ -8,6 +8,7 @@ using Java.IO;
 using DezignSpiration.Models;
 using Android.Text.Style;
 using Android.Widget;
+using Android.OS;
 
 namespace DezignSpiration.Droid
 {
@@ -41,21 +42,29 @@ namespace DezignSpiration.Droid
             paint.TextAlign = Paint.Align.Left;
 
             // set text width to canvas width minus screen padding(10 percent of width) in dp
-            int textWidth = canvas.Width - (10 / 100 * width);
+            int textWidth = ((int)(canvas.Width - (0.1 * width)));
 
             var textPreview = new SpannableString(text);
             // Reduce the text of the brand name
             textPreview.SetSpan(new RelativeSizeSpan(0.5f), text.Length - Helpers.Constants.BRAND_NAME.Length, text.Length, SpanTypes.ExclusiveExclusive);
 
             // init StaticLayout for text
-            StaticLayout textLayout = new StaticLayout(textPreview, paint, textWidth, Layout.Alignment.AlignNormal, 1.0f, 0.0f, false);
+            StaticLayout textLayout;
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.M)
+            {
+                textLayout = StaticLayout.Builder.Obtain(textPreview, 0, text.Length, paint, textWidth).Build();
+            }
+            else
+            {
+                textLayout = new StaticLayout(textPreview, paint, textWidth, Layout.Alignment.AlignNormal, 1.0f, 0.0f, false);
+            }
 
             // get height of multiline text
-            int textHeight = textLayout.Height;
+            int? textHeight = textLayout?.Height;
 
             // get position of text's top left corner
             float x = (bitmap.Width - textWidth) / 2;
-            float y = (bitmap.Height - textHeight) / 2;
+            float y = (bitmap.Height - textHeight ?? 0) / 2;
 
             // draw text to the Canvas center
             canvas.Save();
