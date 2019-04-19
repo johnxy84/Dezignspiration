@@ -282,7 +282,7 @@ namespace DezignSpiration.Helpers
 
         public static ObservableRangeCollection<Color> GetDefaultColors()
         {
-            return Shuffle(new ObservableRangeCollection<Color> {
+            return new ObservableRangeCollection<Color> {
                 new Color {
                     Id = 1,
                     PrimaryColor = "#FDD32B",
@@ -333,7 +333,7 @@ namespace DezignSpiration.Helpers
                     PrimaryColor = "#393D50",
                     SecondaryColor = "#F7F6F4"
                 },
-            });
+            };
         }
 
 
