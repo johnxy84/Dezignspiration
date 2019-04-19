@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using DezignSpiration.Interfaces;
 using CommonServiceLocator;
 using System.Linq;
+using Xamarin.Forms;
 
 namespace DezignSpiration.Droid
 {
@@ -43,28 +44,16 @@ namespace DezignSpiration.Droid
 
                 case Constants.NOTIFICATION_QUOTE_ACTION:
                     {
-                        NotificationType notificationType = intent.GetStringExtra(Constants.NOTIFICTAIONTYPE_KEY) == NotificationType.RandomAlarm.ToString() ? NotificationType.RandomAlarm : NotificationType.DailyAlarm;
-                        var quotesRepository = ServiceLocator.Current.GetInstance<IQuotesRepository>();
-                        var colorsRepository = ServiceLocator.Current.GetInstance<IColorsRepository>();
-                        DesignQuote designQuote;
-
                         try
                         {
-                            switch (notificationType)
-                            {
-                                case NotificationType.RandomAlarm:
-                                    designQuote = await quotesRepository.GetRandomQuote();
-                                    NotificationUtils.UpdateScheduledNotification(NotificationType.RandomAlarm, false);
-                                    break;
-                                // Assume default alarm 
-                                default:
-                                    designQuote = (await quotesRepository.GetAllQuotes()).ElementAt(Utils.GetCurrentDisplayIndex());
-                                    NotificationUtils.UpdateScheduledNotification(NotificationType.DailyAlarm, false);
-                                    break;
-                            }
+                            NotificationType notificationType = intent.GetStringExtra(Constants.NOTIFICTAIONTYPE_KEY) == NotificationType.RandomAlarm.ToString() ? NotificationType.RandomAlarm : NotificationType.DailyAlarm;
+                            var quotesRepository = ServiceLocator.Current.GetInstance<IQuotesRepository>();
+                            INotification notification = App.notificationService.GetNotification(notificationType);
+                            DesignQuote designQuote = await notification.GetDesignQuote(quotesRepository);
+                            notification.ToggleNotificationIsSet(false);
 
-                            NotificationHelper.SendScheduledNotification(context, notificationType, designQuote);
-                            NotificationHelper.SetScheduledNotifications(context);
+                            await NotificationHelper.SendScheduledNotification(context, notification);
+                            NotificationHelper.SetScheduledNotifications(context, App.notificationService.Notifications);
                         }
                         catch (Exception ex)
                         {
@@ -78,6 +67,7 @@ namespace DezignSpiration.Droid
                         // Reset counter
                         Settings.SwipeCount = 0;
                         NotificationHelper.SendSwipeEnabledNotification(context);
+                        MessagingCenter.Send(SwipeToggled.Message, Helpers.Constants.SWIPE_TOGGLED, true);
                     }
                     catch (Exception ex)
                     {

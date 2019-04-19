@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using Xamarin.Forms;
 using DezignSpiration.ViewModels;
+using DezignSpiration.Helpers;
 
 namespace DezignSpiration.Pages
 {
@@ -13,6 +14,7 @@ namespace DezignSpiration.Pages
         {
             InitializeComponent();
             BindingContext = settingsViewModel = App.ViewModelLocator.SettingsViewModel;
+            Utils.TrackEvent("SettingsPage");
         }
 
         protected override void OnDisappearing()

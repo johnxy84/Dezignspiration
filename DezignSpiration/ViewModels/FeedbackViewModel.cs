@@ -5,9 +5,6 @@ using Xamarin.Forms;
 using DezignSpiration.Helpers;
 using DezignSpiration.Models;
 using DezignSpiration.Interfaces;
-using System.Net.Http;
-using Newtonsoft.Json;
-using System.Text;
 
 namespace DezignSpiration.ViewModels
 {
@@ -54,11 +51,6 @@ namespace DezignSpiration.ViewModels
             this.client = client;
         }
 
-        public override Task InitializeAsync(object navigationData)
-        {
-            return base.InitializeAsync(navigationData);
-        }
-
         async Task SubmitFeedback()
         {
             try
@@ -72,18 +64,18 @@ namespace DezignSpiration.ViewModels
                 IsBusy = true;
                 var deviceId = await Microsoft.AppCenter.AppCenter.GetInstallIdAsync();
 
-                var payload = new StringContent(JsonConvert.SerializeObject(new
+                var result = await client.Post("/api/v1/feedback", new
                 {
                     feedback = Feedback.FeedbackContent,
                     category = Categories[SelectedCategory],
                     contact = Feedback.Contact,
                     device_id = deviceId
-                }), Encoding.UTF8, "application/json");
+                });
 
-                var result = await client.Post("/api/v1/feedback", payload);
                 if (result.IsSuccessStatusCode)
                 {
                     Helper?.ShowAlert("Thanks for your feedback, we'll be reviewing it");
+                    Utils.TrackEvent("FeedbackAdded");
                     await Navigation.GoBackAsync(isModal: true);
                 }
                 else

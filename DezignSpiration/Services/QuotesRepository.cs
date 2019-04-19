@@ -60,7 +60,6 @@ namespace DezignSpiration.Services
             try
             {
                 return await database.FindWithQueryAsync<DesignQuote>(sql);
-
             }
             catch (Exception ex)
             {
@@ -103,7 +102,7 @@ namespace DezignSpiration.Services
                 //Got data, do the needfuls
                 if (quotesData != null && quotesData.Data != null)
                 {
-                    return quotesData.Data.Quotes;
+                    return Utils.Shuffle(quotesData.Data.Quotes);
                 }
             }
             Utils.LogError(new Exception(content), "RefreshQuotesError");

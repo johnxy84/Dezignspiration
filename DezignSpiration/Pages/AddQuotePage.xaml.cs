@@ -1,6 +1,7 @@
 ﻿using System;
 using Xamarin.Forms;
 using DezignSpiration.Controls;
+using DezignSpiration.Helpers;
 
 namespace DezignSpiration.Pages
 {
@@ -13,6 +14,8 @@ namespace DezignSpiration.Pages
             InitializeComponent();
             var addQuoteViewModel = App.ViewModelLocator.AddQuoteViewModel;
             BindingContext = addQuoteViewModel;
+            Utils.TrackEvent("AddQuotePage");
+
         }
 
         public void QuoteTextChanged(object sender, EventArgs e)

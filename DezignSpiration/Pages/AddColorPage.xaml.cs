@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-
 using Xamarin.Forms;
-using DezignSpiration.ViewModels;
 using System.Text.RegularExpressions;
+using DezignSpiration.Helpers;
 
 namespace DezignSpiration.Pages
 {
@@ -17,6 +15,7 @@ namespace DezignSpiration.Pages
         {
             InitializeComponent();
             BindingContext = App.ViewModelLocator.AddColorViewModel;
+            Utils.TrackEvent("AddColorPage");
         }
 
         void PrimaryTextCompleted(object sender, EventArgs e)

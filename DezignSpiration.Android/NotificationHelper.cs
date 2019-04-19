@@ -7,6 +7,10 @@ using DezignSpiration.Helpers;
 using Android.Support.V4.App;
 using Android.Media;
 using Newtonsoft.Json;
+using DezignSpiration.Interfaces;
+using System.Collections.Generic;
+using CommonServiceLocator;
+using System.Threading.Tasks;
 
 namespace DezignSpiration.Droid
 {
@@ -25,16 +29,16 @@ namespace DezignSpiration.Droid
                 {
                     Description = Constants.NOTIFICATION_CHANNEL_DESCRIPTION
                 };
-                // Register the channel with the system; you can't change the importance
-                // or other notification behaviors after this
                 NotificationManager notificationManager = (NotificationManager)context.GetSystemService(Context.NotificationService);
                 notificationManager?.CreateNotificationChannel(channel);
             }
         }
 
-        public static void SendScheduledNotification(Context context, NotificationType notificationType, DesignQuote designQuote)
+        public static async Task SendScheduledNotification(Context context, INotification notification)
         {
             var notificationIntent = new Intent(context, typeof(MainActivity));
+            var quotesRepository = ServiceLocator.Current.GetInstance<IQuotesRepository>();
+            var designQuote = await notification.GetDesignQuote(quotesRepository);
             notificationIntent.SetFlags(ActivityFlags.SingleTop);
 
             PendingIntent tappedPendingIntent = PendingIntent.GetActivity(context, Constants.TOUCH_NOTIFICATON_REQUEST_CODE, notificationIntent, PendingIntentFlags.UpdateCurrent);
@@ -42,25 +46,24 @@ namespace DezignSpiration.Droid
             // Set action for share button
             Intent shareIntent = new Intent(context, typeof(AlarmReceiver));
             shareIntent.SetAction(Constants.SHARE_NOTIFICATION_QUOTE_INTENT_ACTION);
-            shareIntent.PutExtra(Constants.NOTIFICTAIONTYPE_KEY, notificationType.ToString());
+            shareIntent.PutExtra(Constants.NOTIFICTAIONTYPE_KEY, notification.GetType().ToString());
             // Add This notification to the intent just in case the user needs to share it
             shareIntent.PutExtra(Constants.SHARE_NOTIFICATION_QUOTE_INTENT_ACTION, JsonConvert.SerializeObject(designQuote));
             PendingIntent shareNotificationPendingIntent = PendingIntent.GetBroadcast(context, Constants.SHARE_NOTIFICATION_REQUEST_CODE, shareIntent, PendingIntentFlags.CancelCurrent);
-            var bitmapImage = Helper.GetBitmap(context, Helper.GetImageText(designQuote), designQuote.Color.PrimaryColor, designQuote.Color.SecondaryColor);
 
             var notificationBuilder = new NotificationCompat.Builder(context, Constants.NOTIFICTAIONTYPE_CHANNEL_ID)
-                        .SetContentTitle(designQuote.Author)
-                        .SetSound(RingtoneManager.GetDefaultUri(RingtoneType.Notification))
-                        .SetSmallIcon(Resource.Drawable.notify_icon)
-                        .SetContentIntent(tappedPendingIntent)
-                        .SetContentText(designQuote.Quote)
-                        .SetPriority(NotificationCompat.PriorityDefault)
-                        .SetStyle(new NotificationCompat.BigTextStyle().BigText(designQuote.Quote))
-                        .AddAction(Resource.Drawable.share, "Share Quote", shareNotificationPendingIntent)
-                        .SetContentText(designQuote.Quote)
-                        .SetAutoCancel(true);
+                .SetContentTitle(designQuote.Author)
+                .SetSound(RingtoneManager.GetDefaultUri(RingtoneType.Notification))
+                .SetSmallIcon(Resource.Drawable.notify_icon)
+                .SetContentIntent(tappedPendingIntent)
+                .SetContentText(designQuote.Quote)
+                .SetPriority(NotificationCompat.PriorityDefault)
+                .SetStyle(new NotificationCompat.BigTextStyle().BigText(designQuote.Quote))
+                .AddAction(Resource.Drawable.share, "Share Quote", shareNotificationPendingIntent)
+                .SetContentText(designQuote.Quote)
+                .SetAutoCancel(true);
 
-            if (notificationType == NotificationType.DailyAlarm)
+            if (notification.GetNotificationType() == NotificationType.DailyAlarm)
             {
                 notificationBuilder.SetSubText("Daily Quote");
             }
@@ -70,28 +73,17 @@ namespace DezignSpiration.Droid
             notificationManager.Notify(Settings.NotificationCount++, notificationBuilder.Build());
         }
 
-        public static void ScheduleNotification(Context context, ScheduledNotification scheduledNotification)
+        public static void ScheduleNotification(Context context, INotification notification)
         {
             try
             {
-                var pendingIntent = GetPendingNotificationIntent(scheduledNotification, context);
+                var pendingIntent = GetPendingNotificationIntent(notification, context);
 
                 AlarmManager alarmManager = (AlarmManager)context.GetSystemService(Context.AlarmService);
-                long elapsedTime = (long)(Java.Lang.JavaSystem.CurrentTimeMillis() + scheduledNotification.TimeSpan.TotalMilliseconds);
+                long elapsedTime = (long)(Java.Lang.JavaSystem.CurrentTimeMillis() + notification.TimeToSend().TotalMilliseconds);
 
                 // Set the Alarm
                 alarmManager.Set(AlarmType.RtcWakeup, elapsedTime, pendingIntent);
-
-                // Save Alarm information if we need to cancel it later
-                switch (scheduledNotification.NotificationType)
-                {
-                    case NotificationType.DailyAlarm:
-                        Settings.DailyNotificationData = scheduledNotification;
-                        break;
-                    case NotificationType.RandomAlarm:
-                        Settings.RandomNotificationData = scheduledNotification;
-                        break;
-                }
             }
             catch (Exception ex)
             {
@@ -99,46 +91,31 @@ namespace DezignSpiration.Droid
             }
         }
 
-        public static void SetScheduledNotifications(Context context)
+        public static void SetScheduledNotifications(Context context, List<INotification> notifications)
         {
-
-            if (NotificationUtils.ShouldCreateNotification(NotificationType.DailyAlarm))
+            foreach (var notification in notifications)
             {
-                try
+                if (notification.ShouldCreateNotification())
                 {
-                    var scheduledNotification = NotificationUtils.GetScheduledNotification(NotificationType.DailyAlarm);
-                    ScheduleNotification(context, scheduledNotification);
-                    NotificationUtils.UpdateScheduledNotification(NotificationType.DailyAlarm, true);
-                }
-                catch (Exception ex)
-                {
-                    Utils.LogError(ex, "SetScheduledDailyAlarm");
-                }
-            }
-
-            if (NotificationUtils.ShouldCreateNotification(NotificationType.RandomAlarm))
-            {
-                try
-                {
-                    var scheduledNotification = NotificationUtils.GetScheduledNotification(NotificationType.RandomAlarm);
-                    ScheduleNotification(context, scheduledNotification);
-                    NotificationUtils.UpdateScheduledNotification(NotificationType.RandomAlarm, true);
-                }
-                catch (Exception ex)
-                {
-                    Utils.LogError(ex, "SetScheduledRandomAlarm");
+                    try
+                    {
+                        ScheduleNotification(context, notification);
+                        notification.ToggleNotificationIsSet(true);
+                    }
+                    catch (Exception ex)
+                    {
+                        Utils.LogError(ex, "SettingNotification", notification.GetType().ToString());
+                    }
                 }
             }
         }
 
-        public static PendingIntent GetPendingNotificationIntent(ScheduledNotification scheduledNotification, Context context)
+        public static PendingIntent GetPendingNotificationIntent(INotification notification, Context context)
         {
             Intent intent = new Intent(context, typeof(AlarmReceiver));
             intent.SetAction(Constants.NOTIFICATION_QUOTE_ACTION);
-            intent.PutExtra(Constants.NOTIFICTAIONTYPE_KEY, scheduledNotification.NotificationType.ToString());
-            // Use different Request Codes when setting alarms to prevent collision
-            int requestCode = scheduledNotification.NotificationType == NotificationType.DailyAlarm ?
-                                                   Constants.DAILY_ALARM_REQUEST_CODE : Constants.RANDOM_ALARM_REQUEST_CODE;
+            intent.PutExtra(Constants.NOTIFICTAIONTYPE_KEY, notification.GetNotificationType().ToString());
+            int requestCode = notification.GetNotificationId();
 
             return PendingIntent.GetBroadcast(Application.Context, requestCode, intent, PendingIntentFlags.UpdateCurrent);
         }
@@ -147,11 +124,11 @@ namespace DezignSpiration.Droid
         {
             try
             {
-                // Unset Notifications to enable us create new ones
-                NotificationUtils.UnSetNotifications();
+                // Clear Notifications to enable us create new ones
+                App.notificationService.ClearNotifications();
 
                 // initialize notifications
-                SetScheduledNotifications(context);
+                SetScheduledNotifications(context, App.notificationService.Notifications);
             }
             catch (Exception ex)
             {
@@ -177,13 +154,13 @@ namespace DezignSpiration.Droid
             NotificationManagerCompat.From(Application.Context).Notify(DateTime.Now.Millisecond, notificationBuilder.Build());
         }
 
-        public static void ScheduleSwipeEnabledNotification(Context context, int hours)
+        public static void ScheduleSwipeEnabledNotification(Context context, double hours)
         {
             Intent intent = new Intent(context, typeof(AlarmReceiver));
             intent.SetAction(Constants.SWIPE_ENABLED_ACTION);
             var pendingIntent = PendingIntent.GetBroadcast(context, Constants.SWIPE_ENABLED_REQUEST_CODE, intent, PendingIntentFlags.UpdateCurrent);
             AlarmManager alarmManager = (AlarmManager)context.GetSystemService(Context.AlarmService);
-            // schedule for 12 hours time
+            // schedule for X hours time
             double totalMilliseconds = (DateTime.Now.AddHours(hours) - DateTime.Now).TotalMilliseconds;
             long elapsedTime = (long)(Java.Lang.JavaSystem.CurrentTimeMillis() + totalMilliseconds);
 

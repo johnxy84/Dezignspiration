@@ -98,6 +98,7 @@ namespace DezignSpiration.ViewModels
                 if (added)
                 {
                     Helper?.ShowAlert("Your color would be added soon just because it's Awesome!", false);
+                    Utils.TrackEvent("ColorAdded");
                     await Navigation.GoBackAsync(isModal: true);
                 }
                 else

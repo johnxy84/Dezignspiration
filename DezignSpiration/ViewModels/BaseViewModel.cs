@@ -70,8 +70,8 @@ namespace DezignSpiration.ViewModels
                 var newQuotes = await quotesRepository.GetFreshQuotes();
                 if (newQuotes != null)
                 {
-                    MessagingCenter.Send(QuotesAdded.Message, Constants.QUOTES_ADDED_KEY, newQuotes);
                     Settings.ShouldRetryQuotes = false;
+                    MessagingCenter.Send(QuotesAdded.Message, Constants.QUOTES_ADDED_KEY, newQuotes);
                     Helper?.ShowAlert("Yassss. You just got some fresh, new quotes. :-)");
                     await quotesRepository.InsertQuotes(newQuotes);
                     return true;
@@ -95,8 +95,8 @@ namespace DezignSpiration.ViewModels
             }
             finally
             {
-                NotificationUtils.ClearNotifications();
-                Helper?.SetScheduledNotifications();
+                App.notificationService.ClearNotifications();
+                Helper?.SetScheduledNotifications(App.notificationService.Notifications);
             }
         }
 

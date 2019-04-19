@@ -15,6 +15,7 @@ using Android.Runtime;
 using DezignSpiration.Interfaces;
 using CarouselView.FormsPlugin.Android;
 using Lottie.Forms.Droid;
+using System.Collections.Generic;
 
 [assembly: Xamarin.Forms.Dependency(typeof(MainActivity))]
 
@@ -147,28 +148,9 @@ namespace DezignSpiration.Droid
             });
         }
 
-        public void CancelScheduledNotification(ScheduledNotification scheduledNotification)
+        public void SetScheduledNotifications(List<INotification> notifications)
         {
-            if (scheduledNotification == null) return;
-            try
-            {
-                PendingIntent pendingIntent = NotificationHelper.GetPendingNotificationIntent(scheduledNotification, Application.Context);
-
-                if (pendingIntent != null)
-                {
-                    AlarmManager alarmManager = (AlarmManager)Application.Context.GetSystemService(AlarmService);
-                    alarmManager?.Cancel(pendingIntent);
-                }
-            }
-            catch (System.Exception ex)
-            {
-                Utils.LogError(ex, "CancelScheduledNotification");
-            }
-        }
-
-        public void SetScheduledNotifications()
-        {
-            NotificationHelper.SetScheduledNotifications(Application.Context);
+            NotificationHelper.SetScheduledNotifications(Application.Context, notifications);
         }
 
         public void BackButtonPressed()
@@ -214,9 +196,28 @@ namespace DezignSpiration.Droid
             });
         }
 
-        public void BeginSwipeEnableCountdown(int hours)
+        public void BeginSwipeEnableCountdown(double hours)
         {
             NotificationHelper.ScheduleSwipeEnabledNotification(Application.Context, hours);
+        }
+
+        public void CancelScheduledNotification(INotification notification)
+        {
+            if (notification == null) return;
+            try
+            {
+                PendingIntent pendingIntent = NotificationHelper.GetPendingNotificationIntent(notification, Application.Context);
+
+                if (pendingIntent != null)
+                {
+                    AlarmManager alarmManager = (AlarmManager)Application.Context.GetSystemService(AlarmService);
+                    alarmManager?.Cancel(pendingIntent);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Utils.LogError(ex, "CancelScheduledNotification");
+            }
         }
     }
 }

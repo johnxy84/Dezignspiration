@@ -22,7 +22,7 @@ namespace DezignSpiration.Helpers
         private const string IsFirstTimeKey = nameof(IsFirstTimeKey);
         private const string IsDailyNotificationSetKey = nameof(IsDailyNotificationSetKey);
         private const string IsRandomNotificationSetKey = nameof(IsRandomNotificationSetKey);
-        private const string DailyAlarmKey = nameof(DailyAlarmKey);
+        private const string Notif = nameof(Notif);
         private const string RandomAlarmKey = nameof(RandomAlarmKey);
         private const string NotificationCountKey = nameof(NotificationCountKey);
         private const string ShouldRefresKey = nameof(ShouldRefresKey);
@@ -35,6 +35,8 @@ namespace DezignSpiration.Helpers
         private const string SwipeCountKey = nameof(SwipeCountKey);
         private const string SwipeDisabledDateKey = nameof(SwipeDisabledDateKey);
         private const string LengthyQuoteShareKey = nameof(LengthyQuoteShareKey);
+        private const string tokenExpiryKey = nameof(tokenExpiryKey);
+        private const string tokenKey = nameof(tokenKey);
 
         #endregion
 
@@ -47,6 +49,24 @@ namespace DezignSpiration.Helpers
         private static readonly DateTime defaultDate = DateTime.Now;
 
         #endregion
+
+        public static DateTime TokenExpiry
+        {
+            get => Preferences.Get(tokenExpiryKey, DateTime.Now);
+            set
+            {
+                Preferences.Set(tokenExpiryKey, value);
+            }
+        }
+
+        public static string Token
+        {
+            get => Preferences.Get(tokenKey, string.Empty);
+            set
+            {
+                Preferences.Set(tokenKey, value);
+            }
+        }
 
         public static int CurrentIndex
         {
@@ -120,18 +140,6 @@ namespace DezignSpiration.Helpers
             set => Preferences.Set(IsRandomNotificationSetKey, value);
         }
 
-        public static ScheduledNotification DailyNotificationData
-        {
-            get => JsonConvert.DeserializeObject<ScheduledNotification>(Preferences.Get(DailyAlarmKey, null));
-            set => Preferences.Set(DailyAlarmKey, JsonConvert.SerializeObject(value));
-        }
-
-        public static ScheduledNotification RandomNotificationData
-        {
-            get => JsonConvert.DeserializeObject<ScheduledNotification>(Preferences.Get(RandomAlarmKey, null));
-            set => Preferences.Set(RandomAlarmKey, JsonConvert.SerializeObject(value));
-        }
-
         public static int NotificationCount
         {
             get => Preferences.Get(NotificationCountKey, 0);
@@ -150,7 +158,13 @@ namespace DezignSpiration.Helpers
             set => Preferences.Set(LastRetryTimeKey, DateTime.SpecifyKind(value, DateTimeKind.Utc));
         }
 
-        public static bool ShouldRefreshQuotes => (DateTime.Now - LastRetryTime).TotalMinutes > 2;
+        public static bool ShouldRefreshQuotes
+        {
+            get
+            {
+                return (DateTime.Now - LastRetryTime).TotalMinutes > 1;
+            }
+        }
 
         public static DateTime LastColorRefreshTime
         {

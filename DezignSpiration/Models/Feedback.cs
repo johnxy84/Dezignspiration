@@ -5,8 +5,7 @@ namespace DezignSpiration.Models
     public class Feedback : ObservableObject
     {
         private string feedbackContent = string.Empty;
-        private string category = string.Empty;
-        private string contact = string.Empty;
+        private string contact;
 
         [JsonProperty("feedback")]
         public string FeedbackContent
@@ -18,15 +17,6 @@ namespace DezignSpiration.Models
             }
         }
 
-        [JsonProperty("category")]
-        public string Category
-        {
-            get => Category; set
-            {
-                category = value;
-                OnPropertyChanged();
-            }
-        }
 
         [JsonProperty("contact")]
         public string Contact

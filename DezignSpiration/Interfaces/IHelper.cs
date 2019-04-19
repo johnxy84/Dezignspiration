@@ -1,5 +1,6 @@
 ﻿using System;
 using DezignSpiration.Models;
+using System.Collections.Generic;
 namespace DezignSpiration.Interfaces
 {
     public interface IHelper
@@ -8,14 +9,14 @@ namespace DezignSpiration.Interfaces
 
         void ShowAlert(string message, bool isLongAlert = false, bool isToast = true, string actionMessage = null, Action<object> action = null);
 
-        void CancelScheduledNotification(ScheduledNotification notificationData);
+        void CancelScheduledNotification(INotification notificationData);
 
-        void SetScheduledNotifications();
+        void SetScheduledNotifications(List<INotification> notifications);
 
         void ShareQuote(DesignQuote quote, bool isLongQuote = false);
 
         void ShowOptions(string title, string[] options, Action<object> choice, string cancelText = "Cancel");
 
-        void BeginSwipeEnableCountdown(int hours = 12);
+        void BeginSwipeEnableCountdown(double hours = 12);
     }
 }
