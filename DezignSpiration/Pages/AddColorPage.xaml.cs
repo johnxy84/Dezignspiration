@@ -7,7 +7,7 @@ namespace DezignSpiration.Pages
 {
     public partial class AddColorPage : ContentPage
     {
-        private readonly Regex colorRegex = new Regex(@"^[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3}$");
+        private readonly Regex colorRegex = new Regex(Constants.COLOR_REGEX);
         private bool hasTypedPrimaryColor;
         private bool hasTypedSecondaryColor;
 

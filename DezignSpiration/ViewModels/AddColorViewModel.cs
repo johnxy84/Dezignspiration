@@ -9,7 +9,7 @@ namespace DezignSpiration.ViewModels
 {
     public class AddColorViewModel : BaseViewModel
     {
-        private readonly Regex colorRegex = new Regex(@"^[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3}$");
+        private readonly Regex colorRegex = new Regex(Constants.COLOR_REGEX);
         private readonly IColorsRepository colorsRepository;
         private Models.Color color = new Models.Color();
 

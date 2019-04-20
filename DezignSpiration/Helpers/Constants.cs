@@ -20,6 +20,8 @@
 
         public const string BASE_URL = "https://dezignspiration.com";
 
+        public const string COLOR_REGEX = @"^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$";
+
         public const int MAX_SWIPE_COUNT = 19;
 
         public const int MAX_QUOTE_LENGTH = 250;

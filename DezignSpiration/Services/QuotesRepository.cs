@@ -7,7 +7,6 @@ using DezignSpiration.Helpers;
 using Newtonsoft.Json;
 using SQLiteNetExtensionsAsync.Extensions;
 using System;
-using System.Linq;
 
 namespace DezignSpiration.Services
 {
@@ -44,7 +43,6 @@ namespace DezignSpiration.Services
             }
             catch (Exception ex)
             {
-                Utils.LogError(ex, "ErrorInsertingQuotes");
                 return false;
             }
         }
