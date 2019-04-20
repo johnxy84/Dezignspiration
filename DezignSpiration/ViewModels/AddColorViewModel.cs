@@ -92,25 +92,16 @@ namespace DezignSpiration.ViewModels
                 IsBusy = true;
                 var deviceId = await Microsoft.AppCenter.AppCenter.GetInstallIdAsync();
 
-                var added = await colorsRepository.AddColor(Color, deviceId.ToString());
-                if (added)
-                {
-                    Helper?.ShowAlert("Your color would be added soon just because it's Awesome!", false);
-                    Utils.TrackEvent("ColorAdded");
-                    await Navigation.GoBackAsync(isModal: true);
-                }
-                else
-                {
-                    Helper?.ShowAlert("There was an issue adding your color, Please try again Later", true, false, "Try again", async (choice) =>
-                    {
-                        await SubmitColor();
-                    });
-                }
+                await colorsRepository.AddColor(Color, deviceId.ToString());
+
+                Helper?.ShowAlert("Your color would be added soon just because it's Awesome!", false);
+                Utils.TrackEvent("ColorAdded");
+                await Navigation.GoBackAsync(isModal: true);
             }
             catch (Exception ex)
             {
                 Utils.LogError(ex, "Adding QuoteError");
-                Helper?.ShowAlert($"There was an issue adding your color: {ex.Message}", true, false, "Try again", async (choice) =>
+                Helper?.ShowAlert($"There was an issue adding your color", true, false, "Try again", async (choice) =>
                 {
                     await SubmitColor();
                 });

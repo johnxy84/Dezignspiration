@@ -19,7 +19,7 @@ namespace DezignSpiration.Interfaces
 
         Task<ObservableRangeCollection<Color>> GetFreshColors();
 
-        Task<bool> AddColor(Color color, string deviceId);
+        Task AddColor(Color color, string deviceId);
 
     }
 }
