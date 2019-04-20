@@ -60,7 +60,7 @@ namespace DezignSpiration.Services
             try
             {
                 int totalColors = await CountColor();
-                var response = await httpClient.Get($"/api/v1/list/colors?offset={totalColors}&limit={Constants.MAX_FETCH_QUOTE}");
+                var response = await httpClient.Get($"/api/v1/list/colors?offset={totalColors}&limit={Constants.MAX_FETCH_QUOTE}&status=approved");
                 var content = await response.Content.ReadAsStringAsync();
                 if (response.IsSuccessStatusCode)
                 {

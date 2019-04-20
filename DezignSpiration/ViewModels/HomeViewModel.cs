@@ -143,16 +143,19 @@ namespace DezignSpiration.ViewModels
                 Settings.SwipeCount--;
             }
 
+            string message = string.Empty;
             switch (Settings.SwipeCount)
             {
                 case Constants.MAX_SWIPE_COUNT / 2:
                     if (Utils.ShouldShowAnnoyingMessage)
                     {
-                        Helper?.ShowAlert($"Slow down champ, You've got {Constants.MAX_SWIPE_COUNT / 2} more forward swipes today", isLongAlert: true);
+                        message = $"Slow down champ, You've got {Constants.MAX_SWIPE_COUNT / 2} more forward swipes today";
+                        Helper?.ShowAlert(message, isLongAlert: false, isToast: false);
                     }
                     break;
                 case Constants.MAX_SWIPE_COUNT:
-                    Helper?.ShowAlert("You've maxed out your swipes. Try taking a breath of fresh air and come back later", isLongAlert: true);
+                    message = "You've maxed out your swipes. Try taking a breath of fresh air and check back later. We'll remind you.";
+                    Helper?.ShowAlert(message, isLongAlert: true, isToast: false);
                     Settings.SwipeDisabledDate = DateTime.Now;
                     Helper?.BeginSwipeEnableCountdown(Constants.HOURS_TILL_COOL_DOWN);
                     CanSwipe = false;

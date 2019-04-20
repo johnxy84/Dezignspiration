@@ -18,7 +18,6 @@ namespace DezignSpiration.ViewModels
         private bool isAnonymous;
 
         public Command AddQuoteCommand { get; }
-        public Command GoBackCommand { get; }
 
         public DesignQuote DesignQuote
         {
@@ -70,7 +69,6 @@ namespace DezignSpiration.ViewModels
         public AddQuoteViewModel(IColorsRepository colorsRepository, IQuotesRepository quotesRepository)
         {
             AddQuoteCommand = new Command(async () => await SubmitQuote());
-            GoBackCommand = new Command(() => { Navigation.GoBackAsync(isModal: true); });
             this.colorsRepository = colorsRepository;
             this.quotesRepository = quotesRepository;
         }

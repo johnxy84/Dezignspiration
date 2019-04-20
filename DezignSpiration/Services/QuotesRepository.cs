@@ -12,7 +12,7 @@ namespace DezignSpiration.Services
 {
     public class QuotesRepository : IQuotesRepository
     {
-        SQLiteAsyncConnection database;
+        private readonly SQLiteAsyncConnection database;
         private readonly INetworkClient httpClient;
 
         public QuotesRepository(INetworkClient httpClient)

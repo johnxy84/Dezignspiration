@@ -132,7 +132,7 @@ namespace DezignSpiration.Droid
                 }
 
                 View activityRootView = Instance.FindViewById(Android.Resource.Id.Content);
-                var snackBar = Snackbar.Make(activityRootView, message, isLongAlert ? Snackbar.LengthLong : Snackbar.LengthShort);
+                var snackBar = Snackbar.Make(activityRootView, message, isLongAlert ? 10000 : Snackbar.LengthShort);
 
                 if (!string.IsNullOrWhiteSpace(actionMessage) && action != null)
                 {

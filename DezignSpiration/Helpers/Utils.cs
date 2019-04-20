@@ -159,9 +159,9 @@ namespace DezignSpiration.Helpers
                     Quote = "Personas Are Useful, But Scenarios Are More Useful.",
                     Author = "Jared M Spool",
                     Color = new Color {
-                        Id = 14,
-                        PrimaryColor = "#272B3A",
-                        SecondaryColor = "#FFBF25"
+                        Id = 9,
+                        PrimaryColor = "#36688D",
+                        SecondaryColor = "#F3CD05"
                     }
                 },
                 new DesignQuote {
@@ -189,9 +189,9 @@ namespace DezignSpiration.Helpers
                     Quote = "If you are to succeed, you have to get end users excited and enabled even if they aren’t the ones paying for it. And product education plays a major role in that.",
                     Author = "Misha Abasov",
                     Color = new Color {
-                        Id = 13,
-                        PrimaryColor = "#18288D",
-                        SecondaryColor = "#FFC13D"
+                        Id = 2,
+                        PrimaryColor = "#0091E5",
+                        SecondaryColor = "#FAECAA"
                     }
                 },
                 new DesignQuote {
@@ -199,9 +199,9 @@ namespace DezignSpiration.Helpers
                     Quote = "Gaining a better understanding of how something works is vital to doing your best work.",
                     Author = "Andrew Couldwell",
                     Color = new Color {
-                        Id = 14,
-                        PrimaryColor = "#272B3A",
-                        SecondaryColor = "#FFBF25"
+                        Id = 5,
+                        PrimaryColor = "#222060",
+                        SecondaryColor = "#EC192B"
                     }
                 },
                 new DesignQuote {
@@ -209,9 +209,9 @@ namespace DezignSpiration.Helpers
                     Quote = "Don’t use blue for non-link text, even if you don’t use blue as your link color. Blue is still the color with the strongest perceived affordance of clickability.",
                     Author = "Josh Byrne",
                     Color = new Color {
-                        Id = 11,
-                        PrimaryColor = "#334E4C",
-                        SecondaryColor = "#FFE074"
+                        Id = 2,
+                        PrimaryColor = "#0091E5",
+                        SecondaryColor = "#FAECAA"
                     }
                 },
                 new DesignQuote {
@@ -219,9 +219,9 @@ namespace DezignSpiration.Helpers
                     Quote = "When designers only focus on delightful animations, humorous copywriting or fun interaction, they are missing deeper, more important aspects of user experience. This is what we call Surface Delight.",
                     Author = "Aaron Walter",
                     Color = new Color {
-                        Id = 11,
-                        PrimaryColor = "#334E4C",
-                        SecondaryColor = "#FFE074"
+                        Id = 1,
+                        PrimaryColor = "#FDD32B",
+                        SecondaryColor = "#06070D"
                     }
                 },
                 new DesignQuote {
@@ -229,9 +229,9 @@ namespace DezignSpiration.Helpers
                     Quote = "Whether a design is functional, decorative, or carries a message, Form and Function explores the relationship between the visual form and its purpose. This relationship helps us explore and make better decisions.",
                     Author = "Eleana Gkogka",
                     Color = new Color {
-                        Id = 16,
-                        PrimaryColor = "#393D50",
-                        SecondaryColor = "#F7F6F4"
+                        Id = 6,
+                        PrimaryColor = "#ED962B",
+                        SecondaryColor = "#984098"
                     }
                 },
                 new DesignQuote {
@@ -239,9 +239,9 @@ namespace DezignSpiration.Helpers
                     Quote = "Help people find solutions; don’t tell them what to do: Telling people what you would have done doesn’t necessarily help them.",
                     Author = "Stuart Norrie",
                     Color = new Color {
-                        Id = 16,
-                        PrimaryColor = "#393D50",
-                        SecondaryColor = "#F7F6F4"
+                        Id = 8,
+                        PrimaryColor = "#003D73",
+                        SecondaryColor = "#1ECFD6"
                     }
                 },
 
@@ -314,24 +314,19 @@ namespace DezignSpiration.Helpers
                     SecondaryColor = "#984098"
                 },
                 new Color {
-                    Id = 11,
-                    PrimaryColor = "#334E4C",
-                    SecondaryColor = "#FFE074"
+                    Id = 7,
+                    PrimaryColor = "#257873",
+                    SecondaryColor = "#F8D591"
                 },
                 new Color {
-                    Id = 13,
-                    PrimaryColor = "#18288D",
-                    SecondaryColor = "#FFC13D"
+                    Id = 8,
+                    PrimaryColor = "#003D73",
+                    SecondaryColor = "#1ECFD6"
                 },
                 new Color {
-                    Id = 14,
-                    PrimaryColor = "#272B3A",
-                    SecondaryColor = "#FFBF25"
-                },
-                new Color {
-                    Id = 16,
-                    PrimaryColor = "#393D50",
-                    SecondaryColor = "#F7F6F4"
+                    Id = 9,
+                    PrimaryColor = "#36688D",
+                    SecondaryColor = "#F3CD05"
                 },
             };
         }
