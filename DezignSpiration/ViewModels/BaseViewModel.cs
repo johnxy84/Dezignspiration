@@ -72,7 +72,7 @@ namespace DezignSpiration.ViewModels
                 {
                     Settings.ShouldRetryQuotes = false;
                     MessagingCenter.Send(QuotesAdded.Message, Constants.QUOTES_ADDED_KEY, newQuotes);
-                    Helper?.ShowAlert("Yassss. You just got some fresh, new quotes. :-)");
+                    Helper?.ShowAlert("Yassss. You just got some fresh, new quotes. :-)", true);
                     await quotesRepository.InsertQuotes(newQuotes);
                     return true;
                 }
