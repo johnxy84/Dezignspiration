@@ -8,6 +8,11 @@ namespace DezignSpiration.Models.Notifications
 {
     public class DailyNotification : INotification
     {
+        public void ClearNotification()
+        {
+            Settings.IsDailyNotificationSet = false;
+        }
+
         public async Task<DesignQuote> GetDesignQuote(IQuotesRepository quotesRepository)
         {
             return (await quotesRepository.GetAllQuotes()).ElementAt(Utils.GetCurrentDisplayIndex());

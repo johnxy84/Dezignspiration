@@ -31,7 +31,6 @@ namespace DezignSpiration.Helpers
         private const string LastRefreshFlagReasonsTimeKey = nameof(LastRefreshFlagReasonsTimeKey);
         private const string ColorsKey = nameof(ColorsKey);
         private const string FlaggedQuotesKey = nameof(FlaggedQuotesKey);
-        private const string CanSwipeKey = nameof(CanSwipeKey);
         private const string SwipeCountKey = nameof(SwipeCountKey);
         private const string SwipeDisabledDateKey = nameof(SwipeDisabledDateKey);
         private const string LengthyQuoteShareKey = nameof(LengthyQuoteShareKey);

@@ -1,5 +1,4 @@
-﻿using System;
-using Android.App;
+﻿using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
@@ -8,8 +7,9 @@ namespace DezignSpiration.Droid
 {
     // This service would help schedule our notifications incase android is killing off all apps
     [Service]
-	public class KillStopper: Service
+    public class KillStopper : Service
     {
+
         public override IBinder OnBind(Intent intent)
         {
             return null;

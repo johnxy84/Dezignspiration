@@ -1,18 +1,21 @@
-﻿using System;
-using Android.App;
+﻿using Android.App;
 using Android.Content;
 
 namespace DezignSpiration.Droid
 {
     [BroadcastReceiver]
-    [IntentFilter(new[] { Intent.ActionBootCompleted })]
+    [IntentFilter(new[] { Intent.ActionBootCompleted, Intent.ActionMyPackageReplaced })]
     public class BootAlarmReceiver : BroadcastReceiver
     {
         public override void OnReceive(Context context, Intent intent)
         {
-            if (intent.Action == Intent.ActionBootCompleted || intent.Action == Intent.ActionReboot)
+            switch (intent.Action)
             {
-                NotificationHelper.SetFreshNotifications(context);
+                case Intent.ActionBootCompleted:
+                case Intent.ActionReboot:
+                case Intent.ActionMyPackageReplaced:
+                    NotificationHelper.SetFreshNotifications(context);
+                    break;
             }
         }
 

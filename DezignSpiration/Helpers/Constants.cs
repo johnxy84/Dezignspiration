@@ -41,6 +41,6 @@
 
         public const string SWIPE_TOGGLED = "swipe_toggled";
 
-        public const double HOURS_TILL_COOL_DOWN = 6;
+        public const double HOURS_TILL_COOL_DOWN = 3;
     }
 }

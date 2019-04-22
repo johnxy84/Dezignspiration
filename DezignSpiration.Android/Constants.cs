@@ -22,8 +22,8 @@ namespace DezignSpiration.Droid
         public const int SHARE_NOTIFICATION_REQUEST_CODE = 4;
         public const int SWIPE_ENABLED_REQUEST_CODE = 5;
 
-        public const string SHARE_NOTIFICATION_QUOTE_INTENT_ACTION = "Share Notification Quote";
-        public const string NOTIFICATION_QUOTE_ACTION = "Notification Quote";
+        public const string SHARE_NOTIFICATION_QUOTE_INTENT_ACTION = "Share_Notification_Quote";
+        public const string NOTIFICATION_QUOTE_ACTION = "Notification_Quote";
 
         public const string SWIPE_ENABLED_ACTION = "Swipe Enabled";
     }

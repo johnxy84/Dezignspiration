@@ -120,7 +120,10 @@ namespace DezignSpiration.ViewModels
             MessagingCenter.Subscribe<SwipeToggled, bool>(this, Constants.SWIPE_TOGGLED, (sender, isSwipeEnabled) =>
             {
                 CanSwipe = isSwipeEnabled;
-                Settings.SwipeCount = isSwipeEnabled ? 0 : Settings.SwipeCount;
+                if (isSwipeEnabled)
+                {
+                    Settings.SwipeCount = 0;
+                }
             });
 
         }
@@ -129,9 +132,10 @@ namespace DezignSpiration.ViewModels
         {
             //Reset swipe count if it's past wait time and should reset
             // Worst case Scenario if for some weird reason, countdown didn't fire 
-            if ((DateTime.Now - Settings.SwipeDisabledDate).Hours > Constants.HOURS_TILL_COOL_DOWN && Settings.SwipeCount >= Constants.MAX_SWIPE_COUNT)
+            if ((DateTime.Now - Settings.SwipeDisabledDate).TotalHours > Constants.HOURS_TILL_COOL_DOWN && Settings.SwipeCount >= Constants.MAX_SWIPE_COUNT)
             {
-                Settings.SwipeCount = 0;
+                MessagingCenter.Send(SwipeToggled.Message, Constants.SWIPE_TOGGLED, true);
+                return;
             }
 
             if (newValue > oldValue)
@@ -156,9 +160,13 @@ namespace DezignSpiration.ViewModels
                 case Constants.MAX_SWIPE_COUNT:
                     message = "You've maxed out your swipes. Try taking a breath of fresh air and check back later. We'll remind you.";
                     Helper?.ShowAlert(message, isLongAlert: true, isToast: false);
-                    Settings.SwipeDisabledDate = DateTime.Now;
-                    Helper?.BeginSwipeEnableCountdown(Constants.HOURS_TILL_COOL_DOWN);
-                    CanSwipe = false;
+                    if (CanSwipe)
+                    {
+                        Settings.SwipeDisabledDate = DateTime.Now;
+                        Helper?.BeginSwipeEnableCountdown(Constants.HOURS_TILL_COOL_DOWN);
+                        MessagingCenter.Send(SwipeToggled.Message, Constants.SWIPE_TOGGLED, false);
+                    }
+
                     break;
             }
         }
@@ -256,5 +264,6 @@ namespace DezignSpiration.ViewModels
         {
             Navigation.NavigateToAsync<SettingsViewModel>(isModal: true);
         }
+
     }
 }

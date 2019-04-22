@@ -74,8 +74,7 @@ namespace DezignSpiration.ViewModels
 
         public override Task InitializeAsync(object navigationData)
         {
-            PrimaryColor = string.Empty;
-            SecondaryColor = string.Empty;
+            PrimaryColor = SecondaryColor = string.Empty;
             return base.InitializeAsync(navigationData);
         }
 
@@ -94,7 +93,7 @@ namespace DezignSpiration.ViewModels
 
                 await colorsRepository.AddColor(Color, deviceId.ToString());
 
-                Helper?.ShowAlert("Your color would be added soon just because it's Awesome!", false);
+                Helper?.ShowAlert("Your color would be added soon just because it's Awesome!", true, false);
                 Utils.TrackEvent("ColorAdded");
                 await Navigation.GoBackAsync(isModal: true);
             }

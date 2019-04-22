@@ -106,13 +106,13 @@ namespace DezignSpiration.ViewModels
 
                 if (added)
                 {
-                    Helper?.ShowAlert("Thanks for your awesome quote! You'll be seeing it soon", true);
+                    Helper?.ShowAlert("Thanks for your awesome quote! It's being reviewed and you'll be seeing it soon", true, false);
                     Utils.TrackEvent("QuoteAdded");
                     await Navigation.GoBackAsync(isModal: true);
                 }
                 else
                 {
-                    Helper?.ShowAlert("There was an issue uploading your quote, Please try again Later", true, false, "Try again", async (choice) =>
+                    Helper?.ShowAlert("There was an issue uploading your quote, please check your network or try again Later", true, false, "Try again", async (choice) =>
                     {
                         await SubmitQuote();
                     });
@@ -121,7 +121,7 @@ namespace DezignSpiration.ViewModels
             catch (Exception ex)
             {
                 Utils.LogError(ex, "AddngQuoteError");
-                Helper?.ShowAlert($"There was an issue uploading your quote: {ex.Message}", true, false, "Try again", async (choice) =>
+                Helper?.ShowAlert("There was an issue uploading your quote please check your network or try again later", true, false, "Try again", async (choice) =>
                 {
                     await SubmitQuote();
                 });

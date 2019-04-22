@@ -65,8 +65,6 @@ namespace DezignSpiration.Droid
                 case Constants.SWIPE_ENABLED_ACTION:
                     try
                     {
-                        // Reset counter
-                        Settings.SwipeCount = 0;
                         NotificationHelper.SendSwipeEnabledNotification(context);
                         MessagingCenter.Send(SwipeToggled.Message, Helpers.Constants.SWIPE_TOGGLED, true);
                     }

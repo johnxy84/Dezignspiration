@@ -20,7 +20,7 @@ namespace DezignSpiration.Droid
             return Android.Graphics.Color.Rgb(rgbColor.Red, rgbColor.Green, rgbColor.Blue);
         }
 
-        public static Bitmap GetBitmap(Context context, string text, string backgroundColor, string textColor, int height = 1000, int width = 1000)
+        public static Bitmap GetBitmap(Context context, string text, string backgroundColor, string textColor, int height = 3000, int width = 3000)
         {
             Bitmap bitmap = Bitmap.CreateBitmap(width, height, Bitmap.Config.Argb8888);
             Canvas canvas = new Canvas(bitmap);
@@ -170,7 +170,7 @@ namespace DezignSpiration.Droid
 
         public static float GetFontSize(string text)
         {
-            return text.Length <= 100 ? 70 : text.Length <= 150 ? 65 : 60;
+            return text.Length <= 100 ? 240 : text.Length <= 150 ? 200 : 190;
         }
     }
 

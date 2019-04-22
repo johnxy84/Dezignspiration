@@ -8,6 +8,11 @@ namespace DezignSpiration.Models.Notifications
 {
     public class RandomNotification : INotification
     {
+        public void ClearNotification()
+        {
+            Settings.IsRandomNotificationSet = false;
+        }
+
         public async Task<DesignQuote> GetDesignQuote(IQuotesRepository quotesRepository)
         {
             return await quotesRepository.GetRandomQuote();
