@@ -19,5 +19,7 @@ namespace DezignSpiration.Interfaces
         Task<DesignQuote> GetDesignQuote(IQuotesRepository quotesRepository);
 
         void ClearNotification();
+
+        bool IsSet();
     }
 }

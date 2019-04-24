@@ -28,6 +28,11 @@ namespace DezignSpiration.Models.Notifications
             return NotificationType.RandomAlarm;
         }
 
+        public bool IsSet()
+        {
+            return Settings.IsRandomNotificationSet;
+        }
+
         public bool ShouldCreateNotification()
         {
             return !Settings.IsRandomNotificationSet && Settings.SettingsConfig.IsRandomQuoteEnabled;

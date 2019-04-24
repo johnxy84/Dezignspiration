@@ -255,7 +255,7 @@ namespace DezignSpiration.Helpers
             Dictionary<string, string> crashProperties = new Dictionary<string, string>();
             for (int i = 0; i < extraParams.Length; i++)
             {
-                crashProperties.Add($"Action {i}", extraParams[i]);
+                crashProperties.Add($"Param {i}", extraParams[i]);
             }
             Crashes.TrackError(ex, crashProperties);
         }

@@ -120,15 +120,18 @@ namespace DezignSpiration.Droid
             return PendingIntent.GetBroadcast(Application.Context, requestCode, intent, PendingIntentFlags.UpdateCurrent);
         }
 
-        public static void SetFreshNotifications(Context context)
+        public static void SetOrphanedNotifications(Context context)
         {
             try
             {
-                // Clear Notifications to enable us create new ones
-                App.notificationService.ClearNotifications();
-
-                // initialize notifications
-                SetScheduledNotifications(context, App.notificationService.Notifications);
+                foreach (var notification in App.notificationService.Notifications)
+                {
+                    // notification is marked as scheduled but it's not scheduled
+                    if (!IsNotificationSchdeuled(notification, context) && notification.IsSet())
+                    {
+                        ScheduleNotification(context, notification);
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -165,6 +168,14 @@ namespace DezignSpiration.Droid
             long elapsedTime = (long)(Java.Lang.JavaSystem.CurrentTimeMillis() + totalMilliseconds);
 
             alarmManager.Set(AlarmType.RtcWakeup, elapsedTime, pendingIntent);
+        }
+
+        public static bool IsNotificationSchdeuled(INotification notification, Context context)
+        {
+            var intent = new Intent(context, typeof(AlarmReceiver));
+            intent.SetAction(Constants.NOTIFICATION_QUOTE_ACTION);
+            intent.PutExtra(Constants.NOTIFICTAIONTYPE_KEY, notification.GetType().ToString());
+            return PendingIntent.GetBroadcast(context, notification.GetNotificationId(), intent, PendingIntentFlags.NoCreate) != null;
         }
     }
 }

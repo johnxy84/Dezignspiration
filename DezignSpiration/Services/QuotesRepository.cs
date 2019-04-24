@@ -31,7 +31,15 @@ namespace DezignSpiration.Services
 
         public async Task<bool> DeleteQuote(DesignQuote designQuote)
         {
-            return await database.DeleteAsync(designQuote) == 1;
+            var sql = $"delete from {nameof(DesignQuote)} where id = ?";
+            try
+            {
+                return await database.ExecuteAsync(sql, designQuote.Id) == 1;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public async Task<bool> InsertQuotes(IEnumerable<DesignQuote> quotes)

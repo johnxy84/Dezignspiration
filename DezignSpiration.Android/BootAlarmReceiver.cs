@@ -14,7 +14,7 @@ namespace DezignSpiration.Droid
                 case Intent.ActionBootCompleted:
                 case Intent.ActionReboot:
                 case Intent.ActionMyPackageReplaced:
-                    NotificationHelper.SetFreshNotifications(context);
+                    NotificationHelper.SetOrphanedNotifications(context);
                     break;
             }
         }
