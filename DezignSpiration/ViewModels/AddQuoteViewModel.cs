@@ -120,7 +120,7 @@ namespace DezignSpiration.ViewModels
             }
             catch (Exception ex)
             {
-                Utils.LogError(ex, "AddngQuoteError");
+                Utils.LogError(ex, "AddngQuoteError", DesignQuote.Quote, DesignQuote.Author);
                 Helper?.ShowAlert("There was an issue uploading your quote please check your network or try again later", true, false, "Try again", async (choice) =>
                 {
                     await SubmitQuote();

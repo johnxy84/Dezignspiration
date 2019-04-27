@@ -15,7 +15,7 @@ namespace DezignSpiration.Droid
         {
             base.OnCreate();
             Initialize(Application.Context);
-            Android.Widget.Toast.MakeText(Application.Context, "BG Service Started", Android.Widget.ToastLength.Long);
+            NotificationHelper.SendNotification(Application.Context, "BG Service Started");
 
             NotificationHelper.SetOrphanedNotifications(Application.Context);
         }
@@ -28,8 +28,8 @@ namespace DezignSpiration.Droid
         public override void OnTaskRemoved(Intent rootIntent)
         {
             // Recreate our Notifications before the apps die off
+            NotificationHelper.SendNotification(Application.Context, "App is Being Removed");
             NotificationHelper.SetOrphanedNotifications(Application.Context);
-            Android.Widget.Toast.MakeText(Application.Context, "App is Being Removed", Android.Widget.ToastLength.Long);
 
             base.OnTaskRemoved(rootIntent);
         }
@@ -43,7 +43,7 @@ namespace DezignSpiration.Droid
         public override void OnDestroy()
         {
             // Recreate our Notifications before the apps die off
-            Android.Widget.Toast.MakeText(Application.Context, "App is Being Mudered", Android.Widget.ToastLength.Long);
+            NotificationHelper.SendNotification(Application.Context, "App is Being Mudered");
             NotificationHelper.SetOrphanedNotifications(Application.Context);
             base.OnDestroy();
         }
@@ -56,7 +56,7 @@ namespace DezignSpiration.Droid
             PendingIntent pendingIntent = PendingIntent.GetBroadcast(context, Constants.BACKGROUND_SERVICE_REQUEST_CODE, intent, 0);
             if (pendingIntent == null)
             {
-                Android.Widget.Toast.MakeText(this, "Some problems with creating of PendingIntent", Android.Widget.ToastLength.Long).Show();
+                NotificationHelper.SendNotification(Application.Context, "Some problems with creating of PendingIntent");
             }
             else
             {
