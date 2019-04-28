@@ -54,7 +54,6 @@ namespace DezignSpiration.Droid
                 Utils.LogError(new System.Exception("Error Initializing Android Notification Job"));
             }
 
-            StartService(new Intent(Application.Context, typeof(KillStopper)));
             LoadApplication(appInstance);
         }
 
