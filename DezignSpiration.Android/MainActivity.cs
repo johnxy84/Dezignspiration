@@ -16,6 +16,7 @@ using DezignSpiration.Interfaces;
 using CarouselView.FormsPlugin.Android;
 using Lottie.Forms.Droid;
 using System.Collections.Generic;
+using Android.App.Job;
 
 [assembly: Xamarin.Forms.Dependency(typeof(MainActivity))]
 
@@ -46,9 +47,12 @@ namespace DezignSpiration.Droid
             Xamarin.Forms.Forms.Init(this, savedInstanceState);
             AnimationViewRenderer.Init();
             appInstance = new App();
-
             HandleIntent(Intent);
 
+            if (!InitializeRectifyNotificationJob(Application.Context))
+            {
+                Utils.LogError(new System.Exception("Error Initializing Android Notification Job"));
+            }
 
             StartService(new Intent(Application.Context, typeof(KillStopper)));
             LoadApplication(appInstance);
@@ -219,6 +223,18 @@ namespace DezignSpiration.Droid
                 Utils.LogError(ex, "CancelScheduledNotification");
             }
         }
+
+        public bool InitializeRectifyNotificationJob(Context context)
+        {
+            var rectifyNotificationJob = context.CreateJobBuilderUsingJobId<RectifyNotificationJob>(1)
+                .SetPeriodic(AlarmManager.IntervalHalfHour)
+                .SetPersisted(true)
+                .Build();
+
+            var jobScheduler = (JobScheduler)GetSystemService(JobSchedulerService);
+            return jobScheduler.Schedule(rectifyNotificationJob) == JobScheduler.ResultSuccess;
+        }
+
     }
 }
 

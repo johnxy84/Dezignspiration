@@ -83,9 +83,9 @@
     <Compile Include="Constants.cs" />
     <Compile Include="BootAlarmReceiver.cs" />
     <Compile Include="NotificationHelper.cs" />
-    <Compile Include="BackgroundHelper.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="SplashActivity.cs" />
+    <Compile Include="RectifyNotificationJob.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

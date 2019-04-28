@@ -73,12 +73,6 @@ namespace DezignSpiration.Droid
                         Utils.LogError(ex, "ErrorEnablingSwipe");
                     }
                     break;
-                case Constants.BACKGROUND_SERVICE_ACTION:
-                    Android.Widget.Toast.MakeText(context, "BG Alarm Received", Android.Widget.ToastLength.Long);
-                    Intent restartIntent = new Intent(context, typeof(KillStopper));
-                    context.StartService(restartIntent);
-                    break;
-
             }
         }
 

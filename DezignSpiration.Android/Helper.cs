@@ -9,6 +9,8 @@ using DezignSpiration.Models;
 using Android.Text.Style;
 using Android.Widget;
 using Android.OS;
+using Android.App.Job;
+using Java.Lang;
 
 namespace DezignSpiration.Droid
 {
@@ -140,7 +142,7 @@ namespace DezignSpiration.Droid
                     context.StartActivity(chooserIntent);
                 }
             }
-            catch (Exception ex)
+            catch (System.Exception ex)
             {
                 Toast.MakeText(context, "There was an issue sharing the Quote", ToastLength.Short).Show();
                 Utils.LogError(ex, "SharingQuoteException");
@@ -171,6 +173,13 @@ namespace DezignSpiration.Droid
         public static float GetFontSize(string text)
         {
             return text.Length <= 100 ? 240 : text.Length <= 150 ? 200 : 190;
+        }
+
+        public static JobInfo.Builder CreateJobBuilderUsingJobId<T>(this Context context, int jobId) where T : JobService
+        {
+            var javaClass = Class.FromType(typeof(T));
+            var componentName = new ComponentName(context, javaClass);
+            return new JobInfo.Builder(jobId, componentName);
         }
     }
 

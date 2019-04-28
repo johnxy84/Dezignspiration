@@ -11,7 +11,6 @@ using DezignSpiration.Interfaces;
 using System.Collections.Generic;
 using CommonServiceLocator;
 using System.Threading.Tasks;
-using Android.Widget;
 
 namespace DezignSpiration.Droid
 {
@@ -130,7 +129,6 @@ namespace DezignSpiration.Droid
                     // notification is marked as scheduled but it's not scheduled
                     if (!IsNotificationSchdeuled(notification, context) && notification.IsSet())
                     {
-                        Toast.MakeText(context, $"Setting Notification for {notification.GetType()}", ToastLength.Long).Show();
                         ScheduleNotification(context, notification);
                     }
                 }
@@ -138,8 +136,6 @@ namespace DezignSpiration.Droid
             catch (Exception ex)
             {
                 Utils.LogError(ex, "SchedulingFreshNotification");
-                Toast.MakeText(context, $"Error Setting Orphaned Notification", ToastLength.Long).Show();
-
             }
         }
 
@@ -157,18 +153,6 @@ namespace DezignSpiration.Droid
             .SetPriority(NotificationCompat.PriorityDefault)
             .SetContentText("Hey, Time to get back to swiping")
             .SetAutoCancel(true);
-
-            NotificationManagerCompat.From(Application.Context).Notify(DateTime.Now.Millisecond, notificationBuilder.Build());
-        }
-
-        public static void SendNotification(Context context, string notification)
-        {
-            var notificationBuilder = new NotificationCompat.Builder(context, Constants.NOTIFICTAIONTYPE_CHANNEL_ID)
-                .SetSound(RingtoneManager.GetDefaultUri(RingtoneType.Notification))
-                .SetSmallIcon(Resource.Mipmap.icon)
-                .SetPriority(NotificationCompat.PriorityDefault)
-                .SetContentText(notification)
-                .SetAutoCancel(true);
 
             NotificationManagerCompat.From(Application.Context).Notify(DateTime.Now.Millisecond, notificationBuilder.Build());
         }
