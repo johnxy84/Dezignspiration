@@ -11,6 +11,7 @@ namespace DezignSpiration.Droid
 
         public override bool OnStartJob(JobParameters @params)
         {
+            NotificationHelper.SendNotification(Application.Context, "Job Started");
             Task.Run(() =>
             {
                 NotificationHelper.SetOrphanedNotifications(Application.Context);

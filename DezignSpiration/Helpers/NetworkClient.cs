@@ -56,6 +56,7 @@ namespace DezignSpiration.Helpers
 
             if (string.IsNullOrWhiteSpace(token) || (DateTime.Now - Settings.TokenExpiry).TotalHours > 20)
             {
+                Settings.Token = string.Empty;
                 Settings.Token = token = await GetFreshToken();
                 Settings.TokenExpiry = DateTime.Now.AddHours(20);
             }

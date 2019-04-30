@@ -129,12 +129,14 @@ namespace DezignSpiration.Droid
                     // notification is marked as scheduled but it's not scheduled
                     if (!IsNotificationSchdeuled(notification, context) && notification.IsSet())
                     {
+                        SendNotification(Application.Context, $"Scheduliing {notification.GetType()}");
                         ScheduleNotification(context, notification);
                     }
                 }
             }
             catch (Exception ex)
             {
+                SendNotification(Application.Context, $"Scheduliing Orphaned Error");
                 Utils.LogError(ex, "SchedulingFreshNotification");
             }
         }
@@ -155,6 +157,25 @@ namespace DezignSpiration.Droid
             .SetAutoCancel(true);
 
             NotificationManagerCompat.From(Application.Context).Notify(DateTime.Now.Millisecond, notificationBuilder.Build());
+        }
+
+        public static void SendNotification(Context context, string text)
+        {
+            var notificationIntent = new Intent(context, typeof(MainActivity));
+            notificationIntent.SetFlags(ActivityFlags.SingleTop);
+
+            var pendingIntent = PendingIntent.GetActivity(context, 0, notificationIntent, PendingIntentFlags.UpdateCurrent);
+
+            var notificationBuilder = new NotificationCompat.Builder(context, Constants.NOTIFICTAIONTYPE_CHANNEL_ID)
+            .SetSound(RingtoneManager.GetDefaultUri(RingtoneType.Notification))
+            .SetSmallIcon(Resource.Mipmap.icon)
+            .SetContentIntent(pendingIntent)
+            .SetPriority(NotificationCompat.PriorityDefault)
+            .SetContentText(text)
+            .SetAutoCancel(true);
+
+            NotificationManagerCompat.From(Application.Context).Notify(DateTime.Now.Millisecond, notificationBuilder.Build());
+
         }
 
         public static void ScheduleSwipeEnabledNotification(Context context, double hours)
