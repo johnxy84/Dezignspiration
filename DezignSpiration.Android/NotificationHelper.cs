@@ -150,7 +150,7 @@ namespace DezignSpiration.Droid
 
             var notificationBuilder = new NotificationCompat.Builder(context, Constants.NOTIFICTAIONTYPE_CHANNEL_ID)
             .SetSound(RingtoneManager.GetDefaultUri(RingtoneType.Notification))
-            .SetSmallIcon(Resource.Mipmap.icon)
+            .SetSmallIcon(Resource.Drawable.notify_icon)
             .SetContentIntent(pendingIntent)
             .SetPriority(NotificationCompat.PriorityDefault)
             .SetContentText("Hey, Time to get back to swiping")
@@ -168,7 +168,7 @@ namespace DezignSpiration.Droid
 
             var notificationBuilder = new NotificationCompat.Builder(context, Constants.NOTIFICTAIONTYPE_CHANNEL_ID)
             .SetSound(RingtoneManager.GetDefaultUri(RingtoneType.Notification))
-            .SetSmallIcon(Resource.Mipmap.icon)
+            .SetSmallIcon(Resource.Drawable.notify_icon)
             .SetContentIntent(pendingIntent)
             .SetPriority(NotificationCompat.PriorityDefault)
             .SetContentText(text)
