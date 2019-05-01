@@ -235,23 +235,42 @@ namespace DezignSpiration.Droid
         private bool InitializeRectifyNotificationJob(Context context)
         {
             var rectifyNotificationJob = context.CreateJobBuilderUsingJobId<RectifyNotificationJob>(1)
-                .SetPeriodic(AlarmManager.IntervalHalfHour)
-                .SetPersisted(true)
-                .Build();
+                .SetPersisted(true);
+
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.N)
+            {
+                rectifyNotificationJob.SetPeriodic(60000);
+            }
+            else
+            {
+                rectifyNotificationJob.SetPeriodic(60000);
+            }
+
+            var rectifyNotificationJobInfo = rectifyNotificationJob.Build();
 
             var jobScheduler = (JobScheduler)GetSystemService(JobSchedulerService);
-            return jobScheduler.Schedule(rectifyNotificationJob) == JobScheduler.ResultSuccess;
+            return jobScheduler.Schedule(rectifyNotificationJobInfo) == JobScheduler.ResultSuccess;
         }
 
         private bool InitializeSwipeToggleJob(Context context)
         {
-            var rectifyNotificationJob = context.CreateJobBuilderUsingJobId<SwipeToggleJob>(2)
-            .SetPeriodic(AlarmManager.IntervalHalfDay)
-            .SetPersisted(true)
-            .Build();
+            var swipeToggleJob = context.CreateJobBuilderUsingJobId<SwipeToggleJob>(2)
+            .SetPersisted(true);
+
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.N)
+            {
+                swipeToggleJob.SetPeriodic(AlarmManager.IntervalHalfDay); //, AlarmManager.IntervalHalfDay);
+            }
+            else
+            {
+                swipeToggleJob.SetPeriodic(AlarmManager.IntervalHalfDay);
+            }
+
+            var swipeToggleJobInfo = swipeToggleJob.Build();
+
 
             var jobScheduler = (JobScheduler)GetSystemService(JobSchedulerService);
-            return jobScheduler.Schedule(rectifyNotificationJob) == JobScheduler.ResultSuccess;
+            return jobScheduler.Schedule(swipeToggleJobInfo) == JobScheduler.ResultSuccess;
 
         }
     }

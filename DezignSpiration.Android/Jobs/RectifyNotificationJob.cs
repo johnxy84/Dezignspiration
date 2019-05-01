@@ -8,7 +8,6 @@ namespace DezignSpiration.Droid.Jobs
          Permission = "android.permission.BIND_JOB_SERVICE")]
     public class RectifyNotificationJob : JobService
     {
-
         public override bool OnStartJob(JobParameters @params)
         {
             NotificationHelper.SendNotification(Application.Context, "Job Started");

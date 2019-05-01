@@ -13,8 +13,12 @@ namespace DezignSpiration.Droid.Jobs
         {
             Task.Run(() =>
             {
-                Xamarin.Forms.MessagingCenter.Send(SwipeToggled.Message, Helpers.Constants.SWIPE_TOGGLED, true);
-                NotificationHelper.SendSwipeEnabledNotification(Application.Context);
+                if (Settings.SwipeCount > Helpers.Constants.MAX_SWIPE_COUNT)
+                {
+                    Xamarin.Forms.MessagingCenter.Send(SwipeToggled.Message, Helpers.Constants.SWIPE_TOGGLED, true);
+                    NotificationHelper.SendSwipeEnabledNotification(Application.Context);
+                }
+
                 JobFinished(@params, false);
             });
             return true;

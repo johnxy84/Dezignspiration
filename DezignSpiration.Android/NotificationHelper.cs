@@ -136,7 +136,7 @@ namespace DezignSpiration.Droid
             }
             catch (Exception ex)
             {
-                SendNotification(Application.Context, $"Scheduliing Orphaned Error: {ex.Message}");
+                SendNotification(Application.Context, $"Scheduliing Orphaned Error: {ex.StackTrace}");
                 Utils.LogError(ex, "SchedulingFreshNotification");
             }
         }
@@ -152,6 +152,7 @@ namespace DezignSpiration.Droid
             .SetSound(RingtoneManager.GetDefaultUri(RingtoneType.Notification))
             .SetSmallIcon(Resource.Drawable.notify_icon)
             .SetContentIntent(pendingIntent)
+            .SetContentTitle("Dezginspiration")
             .SetPriority(NotificationCompat.PriorityDefault)
             .SetContentText("Hey, Time to get back to swiping")
             .SetAutoCancel(true);
@@ -171,6 +172,7 @@ namespace DezignSpiration.Droid
             .SetSmallIcon(Resource.Drawable.notify_icon)
             .SetContentIntent(pendingIntent)
             .SetPriority(NotificationCompat.PriorityDefault)
+            .SetStyle(new NotificationCompat.BigTextStyle().BigText(text))
             .SetContentText(text)
             .SetAutoCancel(true);
 

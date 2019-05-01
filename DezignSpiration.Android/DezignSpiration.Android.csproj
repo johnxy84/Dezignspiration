@@ -85,8 +85,8 @@
     <Compile Include="NotificationHelper.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="SplashActivity.cs" />
-    <Compile Include="Jobs\RectifyNotificationJob.cs" />
     <Compile Include="Jobs\SwipeToggleJob.cs" />
+    <Compile Include="Jobs\RectifyNotificationJob.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
