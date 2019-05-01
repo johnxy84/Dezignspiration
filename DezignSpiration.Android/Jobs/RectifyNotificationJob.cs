@@ -2,7 +2,7 @@
 using Android.App;
 using Android.App.Job;
 
-namespace DezignSpiration.Droid
+namespace DezignSpiration.Droid.Jobs
 {
     [Service(Name = "com.forefront.dezignspiration.RectifyNotificationJob",
          Permission = "android.permission.BIND_JOB_SERVICE")]

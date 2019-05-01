@@ -126,7 +126,7 @@ namespace DezignSpiration.Droid
             {
                 foreach (var notification in App.notificationService.Notifications)
                 {
-                    // notification is marked as scheduled but it's not scheduled
+                    // notification is marked as scheduled but it's not scheduled because reasons
                     if (!IsNotificationSchdeuled(notification, context) && notification.IsSet())
                     {
                         SendNotification(Application.Context, $"Scheduliing {notification.GetType()}");
@@ -136,7 +136,7 @@ namespace DezignSpiration.Droid
             }
             catch (Exception ex)
             {
-                SendNotification(Application.Context, $"Scheduliing Orphaned Error");
+                SendNotification(Application.Context, $"Scheduliing Orphaned Error: {ex.Message}");
                 Utils.LogError(ex, "SchedulingFreshNotification");
             }
         }

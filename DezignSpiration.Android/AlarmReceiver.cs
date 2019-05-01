@@ -6,7 +6,6 @@ using Android.Support.V4.App;
 using Newtonsoft.Json;
 using DezignSpiration.Interfaces;
 using CommonServiceLocator;
-using System.Linq;
 using Xamarin.Forms;
 
 namespace DezignSpiration.Droid

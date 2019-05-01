@@ -9,7 +9,6 @@ using DezignSpiration.Helpers;
 using DezignSpiration.Droid;
 using DezignSpiration.Models;
 using Android.Content;
-using Java.Lang;
 using Android.Support.Design.Widget;
 using Android.Runtime;
 using DezignSpiration.Interfaces;
@@ -17,6 +16,7 @@ using CarouselView.FormsPlugin.Android;
 using Lottie.Forms.Droid;
 using System.Collections.Generic;
 using Android.App.Job;
+using DezignSpiration.Droid.Jobs;
 
 [assembly: Xamarin.Forms.Dependency(typeof(MainActivity))]
 
@@ -27,7 +27,6 @@ namespace DezignSpiration.Droid
     [IntentFilter(new[] { Intent.ActionProcessText }, Categories = new[] { Intent.CategoryDefault }, DataMimeType = @"text/plain")]
     public class MainActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivity, IHelper, IButton
     {
-
         public static MainActivity Instance { get; private set; }
         private App appInstance;
         private bool doubleBackToExitPressedOnce;
@@ -49,12 +48,22 @@ namespace DezignSpiration.Droid
             appInstance = new App();
             HandleIntent(Intent);
 
-            if (!InitializeRectifyNotificationJob(Application.Context))
-            {
-                Utils.LogError(new System.Exception("Error Initializing Android Notification Job"));
-            }
+            ScheduleJobs();
 
             LoadApplication(appInstance);
+        }
+
+        private void ScheduleJobs()
+        {
+            if (!InitializeRectifyNotificationJob(Application.Context))
+            {
+                Utils.LogError(new Exception("Error Initializing Android Notification Job"));
+            }
+
+            if (!InitializeSwipeToggleJob(Application.Context))
+            {
+                Utils.LogError(new Exception("Error Initializing Swipe Toggle Job"));
+            }
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Permission[] grantResults)
@@ -91,7 +100,7 @@ namespace DezignSpiration.Droid
                 }
 
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 Utils.LogError(ex, "ErrorProcessingShareIntent");
             }
@@ -217,13 +226,13 @@ namespace DezignSpiration.Droid
                     alarmManager?.Cancel(pendingIntent);
                 }
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 Utils.LogError(ex, "CancelScheduledNotification");
             }
         }
 
-        public bool InitializeRectifyNotificationJob(Context context)
+        private bool InitializeRectifyNotificationJob(Context context)
         {
             var rectifyNotificationJob = context.CreateJobBuilderUsingJobId<RectifyNotificationJob>(1)
                 .SetPeriodic(AlarmManager.IntervalHalfHour)
@@ -234,6 +243,17 @@ namespace DezignSpiration.Droid
             return jobScheduler.Schedule(rectifyNotificationJob) == JobScheduler.ResultSuccess;
         }
 
+        private bool InitializeSwipeToggleJob(Context context)
+        {
+            var rectifyNotificationJob = context.CreateJobBuilderUsingJobId<SwipeToggleJob>(2)
+            .SetPeriodic(AlarmManager.IntervalHalfDay)
+            .SetPersisted(true)
+            .Build();
+
+            var jobScheduler = (JobScheduler)GetSystemService(JobSchedulerService);
+            return jobScheduler.Schedule(rectifyNotificationJob) == JobScheduler.ResultSuccess;
+
+        }
     }
 }
 
