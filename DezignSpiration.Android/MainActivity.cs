@@ -119,7 +119,7 @@ namespace DezignSpiration.Droid
         {
             var rectifyNotificationJobInfo = context.CreateJobBuilderUsingJobId<RectifyNotificationJob>(Constants.RECTIFY_NOTIIFICATIOON_JOB_ID)
                 .SetPersisted(true)
-                .SetPeriodic(AlarmManager.IntervalHour)
+                .SetPeriodic(AlarmManager.IntervalHalfHour)
                 .Build();
 
             var jobScheduler = (JobScheduler)GetSystemService(JobSchedulerService);

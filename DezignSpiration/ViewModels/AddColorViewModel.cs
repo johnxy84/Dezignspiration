@@ -74,7 +74,6 @@ namespace DezignSpiration.ViewModels
 
         public override Task InitializeAsync(object navigationData)
         {
-            primaryColor = secondaryColor = string.Empty;
             return base.InitializeAsync(navigationData);
         }
 
