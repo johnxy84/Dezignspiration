@@ -17,9 +17,7 @@ namespace DezignSpiration.Helpers
         /// <param name="collection">Collection to shuffle.</param>
         public static ObservableRangeCollection<T> Shuffle<T>(ObservableRangeCollection<T> collection)
         {
-            ObservableRangeCollection<T> randomList = new ObservableRangeCollection<T>(collection.OrderBy(item => App.Random.Next(0, collection.Count)).ToList());
-
-            return randomList;
+            return new ObservableRangeCollection<T>(collection.OrderBy(item => DI.Random.Next(0, collection.Count)).ToList());
         }
 
         public static void TrackEvent(string eventName = "Error", params string[] extraParams)
@@ -313,7 +311,7 @@ namespace DezignSpiration.Helpers
         /// This was put because I couldn't think of anoter way to display messages "occasionally" without being annoying
         /// </summary>
         /// <returns><c>boolean</c>,
-        public static bool ShouldShowAnnoyingMessage => App.Random.Next(1, 20) % 3 == 0;
+        public static bool ShouldShowAnnoyingMessage => DI.Random.Next(1, 20) % 3 == 0;
 
         public static string GetHexString(this Xamarin.Forms.Color color)
         {

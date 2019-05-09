@@ -44,7 +44,7 @@ namespace DezignSpiration.Models.Notifications
             var randomQuoteFrequency = config.RandomQuoteFrequencies.ElementAt(config.SelectedRandomQuoteIndex);
             int minHour = randomQuoteFrequency.MinHour;
             int maxHour = randomQuoteFrequency.MaxHour;
-            return new TimeSpan(App.Random.Next(minHour, maxHour), App.Random.Next(0, 59), 0);
+            return new TimeSpan(DI.Random.Next(minHour, maxHour), DI.Random.Next(0, 59), 0);
         }
 
         public void ToggleNotificationIsSet(bool isNotificationSet)

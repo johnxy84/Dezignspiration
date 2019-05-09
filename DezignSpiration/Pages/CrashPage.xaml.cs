@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Xamarin.Forms;
-using DezignSpiration.ViewModels;
+﻿using Xamarin.Forms;
 using DezignSpiration.Helpers;
 
 namespace DezignSpiration.Pages
@@ -13,7 +9,7 @@ namespace DezignSpiration.Pages
         {
             InitializeComponent();
             NavigationPage.SetHasNavigationBar(this, false);
-            BindingContext = App.ViewModelLocator.CrashViewModel;
+            BindingContext = DI.ViewModelLocator.CrashViewModel;
             Utils.TrackEvent("CrashPage");
         }
     }

@@ -13,7 +13,7 @@ namespace DezignSpiration.Pages
         public SettingsPage()
         {
             InitializeComponent();
-            BindingContext = settingsViewModel = App.ViewModelLocator.SettingsViewModel;
+            BindingContext = settingsViewModel = DI.ViewModelLocator.SettingsViewModel;
             Utils.TrackEvent("SettingsPage");
         }
 

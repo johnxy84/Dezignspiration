@@ -17,7 +17,7 @@ namespace DezignSpiration.Services
 
         public QuotesRepository(INetworkClient httpClient)
         {
-            database = App.dbConnection;
+            database = DI.DbConnection;
             this.httpClient = httpClient;
             try
             {

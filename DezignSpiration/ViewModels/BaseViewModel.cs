@@ -6,6 +6,7 @@ using Xamarin.Forms;
 using DezignSpiration.Interfaces;
 using CommonServiceLocator;
 using Constants = DezignSpiration.Helpers.Constants;
+using DezignSpiration.Services;
 
 namespace DezignSpiration.ViewModels
 {
@@ -95,8 +96,8 @@ namespace DezignSpiration.ViewModels
             }
             finally
             {
-                App.notificationService.ClearNotifications();
-                Helper?.SetScheduledNotifications(App.notificationService.Notifications);
+                DI.NotificationService.ClearNotifications();
+                Helper?.SetScheduledNotifications(NotificationService.Notifications);
             }
         }
 

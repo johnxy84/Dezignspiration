@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Xamarin.Forms;
 using DezignSpiration.Interfaces;
 using System.Linq;
+using DezignSpiration.Services;
 
 namespace DezignSpiration.ViewModels
 {
@@ -78,7 +79,7 @@ namespace DezignSpiration.ViewModels
             {
                 SubscribeToEvents();
                 LoadStoredQuotes();
-                Helper?.SetScheduledNotifications(App.notificationService.Notifications);
+                Helper?.SetScheduledNotifications(NotificationService.Notifications);
             }
             catch (Exception ex)
             {
@@ -147,7 +148,7 @@ namespace DezignSpiration.ViewModels
                 Settings.SwipeCount--;
             }
 
-            string message = string.Empty;
+            string message;
             switch (Settings.SwipeCount)
             {
                 case Constants.MAX_SWIPE_COUNT / 2:
