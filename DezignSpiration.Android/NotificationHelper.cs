@@ -11,6 +11,7 @@ using DezignSpiration.Interfaces;
 using System.Collections.Generic;
 using CommonServiceLocator;
 using System.Threading.Tasks;
+using DezignSpiration.Services;
 
 namespace DezignSpiration.Droid
 {
@@ -124,19 +125,17 @@ namespace DezignSpiration.Droid
         {
             try
             {
-                foreach (var notification in App.notificationService.Notifications)
+                foreach (var notification in NotificationService.Notifications)
                 {
                     // notification is marked as scheduled but it's not scheduled because reasons
                     if (!IsNotificationSchdeuled(notification, context) && notification.IsSet())
                     {
-                        SendNotification(Application.Context, $"Scheduliing {notification.GetType()}");
                         ScheduleNotification(context, notification);
                     }
                 }
             }
             catch (Exception ex)
             {
-                SendNotification(Application.Context, $"Scheduliing Orphaned Error: {ex.StackTrace}");
                 Utils.LogError(ex, "SchedulingFreshNotification");
             }
         }
@@ -160,26 +159,6 @@ namespace DezignSpiration.Droid
             NotificationManagerCompat.From(Application.Context).Notify(DateTime.Now.Millisecond, notificationBuilder.Build());
         }
 
-        public static void SendNotification(Context context, string text)
-        {
-            var notificationIntent = new Intent(context, typeof(MainActivity));
-            notificationIntent.SetFlags(ActivityFlags.SingleTop);
-
-            var pendingIntent = PendingIntent.GetActivity(context, 0, notificationIntent, PendingIntentFlags.UpdateCurrent);
-
-            var notificationBuilder = new NotificationCompat.Builder(context, Constants.NOTIFICTAIONTYPE_CHANNEL_ID)
-            .SetSound(RingtoneManager.GetDefaultUri(RingtoneType.Notification))
-            .SetSmallIcon(Resource.Drawable.notify_icon)
-            .SetContentIntent(pendingIntent)
-            .SetPriority(NotificationCompat.PriorityDefault)
-            .SetStyle(new NotificationCompat.BigTextStyle().BigText(text))
-            .SetContentText(text)
-            .SetAutoCancel(true);
-
-            NotificationManagerCompat.From(Application.Context).Notify(DateTime.Now.Millisecond, notificationBuilder.Build());
-
-        }
-
         public static void ScheduleSwipeEnabledNotification(Context context, double hours)
         {
             Intent intent = new Intent(context, typeof(AlarmReceiver));
@@ -198,7 +177,8 @@ namespace DezignSpiration.Droid
             var intent = new Intent(context, typeof(AlarmReceiver));
             intent.SetAction(Constants.NOTIFICATION_QUOTE_ACTION);
             intent.PutExtra(Constants.NOTIFICTAIONTYPE_KEY, notification.GetType().ToString());
-            return PendingIntent.GetBroadcast(context, notification.GetNotificationId(), intent, PendingIntentFlags.NoCreate) != null;
+            var isScheduled = PendingIntent.GetBroadcast(context, notification.GetNotificationId(), intent, PendingIntentFlags.NoCreate) != null;
+            return isScheduled;
         }
     }
 }

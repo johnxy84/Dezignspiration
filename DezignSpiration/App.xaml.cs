@@ -5,16 +5,10 @@ using DezignSpiration.Helpers;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 using Microsoft.AppCenter.Push;
-using Unity;
 using DezignSpiration.Interfaces;
 using DezignSpiration.ViewModels;
-using DezignSpiration.Services;
-using System.Threading.Tasks;
-using SQLite;
-using System.Diagnostics;
 using Xamarin.Essentials;
 using CommonServiceLocator;
-using Unity.ServiceLocation;
 using Constants = DezignSpiration.Helpers.Constants;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
@@ -22,53 +16,19 @@ namespace DezignSpiration
 {
     public partial class App : Application
     {
-        public static Random Random = new Random(DateTime.Now.Millisecond);
-        public static ViewModelLocator ViewModelLocator;
-        public static SQLiteAsyncConnection dbConnection;
-        public static NotificationService notificationService;
-
         private INavigationService navigationService;
-
 
         public App()
         {
             InitializeComponent();
-            InitializeFields();
-            InitializeNavigation();
+            InitializeApp();
         }
 
-        private void InitializeFields()
+        private void InitializeApp()
         {
-            UnityContainer container = new UnityContainer();
-            dbConnection = new SQLiteAsyncConnection(Utils.DatabasePath)
-            {
-                Tracer = new Action<string>(q => Debug.WriteLine(q)),
-                Trace = true
-            };
-            ViewModelLocator = new ViewModelLocator(container);
-            SetupDI(container);
-
-        }
-
-        private void SetupDI(UnityContainer container)
-        {
-            container.RegisterSingleton<IColorsRepository, ColorsRepository>();
-            container.RegisterSingleton<IQuotesRepository, QuotesRepository>();
-            container.RegisterSingleton<INetworkClient, NetworkClient>();
-            container.RegisterSingleton<INavigationService, NavigationService>();
-            container.RegisterSingleton<IFlagReasonService, FlagService>();
-
-            IServiceLocator serviceLocator = new UnityServiceLocator(container);
-            ServiceLocator.SetLocatorProvider(() => serviceLocator);
-
-            var helper = DependencyService.Get<IHelper>();
-            notificationService = new NotificationService(helper);
-        }
-
-        private Task InitializeNavigation()
-        {
+            DI.InitializeDI();
             navigationService = ServiceLocator.Current.GetInstance<INavigationService>();
-            return navigationService?.InitializeAsync();
+            navigationService?.InitializeAsync();
         }
 
         protected override void OnStart()
@@ -90,7 +50,6 @@ namespace DezignSpiration
                 }
             }
         }
-
 
         protected override void OnSleep()
         {

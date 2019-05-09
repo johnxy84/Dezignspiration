@@ -9,13 +9,11 @@ namespace DezignSpiration.Pages
 {
     public partial class HomePage : ContentPage
     {
-        private readonly HomeViewModel homeViewModel;
-
         public HomePage()
         {
             InitializeComponent();
             NavigationPage.SetHasNavigationBar(this, false);
-            BindingContext = homeViewModel = App.ViewModelLocator.HomeViewModel;
+            BindingContext = DI.ViewModelLocator.HomeViewModel;
             Utils.TrackEvent("HomePage");
         }
 

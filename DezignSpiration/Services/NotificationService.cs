@@ -3,17 +3,16 @@ using System.Collections.Generic;
 using DezignSpiration.Helpers;
 using DezignSpiration.Interfaces;
 using DezignSpiration.Models.Notifications;
-using Xamarin.Forms;
 using DezignSpiration.Models;
+using Xamarin.Forms;
 
 namespace DezignSpiration.Services
 {
     public class NotificationService
     {
-        private List<INotification> notifications;
-        private readonly IHelper helper;
+        private static List<INotification> notifications;
 
-        public List<INotification> Notifications
+        public static List<INotification> Notifications
         {
             get
             {
@@ -29,13 +28,10 @@ namespace DezignSpiration.Services
             }
         }
 
-        public NotificationService(IHelper helper)
-        {
-            this.helper = helper;
-        }
-
         public void ClearNotifications()
         {
+            var helper = DependencyService.Get<IHelper>();
+
             // Unset notifications already set
             Settings.IsRandomNotificationSet = Settings.IsDailyNotificationSet = false;
             // Cancel all scheduled notifications

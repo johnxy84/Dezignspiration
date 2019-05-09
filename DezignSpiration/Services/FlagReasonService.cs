@@ -10,12 +10,10 @@ namespace DezignSpiration.Services
     public class FlagService : IFlagReasonService
     {
         private readonly INetworkClient httpClient;
-        private readonly IQuotesRepository quotesRepository;
 
-        public FlagService(INetworkClient httpClient, IQuotesRepository quotesRepository)
+        public FlagService(INetworkClient httpClient)
         {
             this.httpClient = httpClient;
-            this.quotesRepository = quotesRepository;
         }
 
         public async Task<ObservableRangeCollection<FlagReason>> GetFlagReasons()

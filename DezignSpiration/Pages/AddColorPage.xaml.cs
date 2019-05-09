@@ -14,7 +14,7 @@ namespace DezignSpiration.Pages
         public AddColorPage()
         {
             InitializeComponent();
-            BindingContext = App.ViewModelLocator.AddColorViewModel;
+            BindingContext = DI.ViewModelLocator.AddColorViewModel;
             Utils.TrackEvent("AddColorPage");
         }
 

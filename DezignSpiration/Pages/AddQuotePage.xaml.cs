@@ -12,10 +12,8 @@ namespace DezignSpiration.Pages
         public AddQuotePage()
         {
             InitializeComponent();
-            var addQuoteViewModel = App.ViewModelLocator.AddQuoteViewModel;
-            BindingContext = addQuoteViewModel;
+            BindingContext = DI.ViewModelLocator.AddQuoteViewModel;
             Utils.TrackEvent("AddQuotePage");
-
         }
 
         public void QuoteTextChanged(object sender, EventArgs e)

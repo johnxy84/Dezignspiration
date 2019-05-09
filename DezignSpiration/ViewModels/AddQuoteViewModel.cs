@@ -82,7 +82,8 @@ namespace DezignSpiration.ViewModels
             };
             if (!isInitialized)
             {
-                Colors = new ObservableRangeCollection<Models.Color>(await colorsRepository.GetAllColors());
+                var dbColors = new ObservableRangeCollection<Models.Color>(await colorsRepository.GetAllColors());
+                Colors = Utils.Shuffle(dbColors);
                 isInitialized = true;
             }
             await RefreshColors();

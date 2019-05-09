@@ -18,13 +18,12 @@ namespace DezignSpiration.Pages
         {
             InitializeComponent();
             NavigationPage.SetHasNavigationBar(this, false);
-            BindingContext = onBoardingViewModel = App.ViewModelLocator.OnBoardingViewModel;
+            BindingContext = onBoardingViewModel = DI.ViewModelLocator.OnBoardingViewModel;
             SetupPageIndicators();
             SelectVisualState(0);
             Settings.IsFirstTime = false;
             MessagingCenter.Subscribe<OnBoardingViewModel, int>(this, Constants.ONBOARDING_PAGE_CHANGED, (sender, position) =>
             {
-                var x = Carousel;
                 SelectVisualState(position);
             });
             Utils.TrackEvent("OnboardingPage");

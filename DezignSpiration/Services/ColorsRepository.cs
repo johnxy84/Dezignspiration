@@ -17,7 +17,7 @@ namespace DezignSpiration.Services
 
         public ColorsRepository(INetworkClient httpClient)
         {
-            dbConnection = App.dbConnection;
+            dbConnection = DI.DbConnection;
             this.httpClient = httpClient;
 
             try

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using DezignSpiration.Helpers;
+﻿using DezignSpiration.Helpers;
 using Xamarin.Forms;
 
 namespace DezignSpiration.Pages
@@ -11,7 +9,7 @@ namespace DezignSpiration.Pages
         {
             InitializeComponent();
             NavigationPage.SetHasNavigationBar(this, false);
-            BindingContext = App.ViewModelLocator.FeedbackViewModel;
+            BindingContext = DI.ViewModelLocator.FeedbackViewModel;
             Utils.TrackEvent("FeedbackPage");
         }
     }

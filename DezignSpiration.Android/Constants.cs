@@ -21,5 +21,8 @@ namespace DezignSpiration.Droid
         public const string BACKGROUND_SERVICE_ACTION = "Background_Service";
 
         public const string SWIPE_ENABLED_ACTION = "Swipe Enabled";
+
+        public const int RECTIFY_NOTIIFICATIOON_JOB_ID = 1;
+        public const int TOGGLESWIPE_NOTIIFICATIOON_JOB_ID = 2;
     }
 }
