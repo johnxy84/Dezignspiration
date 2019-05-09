@@ -33,11 +33,11 @@
         public const string AUTH_URL = "https://johnxy84.auth0.com";
 
         // We'll swap out these bad boys during build #AppCenter Roxx
-        public const string APP_CENTER_SECRET = "APP_SECRET";
+        public const string APP_CENTER_SECRET = "0b89a65b-95a9-4500-a056-9c6f2ce7dc06";
 
-        public const string CLIENT_SECRET = "CLIENT_ID_SECRET_KEY";
+        public const string CLIENT_SECRET = "GN5K22xVsPAGwnpEgWewKpdsPyY0mlxV3Jwo_In8n1B8d2JDEiDvJzFrMOoLxC_4";
 
-        public const string CLIENT_ID = "CLIENT_ID_KEY";
+        public const string CLIENT_ID = "n92at9j6ek0XWI0Q9W8JEUsUgHI4Z3oj";
 
         public const string SWIPE_TOGGLED = "swipe_toggled";
 
