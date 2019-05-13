@@ -111,6 +111,7 @@ namespace DezignSpiration.Droid
         {
             try
             {
+                string extraText = "Hey, Checkout this awesome quote. Download the app here http://dezignspiration.com";
                 File cachePath = new File(context.CacheDir, "images");
                 // Create Directory
                 cachePath.Mkdirs();
@@ -133,6 +134,7 @@ namespace DezignSpiration.Droid
                     shareIntent.AddFlags(ActivityFlags.GrantReadUriPermission);
                     shareIntent.SetDataAndType(contentUri, context.ContentResolver.GetType(contentUri));
                     shareIntent.PutExtra(Intent.ExtraStream, contentUri);
+                    shareIntent.PutExtra(Intent.ExtraText, extraText);
                     shareIntent.SetFlags(ActivityFlags.NewTask);
                     shareIntent.SetType("image/jpeg");
 

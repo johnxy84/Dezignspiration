@@ -58,7 +58,7 @@
                 </StackLayout.Triggers>
                 <Label Text="Who said this (Optional)" HorizontalOptions="FillAndExpand" VerticalOptions="Center"/>
                 <Entry x:Name="AuthorName" IsEnabled="{Binding IsNotBusy}" Text="{Binding DesignQuote.Author}"
-                       Placeholder="Anonymuos by default" MaxLength="40"/>
+                       Placeholder="Anonymous by default" MaxLength="40"/>
             </StackLayout>
             
             <Label Text="Choose a color"/>

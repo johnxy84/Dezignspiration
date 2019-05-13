@@ -34,8 +34,8 @@ namespace DezignSpiration.Helpers
         private const string SwipeCountKey = nameof(SwipeCountKey);
         private const string SwipeDisabledDateKey = nameof(SwipeDisabledDateKey);
         private const string LengthyQuoteShareKey = nameof(LengthyQuoteShareKey);
-        private const string tokenExpiryKey = nameof(tokenExpiryKey);
-        private const string tokenKey = nameof(tokenKey);
+        private const string TokenExpiryKey = nameof(TokenExpiryKey);
+        private const string TokenKey = nameof(TokenKey);
 
         #endregion
 
@@ -51,19 +51,19 @@ namespace DezignSpiration.Helpers
 
         public static DateTime TokenExpiry
         {
-            get => Preferences.Get(tokenExpiryKey, DateTime.Now);
+            get => Preferences.Get(TokenExpiryKey, DateTime.Now);
             set
             {
-                Preferences.Set(tokenExpiryKey, value);
+                Preferences.Set(TokenExpiryKey, value);
             }
         }
 
         public static string Token
         {
-            get => Preferences.Get(tokenKey, string.Empty);
+            get => Preferences.Get(TokenKey, string.Empty);
             set
             {
-                Preferences.Set(tokenKey, value);
+                Preferences.Set(TokenKey, value);
             }
         }
 
@@ -183,6 +183,15 @@ namespace DezignSpiration.Helpers
         {
             get => Preferences.Get(SwipeDisabledDateKey, defaultDate.AddDays(-1));
             set => Preferences.Set(SwipeDisabledDateKey, DateTime.SpecifyKind(value, DateTimeKind.Utc));
+        }
+
+        public static bool ShouldEnableSwipe
+        {
+            get
+            {
+                return (DateTime.Now - SwipeDisabledDate).TotalHours > Constants.HOURS_TILL_COOL_DOWN
+                    && SwipeCount >= Constants.MAX_SWIPE_COUNT;
+            }
         }
 
         public static bool ShouldRefreshFlagReasons => (DateTime.Now - LastFlagReasonsRefreshTime).Days > 30;

@@ -1,3 +1,4 @@
+
 using System;
 using System.Threading.Tasks;
 using DezignSpiration.Helpers;
@@ -133,7 +134,7 @@ namespace DezignSpiration.ViewModels
         {
             //Reset swipe count if it's past wait time and should reset
             // Worst case Scenario if for some weird reason, countdown didn't fire 
-            if ((DateTime.Now - Settings.SwipeDisabledDate).TotalHours > Constants.HOURS_TILL_COOL_DOWN && Settings.SwipeCount >= Constants.MAX_SWIPE_COUNT)
+            if (Settings.ShouldEnableSwipe)
             {
                 MessagingCenter.Send(SwipeToggled.Message, Constants.SWIPE_TOGGLED, true);
                 return;

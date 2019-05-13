@@ -22,14 +22,13 @@ namespace DezignSpiration.Pages
             {
                 if (quoteEditor.Text.Length < 10)
                 {
-                    QuoteErrorLabel.Text = "Can you make it a teeny bit Longer?";
                     QuoteErrorLabel.TextColor = Color.DarkRed;
                 }
                 else
                 {
-                    QuoteErrorLabel.Text = "Yeah, this is fine";
                     QuoteErrorLabel.TextColor = Color.DarkGreen;
                 }
+                QuoteErrorLabel.Text = $"{quoteEditor.Text.Length}/{Constants.MAX_QUOTE_LENGTH}";
             }
             hasTypedQuote = true;
         }
