@@ -20,7 +20,7 @@ namespace DezignSpiration.Pages
         {
             if (sender is FlexEditor quoteEditor && hasTypedQuote)
             {
-                if (quoteEditor.Text.Length < 10)
+                if (quoteEditor.Text.Length < Constants.MIN_QUOTE_LENGTH)
                 {
                     QuoteErrorLabel.TextColor = Color.DarkRed;
                 }

@@ -29,7 +29,7 @@ namespace DezignSpiration.ViewModels
             }
         }
 
-        public bool CanSubmit => IsNotBusy && DesignQuote.Quote.Length >= 10;
+        public bool CanSubmit => IsNotBusy && DesignQuote.Quote.Length >= Constants.MIN_QUOTE_LENGTH;
 
         public Models.Color SelectedColor
         {
@@ -103,21 +103,12 @@ namespace DezignSpiration.ViewModels
 
                 var deviceId = await Microsoft.AppCenter.AppCenter.GetInstallIdAsync();
 
-                bool added = await quotesRepository.AddQuote(DesignQuote, IsAnonymous, deviceId.ToString());
+                await quotesRepository.AddQuote(DesignQuote, IsAnonymous, deviceId.ToString());
 
-                if (added)
-                {
-                    Helper?.ShowAlert("Thanks for your awesome quote! It's being reviewed and you'll be seeing it soon", true, false);
-                    Utils.TrackEvent("QuoteAdded");
-                    await Navigation.GoBackAsync(isModal: true);
-                }
-                else
-                {
-                    Helper?.ShowAlert("There was an issue uploading your quote, please check your network or try again Later", true, false, "Try again", async (choice) =>
-                    {
-                        await SubmitQuote();
-                    });
-                }
+
+                Helper?.ShowAlert("Thanks for your awesome quote! It's being reviewed and you'll be seeing it soon", true, false);
+                Utils.TrackEvent("QuoteAdded");
+                await Navigation.GoBackAsync(isModal: true);
             }
             catch (Exception ex)
             {

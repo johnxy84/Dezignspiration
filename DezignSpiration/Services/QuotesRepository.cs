@@ -138,7 +138,7 @@ namespace DezignSpiration.Services
             }
         }
 
-        public async Task<bool> AddQuote(DesignQuote quote, bool isAnonymous, string deviceId = null)
+        public async Task AddQuote(DesignQuote quote, bool isAnonymous, string deviceId = null)
         {
             var author = isAnonymous || string.IsNullOrWhiteSpace(quote.Author) ? null : quote.Author;
 
@@ -149,7 +149,13 @@ namespace DezignSpiration.Services
                 author,
                 device_id = deviceId
             });
-            return response.IsSuccessStatusCode;
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                throw new Exception(content);
+            }
+
         }
     }
 }
