@@ -48,10 +48,11 @@
                 <Label Text="Receive random Quotes " HorizontalOptions="FillAndExpand" VerticalOptions="Center"/>
                 <Switch IsToggled="{Binding Config.IsRandomQuoteEnabled}"/>
             </StackLayout>
-            <StackLayout Orientation="Horizontal" Margin="0,10" IsVisible="{Binding Config.IsRandomQuoteEnabled}">
-                <Label Text="How much?" HorizontalOptions="StartAndExpand" VerticalOptions="Center"/>
+            <!-- TODO: Uncoment when this is stable -->
+<!--            <StackLayout Orientation="Horizontal" Margin="0,10" IsVisible="{Binding Config.IsRandomQuoteEnabled}">
+                <Label Text="How often would you like to receive them?" HorizontalOptions="StartAndExpand" VerticalOptions="Center"/>
                 <controls:ModPicker ItemsSource="{Binding Config.RandomQuoteFrequencies}" SelectedIndex="{Binding Config.SelectedRandomQuoteIndex}" Margin="20" HorizontalOptions="End"/>
-            </StackLayout>
+            </StackLayout>-->
             <StackLayout Orientation="Horizontal" Margin="0,10">
                 <Label Text="Receive Push Notifications" HorizontalOptions="FillAndExpand" VerticalOptions="Center"/>
                 <Switch IsToggled="{Binding Config.IsReceivePushEnabled}"/>

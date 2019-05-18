@@ -8,6 +8,11 @@ namespace DezignSpiration.Models.Notifications
 {
     public class RandomNotification : INotification
     {
+        public void ClearNotification()
+        {
+            Settings.IsRandomNotificationSet = false;
+        }
+
         public async Task<DesignQuote> GetDesignQuote(IQuotesRepository quotesRepository)
         {
             return await quotesRepository.GetRandomQuote();
@@ -23,6 +28,11 @@ namespace DezignSpiration.Models.Notifications
             return NotificationType.RandomAlarm;
         }
 
+        public bool IsSet()
+        {
+            return Settings.IsRandomNotificationSet;
+        }
+
         public bool ShouldCreateNotification()
         {
             return !Settings.IsRandomNotificationSet && Settings.SettingsConfig.IsRandomQuoteEnabled;
@@ -34,7 +44,7 @@ namespace DezignSpiration.Models.Notifications
             var randomQuoteFrequency = config.RandomQuoteFrequencies.ElementAt(config.SelectedRandomQuoteIndex);
             int minHour = randomQuoteFrequency.MinHour;
             int maxHour = randomQuoteFrequency.MaxHour;
-            return new TimeSpan(App.Random.Next(minHour, maxHour), App.Random.Next(0, 59), 0);
+            return new TimeSpan(DI.Random.Next(minHour, maxHour), DI.Random.Next(0, 59), 0);
         }
 
         public void ToggleNotificationIsSet(bool isNotificationSet)

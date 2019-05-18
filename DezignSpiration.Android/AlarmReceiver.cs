@@ -6,8 +6,8 @@ using Android.Support.V4.App;
 using Newtonsoft.Json;
 using DezignSpiration.Interfaces;
 using CommonServiceLocator;
-using System.Linq;
 using Xamarin.Forms;
+using DezignSpiration.Services;
 
 namespace DezignSpiration.Droid
 {
@@ -46,14 +46,17 @@ namespace DezignSpiration.Droid
                     {
                         try
                         {
+                            DI.InitializeDI();
+
                             NotificationType notificationType = intent.GetStringExtra(Constants.NOTIFICTAIONTYPE_KEY) == NotificationType.RandomAlarm.ToString() ? NotificationType.RandomAlarm : NotificationType.DailyAlarm;
+                            INotification notification = DI.NotificationService.GetNotification(notificationType);
+
                             var quotesRepository = ServiceLocator.Current.GetInstance<IQuotesRepository>();
-                            INotification notification = App.notificationService.GetNotification(notificationType);
                             DesignQuote designQuote = await notification.GetDesignQuote(quotesRepository);
                             notification.ToggleNotificationIsSet(false);
 
                             await NotificationHelper.SendScheduledNotification(context, notification);
-                            NotificationHelper.SetScheduledNotifications(context, App.notificationService.Notifications);
+                            NotificationHelper.SetScheduledNotifications(context, NotificationService.Notifications);
                             MessagingCenter.Send(SwipeToggled.Message, Helpers.Constants.SWIPE_TOGGLED, true);
                         }
                         catch (Exception ex)
@@ -65,8 +68,6 @@ namespace DezignSpiration.Droid
                 case Constants.SWIPE_ENABLED_ACTION:
                     try
                     {
-                        // Reset counter
-                        Settings.SwipeCount = 0;
                         NotificationHelper.SendSwipeEnabledNotification(context);
                         MessagingCenter.Send(SwipeToggled.Message, Helpers.Constants.SWIPE_TOGGLED, true);
                     }

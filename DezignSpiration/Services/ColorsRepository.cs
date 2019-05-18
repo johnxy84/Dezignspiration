@@ -6,6 +6,7 @@ using SQLite;
 using DezignSpiration.Interfaces;
 using DezignSpiration.Helpers;
 using Newtonsoft.Json;
+using System;
 
 namespace DezignSpiration.Services
 {
@@ -16,7 +17,7 @@ namespace DezignSpiration.Services
 
         public ColorsRepository(INetworkClient httpClient)
         {
-            dbConnection = App.dbConnection;
+            dbConnection = DI.DbConnection;
             this.httpClient = httpClient;
 
             try
@@ -59,7 +60,7 @@ namespace DezignSpiration.Services
             try
             {
                 int totalColors = await CountColor();
-                var response = await httpClient.Get($"/api/v1/list/colors?offset={totalColors}&limit={Constants.MAX_FETCH_QUOTE}");
+                var response = await httpClient.Get($"/api/v1/list/colors?offset={totalColors}&limit={Constants.MAX_FETCH_QUOTE}&status=approved");
                 var content = await response.Content.ReadAsStringAsync();
                 if (response.IsSuccessStatusCode)
                 {
@@ -77,7 +78,7 @@ namespace DezignSpiration.Services
             }
         }
 
-        public async Task<bool> AddColor(Color color, string deviceId = null)
+        public async Task AddColor(Color color, string deviceId = null)
         {
             var response = await httpClient.Post("/api/v1/colors", new
             {
@@ -85,7 +86,12 @@ namespace DezignSpiration.Services
                 secondary_color = color.SecondaryColor.ToUpper(),
                 device_id = deviceId
             });
-            return response.IsSuccessStatusCode;
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                throw new Exception(content);
+            }
         }
 
     }

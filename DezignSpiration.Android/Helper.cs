@@ -8,6 +8,9 @@ using Java.IO;
 using DezignSpiration.Models;
 using Android.Text.Style;
 using Android.Widget;
+using Android.OS;
+using Android.App.Job;
+using Java.Lang;
 
 namespace DezignSpiration.Droid
 {
@@ -19,7 +22,7 @@ namespace DezignSpiration.Droid
             return Android.Graphics.Color.Rgb(rgbColor.Red, rgbColor.Green, rgbColor.Blue);
         }
 
-        public static Bitmap GetBitmap(Context context, string text, string backgroundColor, string textColor, int height = 1000, int width = 1000)
+        public static Bitmap GetBitmap(Context context, string text, string backgroundColor, string textColor, int height = 3000, int width = 3000)
         {
             Bitmap bitmap = Bitmap.CreateBitmap(width, height, Bitmap.Config.Argb8888);
             Canvas canvas = new Canvas(bitmap);
@@ -41,21 +44,29 @@ namespace DezignSpiration.Droid
             paint.TextAlign = Paint.Align.Left;
 
             // set text width to canvas width minus screen padding(10 percent of width) in dp
-            int textWidth = canvas.Width - (10 / 100 * width);
+            int textWidth = ((int)(canvas.Width - (0.1 * width)));
 
             var textPreview = new SpannableString(text);
             // Reduce the text of the brand name
             textPreview.SetSpan(new RelativeSizeSpan(0.5f), text.Length - Helpers.Constants.BRAND_NAME.Length, text.Length, SpanTypes.ExclusiveExclusive);
 
             // init StaticLayout for text
-            StaticLayout textLayout = new StaticLayout(textPreview, paint, textWidth, Layout.Alignment.AlignNormal, 1.0f, 0.0f, false);
+            StaticLayout textLayout;
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.M)
+            {
+                textLayout = StaticLayout.Builder.Obtain(textPreview, 0, text.Length, paint, textWidth).Build();
+            }
+            else
+            {
+                textLayout = new StaticLayout(textPreview, paint, textWidth, Layout.Alignment.AlignNormal, 1.0f, 0.0f, false);
+            }
 
             // get height of multiline text
-            int textHeight = textLayout.Height;
+            int? textHeight = textLayout?.Height;
 
             // get position of text's top left corner
             float x = (bitmap.Width - textWidth) / 2;
-            float y = (bitmap.Height - textHeight) / 2;
+            float y = (bitmap.Height - textHeight ?? 0) / 2;
 
             // draw text to the Canvas center
             canvas.Save();
@@ -100,6 +111,7 @@ namespace DezignSpiration.Droid
         {
             try
             {
+                string extraText = "Hey, Checkout this awesome quote. Download the app here http://dezignspiration.com";
                 File cachePath = new File(context.CacheDir, "images");
                 // Create Directory
                 cachePath.Mkdirs();
@@ -122,6 +134,7 @@ namespace DezignSpiration.Droid
                     shareIntent.AddFlags(ActivityFlags.GrantReadUriPermission);
                     shareIntent.SetDataAndType(contentUri, context.ContentResolver.GetType(contentUri));
                     shareIntent.PutExtra(Intent.ExtraStream, contentUri);
+                    shareIntent.PutExtra(Intent.ExtraText, extraText);
                     shareIntent.SetFlags(ActivityFlags.NewTask);
                     shareIntent.SetType("image/jpeg");
 
@@ -131,7 +144,7 @@ namespace DezignSpiration.Droid
                     context.StartActivity(chooserIntent);
                 }
             }
-            catch (Exception ex)
+            catch (System.Exception ex)
             {
                 Toast.MakeText(context, "There was an issue sharing the Quote", ToastLength.Short).Show();
                 Utils.LogError(ex, "SharingQuoteException");
@@ -161,7 +174,14 @@ namespace DezignSpiration.Droid
 
         public static float GetFontSize(string text)
         {
-            return text.Length <= 100 ? 70 : text.Length <= 150 ? 65 : 60;
+            return text.Length <= 100 ? 240 : text.Length <= 150 ? 200 : 190;
+        }
+
+        public static JobInfo.Builder CreateJobBuilderUsingJobId<T>(this Context context, int jobId) where T : JobService
+        {
+            var javaClass = Class.FromType(typeof(T));
+            var componentName = new ComponentName(context, javaClass);
+            return new JobInfo.Builder(jobId, componentName);
         }
     }
 

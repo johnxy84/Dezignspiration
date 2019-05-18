@@ -7,18 +7,17 @@ using DezignSpiration.Helpers;
 using Newtonsoft.Json;
 using SQLiteNetExtensionsAsync.Extensions;
 using System;
-using System.Linq;
 
 namespace DezignSpiration.Services
 {
     public class QuotesRepository : IQuotesRepository
     {
-        SQLiteAsyncConnection database;
+        private readonly SQLiteAsyncConnection database;
         private readonly INetworkClient httpClient;
 
         public QuotesRepository(INetworkClient httpClient)
         {
-            database = App.dbConnection;
+            database = DI.DbConnection;
             this.httpClient = httpClient;
             try
             {
@@ -32,7 +31,15 @@ namespace DezignSpiration.Services
 
         public async Task<bool> DeleteQuote(DesignQuote designQuote)
         {
-            return await database.DeleteAsync(designQuote) == 1;
+            var sql = $"delete from {nameof(DesignQuote)} where id = ?";
+            try
+            {
+                return await database.ExecuteAsync(sql, designQuote.Id) == 1;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public async Task<bool> InsertQuotes(IEnumerable<DesignQuote> quotes)
@@ -44,7 +51,6 @@ namespace DezignSpiration.Services
             }
             catch (Exception ex)
             {
-                Utils.LogError(ex, "ErrorInsertingQuotes");
                 return false;
             }
         }
@@ -132,7 +138,7 @@ namespace DezignSpiration.Services
             }
         }
 
-        public async Task<bool> AddQuote(DesignQuote quote, bool isAnonymous, string deviceId = null)
+        public async Task AddQuote(DesignQuote quote, bool isAnonymous, string deviceId = null)
         {
             var author = isAnonymous || string.IsNullOrWhiteSpace(quote.Author) ? null : quote.Author;
 
@@ -143,7 +149,13 @@ namespace DezignSpiration.Services
                 author,
                 device_id = deviceId
             });
-            return response.IsSuccessStatusCode;
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                throw new Exception(content);
+            }
+
         }
     }
 }

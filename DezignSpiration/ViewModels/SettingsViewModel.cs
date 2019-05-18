@@ -4,6 +4,7 @@ using DezignSpiration.Models;
 using DezignSpiration.Helpers;
 using Microsoft.AppCenter.Push;
 using Xamarin.Essentials;
+using DezignSpiration.Services;
 
 namespace DezignSpiration.ViewModels
 {
@@ -46,8 +47,8 @@ namespace DezignSpiration.ViewModels
         public void SaveSettings()
         {
             Settings.SettingsConfig = Config;
-            App.notificationService.ClearNotifications();
-            Helper?.SetScheduledNotifications(App.notificationService.Notifications);
+            DI.NotificationService.ClearNotifications();
+            Helper?.SetScheduledNotifications(NotificationService.Notifications);
             Push.SetEnabledAsync(Config.IsReceivePushEnabled);
         }
     }

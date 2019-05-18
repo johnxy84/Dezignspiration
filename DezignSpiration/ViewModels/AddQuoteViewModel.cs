@@ -18,7 +18,6 @@ namespace DezignSpiration.ViewModels
         private bool isAnonymous;
 
         public Command AddQuoteCommand { get; }
-        public Command GoBackCommand { get; }
 
         public DesignQuote DesignQuote
         {
@@ -30,7 +29,7 @@ namespace DezignSpiration.ViewModels
             }
         }
 
-        public bool CanSubmit => IsNotBusy && DesignQuote.Quote.Length >= 10;
+        public bool CanSubmit => IsNotBusy && DesignQuote.Quote.Length >= Constants.MIN_QUOTE_LENGTH;
 
         public Models.Color SelectedColor
         {
@@ -70,7 +69,6 @@ namespace DezignSpiration.ViewModels
         public AddQuoteViewModel(IColorsRepository colorsRepository, IQuotesRepository quotesRepository)
         {
             AddQuoteCommand = new Command(async () => await SubmitQuote());
-            GoBackCommand = new Command(() => { Navigation.GoBackAsync(isModal: true); });
             this.colorsRepository = colorsRepository;
             this.quotesRepository = quotesRepository;
         }
@@ -84,7 +82,8 @@ namespace DezignSpiration.ViewModels
             };
             if (!isInitialized)
             {
-                Colors = new ObservableRangeCollection<Models.Color>(await colorsRepository.GetAllColors());
+                var dbColors = new ObservableRangeCollection<Models.Color>(await colorsRepository.GetAllColors());
+                Colors = Utils.Shuffle(dbColors);
                 isInitialized = true;
             }
             await RefreshColors();
@@ -104,26 +103,17 @@ namespace DezignSpiration.ViewModels
 
                 var deviceId = await Microsoft.AppCenter.AppCenter.GetInstallIdAsync();
 
-                bool added = await quotesRepository.AddQuote(DesignQuote, IsAnonymous, deviceId.ToString());
+                await quotesRepository.AddQuote(DesignQuote, IsAnonymous, deviceId.ToString());
 
-                if (added)
-                {
-                    Helper?.ShowAlert("Thanks for your awesome quote! You'll be seeing it soon", true);
-                    Utils.TrackEvent("QuoteAdded");
-                    await Navigation.GoBackAsync(isModal: true);
-                }
-                else
-                {
-                    Helper?.ShowAlert("There was an issue uploading your quote, Please try again Later", true, false, "Try again", async (choice) =>
-                    {
-                        await SubmitQuote();
-                    });
-                }
+
+                Helper?.ShowAlert("Thanks for your awesome quote! It's being reviewed and you'll be seeing it soon", true, false);
+                Utils.TrackEvent("QuoteAdded");
+                await Navigation.GoBackAsync(isModal: true);
             }
             catch (Exception ex)
             {
-                Utils.LogError(ex, "AddngQuoteError");
-                Helper?.ShowAlert($"There was an issue uploading your quote: {ex.Message}", true, false, "Try again", async (choice) =>
+                Utils.LogError(ex, "AddngQuoteError", DesignQuote.Quote, DesignQuote.Author);
+                Helper?.ShowAlert("There was an issue uploading your quote please check your network or try again later", true, false, "Try again", async (choice) =>
                 {
                     await SubmitQuote();
                 });

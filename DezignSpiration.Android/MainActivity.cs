@@ -9,27 +9,39 @@ using DezignSpiration.Helpers;
 using DezignSpiration.Droid;
 using DezignSpiration.Models;
 using Android.Content;
-using Java.Lang;
 using Android.Support.Design.Widget;
 using Android.Runtime;
 using DezignSpiration.Interfaces;
 using CarouselView.FormsPlugin.Android;
 using Lottie.Forms.Droid;
 using System.Collections.Generic;
+using Android.App.Job;
+using DezignSpiration.Droid.Jobs;
 
 [assembly: Xamarin.Forms.Dependency(typeof(MainActivity))]
-
 namespace DezignSpiration.Droid
 {
-    [Activity(Label = "Dezignspiration", Theme = "@style/MainTheme", ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "Dezignspiration", LaunchMode = LaunchMode.SingleTop, Theme = "@style/MainTheme", ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     [IntentFilter(new[] { Intent.ActionSend }, Categories = new[] { Intent.CategoryDefault }, DataMimeType = @"text/plain")]
     [IntentFilter(new[] { Intent.ActionProcessText }, Categories = new[] { Intent.CategoryDefault }, DataMimeType = @"text/plain")]
     public class MainActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivity, IHelper, IButton
     {
+        private bool doubleBackToExitPressedOnce;
+        private App appInstance;
+        private App AppInstance
+        {
+            get
+            {
+                if (appInstance == null)
+                {
+                    appInstance = new App();
+                }
+                return appInstance;
+            }
+        }
 
         public static MainActivity Instance { get; private set; }
-        private App appInstance;
-        private bool doubleBackToExitPressedOnce;
+
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -44,14 +56,22 @@ namespace DezignSpiration.Droid
             FFImageLoading.Forms.Platform.CachedImageRenderer.Init(true);
             CarouselViewRenderer.Init();
             Xamarin.Forms.Forms.Init(this, savedInstanceState);
-            AnimationViewRenderer.Init();
-            appInstance = new App();
+            AnimationViewRenderer.Init(); HandleIntent(Intent);
+            LoadApplication(AppInstance);
+            ScheduleJobs();
+        }
 
-            HandleIntent(Intent);
+        private void ScheduleJobs()
+        {
+            if (!InitializeRectifyNotificationJob(Application.Context))
+            {
+                Utils.LogError(new Exception("Error Initializing Android Notification Job"));
+            }
 
-
-            StartService(new Intent(Application.Context, typeof(KillStopper)));
-            LoadApplication(appInstance);
+            if (!InitializeSwipeToggleJob(Application.Context))
+            {
+                Utils.LogError(new Exception("Error Initializing Swipe Toggle Job"));
+            }
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Permission[] grantResults)
@@ -66,7 +86,7 @@ namespace DezignSpiration.Droid
             HandleIntent(intent);
         }
 
-        void HandleIntent(Intent intent)
+        private void HandleIntent(Intent intent)
         {
             try
             {
@@ -84,15 +104,37 @@ namespace DezignSpiration.Droid
 
                 if (!string.IsNullOrWhiteSpace(receivedText))
                 {
-                    appInstance?.ProcessShareAction(receivedText);
+                    AppInstance?.ProcessShareAction(receivedText);
                 }
 
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 Utils.LogError(ex, "ErrorProcessingShareIntent");
             }
 
+        }
+
+        private bool InitializeRectifyNotificationJob(Context context)
+        {
+            var rectifyNotificationJobInfo = context.CreateJobBuilderUsingJobId<RectifyNotificationJob>(Constants.RECTIFY_NOTIIFICATIOON_JOB_ID)
+                .SetPersisted(true)
+                .SetPeriodic(AlarmManager.IntervalHalfHour)
+                .Build();
+
+            var jobScheduler = (JobScheduler)GetSystemService(JobSchedulerService);
+            return jobScheduler.Schedule(rectifyNotificationJobInfo) == JobScheduler.ResultSuccess;
+        }
+
+        private bool InitializeSwipeToggleJob(Context context)
+        {
+            var swipeToggleJobInfo = context.CreateJobBuilderUsingJobId<SwipeToggleJob>(Constants.TOGGLESWIPE_NOTIIFICATIOON_JOB_ID)
+                .SetPeriodic(AlarmManager.IntervalHalfDay)
+                .SetPersisted(true)
+                .Build();
+
+            var jobScheduler = (JobScheduler)GetSystemService(JobSchedulerService);
+            return jobScheduler.Schedule(swipeToggleJobInfo) == JobScheduler.ResultSuccess;
         }
 
         public void DisplayMessage(string title, string message, string positive, string negative, Action<bool> choice)
@@ -132,7 +174,7 @@ namespace DezignSpiration.Droid
                 }
 
                 View activityRootView = Instance.FindViewById(Android.Resource.Id.Content);
-                var snackBar = Snackbar.Make(activityRootView, message, isLongAlert ? Snackbar.LengthLong : Snackbar.LengthShort);
+                var snackBar = Snackbar.Make(activityRootView, message, isLongAlert ? 8000 : Snackbar.LengthShort);
 
                 if (!string.IsNullOrWhiteSpace(actionMessage) && action != null)
                 {
@@ -157,7 +199,7 @@ namespace DezignSpiration.Droid
         {
             if (doubleBackToExitPressedOnce)
             {
-                JavaSystem.Exit(0);
+                Instance.MoveTaskToBack(true);
                 return;
             }
 
@@ -214,7 +256,7 @@ namespace DezignSpiration.Droid
                     alarmManager?.Cancel(pendingIntent);
                 }
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 Utils.LogError(ex, "CancelScheduledNotification");
             }

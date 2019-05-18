@@ -11,6 +11,7 @@ using DezignSpiration.Interfaces;
 using System.Collections.Generic;
 using CommonServiceLocator;
 using System.Threading.Tasks;
+using DezignSpiration.Services;
 
 namespace DezignSpiration.Droid
 {
@@ -120,15 +121,18 @@ namespace DezignSpiration.Droid
             return PendingIntent.GetBroadcast(Application.Context, requestCode, intent, PendingIntentFlags.UpdateCurrent);
         }
 
-        public static void SetFreshNotifications(Context context)
+        public static void SetOrphanedNotifications(Context context)
         {
             try
             {
-                // Clear Notifications to enable us create new ones
-                App.notificationService.ClearNotifications();
-
-                // initialize notifications
-                SetScheduledNotifications(context, App.notificationService.Notifications);
+                foreach (var notification in NotificationService.Notifications)
+                {
+                    // notification is marked as scheduled but it's not scheduled because reasons
+                    if (!IsNotificationSchdeuled(notification, context) && notification.IsSet())
+                    {
+                        ScheduleNotification(context, notification);
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -145,8 +149,9 @@ namespace DezignSpiration.Droid
 
             var notificationBuilder = new NotificationCompat.Builder(context, Constants.NOTIFICTAIONTYPE_CHANNEL_ID)
             .SetSound(RingtoneManager.GetDefaultUri(RingtoneType.Notification))
-            .SetSmallIcon(Resource.Mipmap.icon)
+            .SetSmallIcon(Resource.Drawable.notify_icon)
             .SetContentIntent(pendingIntent)
+            .SetContentTitle("Dezginspiration")
             .SetPriority(NotificationCompat.PriorityDefault)
             .SetContentText("Hey, Time to get back to swiping")
             .SetAutoCancel(true);
@@ -165,6 +170,15 @@ namespace DezignSpiration.Droid
             long elapsedTime = (long)(Java.Lang.JavaSystem.CurrentTimeMillis() + totalMilliseconds);
 
             alarmManager.Set(AlarmType.RtcWakeup, elapsedTime, pendingIntent);
+        }
+
+        public static bool IsNotificationSchdeuled(INotification notification, Context context)
+        {
+            var intent = new Intent(context, typeof(AlarmReceiver));
+            intent.SetAction(Constants.NOTIFICATION_QUOTE_ACTION);
+            intent.PutExtra(Constants.NOTIFICTAIONTYPE_KEY, notification.GetType().ToString());
+            var isScheduled = PendingIntent.GetBroadcast(context, notification.GetNotificationId(), intent, PendingIntentFlags.NoCreate) != null;
+            return isScheduled;
         }
     }
 }

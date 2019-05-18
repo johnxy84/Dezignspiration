@@ -51,6 +51,12 @@ namespace DezignSpiration.ViewModels
             this.client = client;
         }
 
+        public override Task InitializeAsync(object navigationData)
+        {
+            Feedback.Contact = Feedback.FeedbackContent = string.Empty;
+            return base.InitializeAsync(navigationData);
+        }
+
         async Task SubmitFeedback()
         {
             try

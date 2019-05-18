@@ -20,6 +20,8 @@
 
         public const string BASE_URL = "https://dezignspiration.com";
 
+        public const string COLOR_REGEX = @"^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$";
+
         public const int MAX_SWIPE_COUNT = 19;
 
         public const int MAX_QUOTE_LENGTH = 250;
@@ -30,7 +32,6 @@
 
         public const string AUTH_URL = "https://johnxy84.auth0.com";
 
-
         // We'll swap out these bad boys during build #AppCenter Roxx
         public const string APP_CENTER_SECRET = "APP_SECRET";
 
@@ -40,6 +41,8 @@
 
         public const string SWIPE_TOGGLED = "swipe_toggled";
 
-        public const double HOURS_TILL_COOL_DOWN = 12;
+        public const double HOURS_TILL_COOL_DOWN = 3;
+
+        public const int MIN_QUOTE_LENGTH = 20;
     }
 }

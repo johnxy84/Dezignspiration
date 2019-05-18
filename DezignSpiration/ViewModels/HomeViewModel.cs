@@ -1,3 +1,4 @@
+
 using System;
 using System.Threading.Tasks;
 using DezignSpiration.Helpers;
@@ -6,6 +7,7 @@ using Newtonsoft.Json;
 using Xamarin.Forms;
 using DezignSpiration.Interfaces;
 using System.Linq;
+using DezignSpiration.Services;
 
 namespace DezignSpiration.ViewModels
 {
@@ -78,7 +80,7 @@ namespace DezignSpiration.ViewModels
             {
                 SubscribeToEvents();
                 LoadStoredQuotes();
-                Helper?.SetScheduledNotifications(App.notificationService.Notifications);
+                Helper?.SetScheduledNotifications(NotificationService.Notifications);
             }
             catch (Exception ex)
             {
@@ -120,7 +122,10 @@ namespace DezignSpiration.ViewModels
             MessagingCenter.Subscribe<SwipeToggled, bool>(this, Constants.SWIPE_TOGGLED, (sender, isSwipeEnabled) =>
             {
                 CanSwipe = isSwipeEnabled;
-                Settings.SwipeCount = isSwipeEnabled ? 0 : Settings.SwipeCount;
+                if (isSwipeEnabled)
+                {
+                    Settings.SwipeCount = 0;
+                }
             });
 
         }
@@ -129,9 +134,10 @@ namespace DezignSpiration.ViewModels
         {
             //Reset swipe count if it's past wait time and should reset
             // Worst case Scenario if for some weird reason, countdown didn't fire 
-            if ((DateTime.Now - Settings.SwipeDisabledDate).Hours > Constants.HOURS_TILL_COOL_DOWN && Settings.SwipeCount >= Constants.MAX_SWIPE_COUNT)
+            if (Settings.ShouldEnableSwipe)
             {
-                Settings.SwipeCount = 0;
+                MessagingCenter.Send(SwipeToggled.Message, Constants.SWIPE_TOGGLED, true);
+                return;
             }
 
             if (newValue > oldValue)
@@ -143,19 +149,26 @@ namespace DezignSpiration.ViewModels
                 Settings.SwipeCount--;
             }
 
+            string message;
             switch (Settings.SwipeCount)
             {
                 case Constants.MAX_SWIPE_COUNT / 2:
                     if (Utils.ShouldShowAnnoyingMessage)
                     {
-                        Helper?.ShowAlert($"Slow down champ, You've got {Constants.MAX_SWIPE_COUNT / 2} more forward swipes today", isLongAlert: true);
+                        message = $"Slow down champ, You've got {Constants.MAX_SWIPE_COUNT / 2} more forward swipes today";
+                        Helper?.ShowAlert(message, isLongAlert: false, isToast: false);
                     }
                     break;
                 case Constants.MAX_SWIPE_COUNT:
-                    Helper?.ShowAlert("You've maxed out your swipes. Try taking a breath of fresh air and come back later", isLongAlert: true);
-                    Settings.SwipeDisabledDate = DateTime.Now;
-                    Helper?.BeginSwipeEnableCountdown(Constants.HOURS_TILL_COOL_DOWN);
-                    CanSwipe = false;
+                    message = "You've maxed out your swipes. Try taking a breath of fresh air and check back later. We'll remind you.";
+                    Helper?.ShowAlert(message, isLongAlert: true, isToast: false);
+                    if (CanSwipe)
+                    {
+                        Settings.SwipeDisabledDate = DateTime.Now;
+                        Helper?.BeginSwipeEnableCountdown(Constants.HOURS_TILL_COOL_DOWN);
+                        MessagingCenter.Send(SwipeToggled.Message, Constants.SWIPE_TOGGLED, false);
+                    }
+
                     break;
             }
         }
@@ -253,5 +266,6 @@ namespace DezignSpiration.ViewModels
         {
             Navigation.NavigateToAsync<SettingsViewModel>(isModal: true);
         }
+
     }
 }

@@ -8,6 +8,11 @@ namespace DezignSpiration.Models.Notifications
 {
     public class DailyNotification : INotification
     {
+        public void ClearNotification()
+        {
+            Settings.IsDailyNotificationSet = false;
+        }
+
         public async Task<DesignQuote> GetDesignQuote(IQuotesRepository quotesRepository)
         {
             return (await quotesRepository.GetAllQuotes()).ElementAt(Utils.GetCurrentDisplayIndex());
@@ -23,6 +28,11 @@ namespace DezignSpiration.Models.Notifications
             return NotificationType.DailyAlarm;
         }
 
+        public bool IsSet()
+        {
+            return Settings.IsDailyNotificationSet;
+        }
+
         public bool ShouldCreateNotification()
         {
             return !Settings.IsDailyNotificationSet && Settings.SettingsConfig.IsDailyQuoteEnabled;
@@ -32,6 +42,8 @@ namespace DezignSpiration.Models.Notifications
         {
             return Utils.GetTimeToScheduleNotification(Settings.SettingsConfig.DailyReminderTime);
         }
+
+
 
         public void ToggleNotificationIsSet(bool updateValue)
         {

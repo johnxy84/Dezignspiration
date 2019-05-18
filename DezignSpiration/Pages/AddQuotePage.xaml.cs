@@ -12,26 +12,23 @@ namespace DezignSpiration.Pages
         public AddQuotePage()
         {
             InitializeComponent();
-            var addQuoteViewModel = App.ViewModelLocator.AddQuoteViewModel;
-            BindingContext = addQuoteViewModel;
+            BindingContext = DI.ViewModelLocator.AddQuoteViewModel;
             Utils.TrackEvent("AddQuotePage");
-
         }
 
         public void QuoteTextChanged(object sender, EventArgs e)
         {
             if (sender is FlexEditor quoteEditor && hasTypedQuote)
             {
-                if (quoteEditor.Text.Length < 10)
+                if (quoteEditor.Text.Length < Constants.MIN_QUOTE_LENGTH)
                 {
-                    QuoteErrorLabel.Text = "Can you make it a teeny bit Longer?";
                     QuoteErrorLabel.TextColor = Color.DarkRed;
                 }
                 else
                 {
-                    QuoteErrorLabel.Text = "Yeah, this is fine";
                     QuoteErrorLabel.TextColor = Color.DarkGreen;
                 }
+                QuoteErrorLabel.Text = $"{quoteEditor.Text.Length}/{Constants.MAX_QUOTE_LENGTH}";
             }
             hasTypedQuote = true;
         }
