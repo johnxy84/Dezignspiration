@@ -68,14 +68,12 @@ namespace DezignSpiration.ViewModels
                 }
 
                 IsBusy = true;
-                var deviceId = await Microsoft.AppCenter.AppCenter.GetInstallIdAsync();
-
                 var result = await client.Post("/api/v1/feedback", new
                 {
                     feedback = Feedback.FeedbackContent,
                     category = Categories[SelectedCategory],
                     contact = Feedback.Contact,
-                    device_id = deviceId
+                    device_id = DI.DeviceInfo[Constants.DEVICE_INSTALLATION_ID]
                 });
 
                 if (result.IsSuccessStatusCode)

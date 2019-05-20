@@ -36,6 +36,7 @@ namespace DezignSpiration.Helpers
         private const string LengthyQuoteShareKey = nameof(LengthyQuoteShareKey);
         private const string TokenExpiryKey = nameof(TokenExpiryKey);
         private const string TokenKey = nameof(TokenKey);
+        private const string HasShownDisclaimerKey = nameof(HasShownDisclaimerKey);
 
         #endregion
 
@@ -109,6 +110,12 @@ namespace DezignSpiration.Helpers
         {
             get => Preferences.Get(IsFirstTimeKey, true);
             set => Preferences.Set(IsFirstTimeKey, value);
+        }
+
+        public static bool HasAcceptedDisclaimer
+        {
+            get => Preferences.Get(HasShownDisclaimerKey, false);
+            set => Preferences.Set(HasShownDisclaimerKey, value);
         }
 
         public static Config SettingsConfig

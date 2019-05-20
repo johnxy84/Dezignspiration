@@ -15,6 +15,11 @@ namespace DezignSpiration.Pages
         {
             InitializeComponent();
             BindingContext = DI.ViewModelLocator.AddColorViewModel;
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
             Utils.TrackEvent("AddColorPage");
         }
 

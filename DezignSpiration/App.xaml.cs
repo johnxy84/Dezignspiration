@@ -36,6 +36,7 @@ namespace DezignSpiration
             // Handle when your app starts
             Microsoft.AppCenter.AppCenter.Start(Constants.APP_CENTER_SECRET, typeof(Analytics), typeof(Crashes), typeof(Push));
             Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
+            DI.InitDeviceProperties();
         }
 
         void Connectivity_ConnectivityChanged(object sender, ConnectivityChangedEventArgs e)

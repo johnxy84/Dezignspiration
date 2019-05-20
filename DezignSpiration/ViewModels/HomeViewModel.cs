@@ -78,6 +78,22 @@ namespace DezignSpiration.ViewModels
         {
             try
             {
+                if (!Settings.HasAcceptedDisclaimer)
+                {
+                    Helper?.DisplayMessage("Disclaimer", Constants.DISCLAIMER_TEXT, "Agree", "Nope", async accepted =>
+                    {
+                        // User didn't agree, cancel all pendings and send him to crash page
+                        if (accepted)
+                        {
+                            Settings.HasAcceptedDisclaimer = true;
+                        }
+                        else
+                        {
+                            DI.NotificationService?.ClearNotifications();
+                            await Navigation.NavigateToAsync<CrashViewModel>(isModal: false);
+                        }
+                    });
+                }
                 SubscribeToEvents();
                 LoadStoredQuotes();
                 Helper?.SetScheduledNotifications(NotificationService.Notifications);
@@ -186,7 +202,7 @@ namespace DezignSpiration.ViewModels
                 Helper?.ShowAlert("Uhmm we're getting you more quotes. Take a step back for now :-)", false);
             }
 
-            if (quotesLeft < 5 && Settings.ShouldRefreshQuotes)
+            if (quotesLeft < 10 && Settings.ShouldRefreshQuotes)
             {
                 Task.Run(async () =>
                 {

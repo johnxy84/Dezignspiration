@@ -14,6 +14,11 @@ namespace DezignSpiration.Pages
             InitializeComponent();
             NavigationPage.SetHasNavigationBar(this, false);
             BindingContext = DI.ViewModelLocator.HomeViewModel;
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
             Utils.TrackEvent("HomePage");
         }
 

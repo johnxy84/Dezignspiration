@@ -10,6 +10,11 @@ namespace DezignSpiration.Pages
             InitializeComponent();
             NavigationPage.SetHasNavigationBar(this, false);
             BindingContext = DI.ViewModelLocator.FeedbackViewModel;
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
             Utils.TrackEvent("FeedbackPage");
         }
     }

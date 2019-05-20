@@ -5,6 +5,7 @@ using DezignSpiration.Models;
 using Microsoft.AppCenter.Crashes;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace DezignSpiration.Helpers
 {
@@ -22,12 +23,25 @@ namespace DezignSpiration.Helpers
 
         public static void TrackEvent(string eventName = "Error", params string[] extraParams)
         {
-            Dictionary<string, string> eventParams = new Dictionary<string, string>();
-            for (int i = 0; i < extraParams.Length; i++)
+            Task.Run(() =>
             {
-                eventParams.Add($"Param {i}", extraParams[i]);
-            }
-            Analytics.TrackEvent(eventName, eventParams);
+                Dictionary<string, string> eventParams = new Dictionary<string, string>();
+                for (int i = 0; i < extraParams.Length; i++)
+                {
+                    eventParams.Add($"Param {i}", extraParams[i]);
+                }
+                AddDevicePpts(ref eventParams);
+                Analytics.TrackEvent(eventName, eventParams);
+            });
+        }
+
+        public static void AddDevicePpts(ref Dictionary<string, string> devicePpts)
+        {
+            devicePpts.Add(Constants.DEVICE_OS, DI.DeviceInfo[Constants.DEVICE_OS]);
+            devicePpts.Add(Constants.DEVICE_MODEL, DI.DeviceInfo[Constants.DEVICE_MODEL]);
+            devicePpts.Add(Constants.DEVICE_MANUFACTURER, DI.DeviceInfo[Constants.DEVICE_MANUFACTURER]);
+            devicePpts.Add(Constants.DEVICE_PLATFORM, DI.DeviceInfo[Constants.DEVICE_PLATFORM]);
+            devicePpts.Add(Constants.DEVICE_INSTALLATION_ID, DI.DeviceInfo[Constants.DEVICE_INSTALLATION_ID]);
         }
 
         public static ObservableRangeCollection<DesignQuote> GetDefaultQuotes()
@@ -250,12 +264,16 @@ namespace DezignSpiration.Helpers
 
         public static void LogError(Exception ex, params string[] extraParams)
         {
-            Dictionary<string, string> crashProperties = new Dictionary<string, string>();
-            for (int i = 0; i < extraParams.Length; i++)
+            Task.Run(() =>
             {
-                crashProperties.Add($"Param {i}", extraParams[i]);
-            }
-            Crashes.TrackError(ex, crashProperties);
+                Dictionary<string, string> crashProperties = new Dictionary<string, string>();
+                for (int i = 0; i < extraParams.Length; i++)
+                {
+                    crashProperties.Add($"Param {i}", extraParams[i]);
+                }
+                AddDevicePpts(ref crashProperties);
+                Crashes.TrackError(ex, crashProperties);
+            });
         }
 
         /// <summary>
@@ -286,8 +304,7 @@ namespace DezignSpiration.Helpers
         {
             get
             {
-                var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "dezignspiration.db");
-                return path;
+                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "dezignspiration.db");
             }
         }
 

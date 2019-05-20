@@ -43,8 +43,6 @@ namespace DezignSpiration.Models.Notifications
             return Utils.GetTimeToScheduleNotification(Settings.SettingsConfig.DailyReminderTime);
         }
 
-
-
         public void ToggleNotificationIsSet(bool updateValue)
         {
             Settings.IsDailyNotificationSet = updateValue;

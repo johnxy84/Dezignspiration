@@ -88,9 +88,7 @@ namespace DezignSpiration.ViewModels
                 }
 
                 IsBusy = true;
-                var deviceId = await Microsoft.AppCenter.AppCenter.GetInstallIdAsync();
-
-                await colorsRepository.AddColor(Color, deviceId.ToString());
+                await colorsRepository.AddColor(Color, DI.DeviceInfo[Constants.DEVICE_INSTALLATION_ID]);
 
                 Helper?.ShowAlert("Your color would be added soon just because it's Awesome!", true, false);
                 Utils.TrackEvent("ColorAdded");

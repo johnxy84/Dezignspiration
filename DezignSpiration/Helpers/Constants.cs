@@ -22,7 +22,7 @@
 
         public const string COLOR_REGEX = @"^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$";
 
-        public const int MAX_SWIPE_COUNT = 19;
+        public const int MAX_SWIPE_COUNT = 30;
 
         public const int MAX_QUOTE_LENGTH = 250;
 
@@ -44,5 +44,20 @@
         public const double HOURS_TILL_COOL_DOWN = 3;
 
         public const int MIN_QUOTE_LENGTH = 20;
+
+        public const string DISCLAIMER_TEXT = "Quotes on this platform are totally crowd sourced. " +
+            "Flag a quote if it is in anyway offensive or intrusive and we would address it." +
+            "\nHappy Surfing";
+
+        public const string DEVICE_MODEL = "DeviceModel";
+
+        public const string DEVICE_MANUFACTURER = "DeviceManufacturer";
+
+        public const string DEVICE_OS = "DeviceOS";
+
+        public const string DEVICE_PLATFORM = "DevicePlatform";
+
+        public const string DEVICE_INSTALLATION_ID = "DeviceInstallationId";
+
     }
 }

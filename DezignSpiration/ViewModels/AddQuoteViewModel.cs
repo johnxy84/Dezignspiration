@@ -101,10 +101,7 @@ namespace DezignSpiration.ViewModels
                 }
                 IsBusy = true;
 
-                var deviceId = await Microsoft.AppCenter.AppCenter.GetInstallIdAsync();
-
-                await quotesRepository.AddQuote(DesignQuote, IsAnonymous, deviceId.ToString());
-
+                await quotesRepository.AddQuote(DesignQuote, IsAnonymous, DI.DeviceInfo[Constants.DEVICE_INSTALLATION_ID]);
 
                 Helper?.ShowAlert("Thanks for your awesome quote! It's being reviewed and you'll be seeing it soon", true, false);
                 Utils.TrackEvent("QuoteAdded");

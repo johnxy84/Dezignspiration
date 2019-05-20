@@ -13,6 +13,11 @@ namespace DezignSpiration.Pages
         {
             InitializeComponent();
             BindingContext = DI.ViewModelLocator.AddQuoteViewModel;
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
             Utils.TrackEvent("AddQuotePage");
         }
 

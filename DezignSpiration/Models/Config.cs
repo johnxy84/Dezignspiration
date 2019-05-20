@@ -10,7 +10,24 @@ namespace DezignSpiration.Models
         private bool isRandomQuoteEnabled;
         private bool isReceivePushEnabled = true;
         private int selectedRandomQuoteIndex;
-        private List<RandomQuoteFrequency> randomnQuotes;
+
+        private static List<RandomQuoteFrequency> randomQuotes;
+
+        public static List<RandomQuoteFrequency> RandomQuoteFrequencies
+        {
+            get
+            {
+                if (randomQuotes == null)
+                {
+                    randomQuotes = new List<RandomQuoteFrequency>
+                        {
+                            new RandomQuoteFrequency(),
+                            new RandomQuoteFrequency(title: "Very Often", minHour: 3, maxHour: 6)
+                        };
+                }
+                return randomQuotes;
+            }
+        }
 
         public bool IsDailyQuoteEnabled
         {
@@ -62,30 +79,15 @@ namespace DezignSpiration.Models
                 OnPropertyChanged();
             }
         }
-
-        public List<RandomQuoteFrequency> RandomQuoteFrequencies
-        {
-            get
-            {
-                if (randomnQuotes == null)
-                {
-                    randomnQuotes = new List<RandomQuoteFrequency>
-                        {
-                            new RandomQuoteFrequency(), new RandomQuoteFrequency(title: "Very Often", minHour: 1, maxHour: 3)
-                        };
-                }
-                return randomnQuotes;
-            }
-        }
     }
 
     public class RandomQuoteFrequency
     {
         public string Title { get; set; } = "Not often";
 
-        public int MinHour { get; set; } = 3;
+        public int MinHour { get; set; } = 6;
 
-        public int MaxHour { get; set; } = 5;
+        public int MaxHour { get; set; } = 10;
 
         public RandomQuoteFrequency()
         {

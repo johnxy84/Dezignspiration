@@ -8,12 +8,15 @@ using SQLite;
 using Unity;
 using Unity.Lifetime;
 using Unity.ServiceLocation;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace DezignSpiration.Helpers
 {
     public static class DI
     {
         private static bool isInitialized;
+        private static bool isDevicePptsInitialized;
 
         public static ViewModelLocator ViewModelLocator { get; private set; }
 
@@ -22,6 +25,8 @@ namespace DezignSpiration.Helpers
         public static NotificationService NotificationService { get; private set; }
 
         public static SQLiteAsyncConnection DbConnection { get; private set; }
+
+        public static Dictionary<string, string> DeviceInfo { get; set; } = new Dictionary<string, string>();
 
         public static void InitializeDI()
         {
@@ -48,6 +53,25 @@ namespace DezignSpiration.Helpers
                 ServiceLocator.SetLocatorProvider(() => serviceLocator);
 
                 isInitialized = true;
+            }
+        }
+
+        public static void InitDeviceProperties()
+        {
+            if (!isDevicePptsInitialized)
+            {
+                Task.Run(async () =>
+                {
+                    var deviceId = await Microsoft.AppCenter.AppCenter.GetInstallIdAsync();
+
+                    DeviceInfo.Add(Constants.DEVICE_INSTALLATION_ID, deviceId.ToString());
+                    DeviceInfo.Add(Constants.DEVICE_MODEL, Xamarin.Essentials.DeviceInfo.Model);
+                    DeviceInfo.Add(Constants.DEVICE_MANUFACTURER, Xamarin.Essentials.DeviceInfo.Manufacturer);
+                    DeviceInfo.Add(Constants.DEVICE_OS, Xamarin.Essentials.DeviceInfo.VersionString);
+                    DeviceInfo.Add(Constants.DEVICE_PLATFORM, Xamarin.Essentials.DeviceInfo.Platform.ToString());
+
+                    isDevicePptsInitialized = true;
+                });
             }
         }
     }

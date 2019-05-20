@@ -41,7 +41,7 @@ namespace DezignSpiration.Models.Notifications
         public TimeSpan TimeToSend()
         {
             var config = Settings.SettingsConfig;
-            var randomQuoteFrequency = config.RandomQuoteFrequencies.ElementAt(config.SelectedRandomQuoteIndex);
+            var randomQuoteFrequency = Config.RandomQuoteFrequencies.ElementAt(config.SelectedRandomQuoteIndex);
             int minHour = randomQuoteFrequency.MinHour;
             int maxHour = randomQuoteFrequency.MaxHour;
             return new TimeSpan(DI.Random.Next(minHour, maxHour), DI.Random.Next(0, 59), 0);

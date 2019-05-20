@@ -26,6 +26,11 @@ namespace DezignSpiration.Pages
             {
                 SelectVisualState(position);
             });
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
             Utils.TrackEvent("OnboardingPage");
         }
 
