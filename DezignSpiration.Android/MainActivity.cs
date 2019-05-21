@@ -199,7 +199,7 @@ namespace DezignSpiration.Droid
         {
             if (doubleBackToExitPressedOnce)
             {
-                Instance.MoveTaskToBack(true);
+                Java.Lang.JavaSystem.Exit(0);
                 return;
             }
 

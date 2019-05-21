@@ -80,7 +80,7 @@ namespace DezignSpiration.ViewModels
             {
                 if (!Settings.HasAcceptedDisclaimer)
                 {
-                    Helper?.DisplayMessage("Disclaimer", Constants.DISCLAIMER_TEXT, "Agree", "Nope", async accepted =>
+                    Helper?.DisplayMessage("Heads up", Constants.DISCLAIMER_TEXT, "Agree", "Nope", async accepted =>
                     {
                         // User didn't agree, cancel all pendings and send him to crash page
                         if (accepted)
