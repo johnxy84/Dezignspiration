@@ -46,8 +46,7 @@
         public const int MIN_QUOTE_LENGTH = 20;
 
         public const string DISCLAIMER_TEXT = "Quotes on this platform are totally crowd sourced. " +
-            "Flag a quote if it is in anyway offensive or intrusive and we would address it." +
-            "\nHappy Surfing";
+            "Flag a quote if it is in anyway offensive or intrusive and we would address it. Happy Surfing";
 
         public const string DEVICE_MODEL = "DeviceModel";
 

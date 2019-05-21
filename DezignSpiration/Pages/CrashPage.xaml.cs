@@ -1,5 +1,6 @@
 ﻿using Xamarin.Forms;
 using DezignSpiration.Helpers;
+using DezignSpiration.Interfaces;
 
 namespace DezignSpiration.Pages
 {
@@ -14,6 +15,7 @@ namespace DezignSpiration.Pages
 
         protected override bool OnBackButtonPressed()
         {
+            DependencyService.Get<IButton>()?.BackButtonPressed();
             return true;
         }
 

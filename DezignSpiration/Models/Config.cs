@@ -22,7 +22,7 @@ namespace DezignSpiration.Models
                     randomQuotes = new List<RandomQuoteFrequency>
                         {
                             new RandomQuoteFrequency(),
-                            new RandomQuoteFrequency(title: "Very Often", minHour: 3, maxHour: 6)
+                            new RandomQuoteFrequency(title: "Very Often", minHour: 4, maxHour: 6)
                         };
                 }
                 return randomQuotes;
@@ -85,7 +85,7 @@ namespace DezignSpiration.Models
     {
         public string Title { get; set; } = "Not often";
 
-        public int MinHour { get; set; } = 6;
+        public int MinHour { get; set; } = 8;
 
         public int MaxHour { get; set; } = 10;
 
